@@ -1,0 +1,152 @@
+import 'package:flutter/material.dart';
+import 'home_screen.dart';
+
+class MainShell extends StatefulWidget {
+  const MainShell({super.key});
+
+  @override
+  State<MainShell> createState() => _MainShellState();
+}
+
+class _MainShellState extends State<MainShell> {
+  int _currentIndex = 0;
+  final Set<int> _initializedTabs = {0}; // Only build tabs when first visited
+
+  final _tabs = const [
+    _TabItem(icon: Icons.home_rounded, label: 'Home'),
+    _TabItem(icon: Icons.calendar_today_rounded, label: 'Bookings'),
+    _TabItem(icon: Icons.map_rounded, label: 'Map'),
+    _TabItem(icon: Icons.shopping_cart_rounded, label: 'Cart'),
+    _TabItem(icon: Icons.person_rounded, label: 'Profile'),
+  ];
+
+  Widget _buildTab(int index) {
+    switch (index) {
+      case 0:
+        return const HomeScreen();
+      default:
+        return _placeholder(_tabs[index].label);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF1A1A1A),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: List.generate(_tabs.length, (i) {
+          if (_initializedTabs.contains(i)) {
+            return _buildTab(i);
+          }
+          // Return empty placeholder until tab is first selected
+          return const SizedBox.shrink();
+        }),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A1A),
+          border: Border(
+            top: BorderSide(
+              color: Colors.white.withValues(alpha: 0.06),
+              width: 1,
+            ),
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(_tabs.length, (i) {
+                final tab = _tabs[i];
+                final active = i == _currentIndex;
+                return GestureDetector(
+                  onTap: () => setState(() {
+                    _initializedTabs.add(i);
+                    _currentIndex = i;
+                  }),
+                  behavior: HitTestBehavior.opaque,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 6,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          child: Icon(
+                            tab.icon,
+                            color: active
+                                ? const Color(0xFFFF8C00)
+                                : Colors.white.withValues(alpha: 0.35),
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          tab.label,
+                          style: TextStyle(
+                            fontFamily: 'DarkerGrotesque',
+                            color: active
+                                ? const Color(0xFFFF8C00)
+                                : Colors.white.withValues(alpha: 0.3),
+                            fontSize: 11,
+                            fontWeight:
+                                active ? FontWeight.w700 : FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _placeholder(String title) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.construction_rounded,
+            color: Colors.white.withValues(alpha: 0.2),
+            size: 48,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            style: TextStyle(
+              fontFamily: 'DarkerGrotesque',
+              color: Colors.white.withValues(alpha: 0.3),
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Coming soon',
+            style: TextStyle(
+              fontFamily: 'DarkerGrotesque',
+              color: Colors.white.withValues(alpha: 0.15),
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TabItem {
+  final IconData icon;
+  final String label;
+  const _TabItem({required this.icon, required this.label});
+}
