@@ -19,12 +19,12 @@ class _RestaurantListScreenState extends State<RestaurantListScreen> with Ticker
   final _filters = const ['Tous', 'Marocain', 'International', 'Rooftop', 'Street Food'];
 
   final _restaurants = const [
-    _RestaurantData(id: 'resto_001', name: 'Le Jardin', location: 'Souk Sidi Abdelaziz, Médina', price: 25, rating: 4.7, reviews: 487, imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80', tags: ['Terrasse', 'Végétarien', 'Bio'], category: 'International', specialite: 'Méditerranéen', horaires: '12h-23h'),
-    _RestaurantData(id: 'resto_002', name: 'Nomad', location: 'Derb Aarjan, Médina', price: 30, rating: 4.8, reviews: 623, imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80', tags: ['Rooftop', 'Vue Médina', 'Cocktails'], category: 'Rooftop', specialite: 'Marocain Moderne', horaires: '10h-23h'),
-    _RestaurantData(id: 'resto_003', name: 'Al Fassia', location: 'Guéliz, Marrakech', price: 35, rating: 4.9, reviews: 389, imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80', tags: ['Tajine', 'Couscous', 'Familial'], category: 'Marocain', specialite: 'Cuisine Fassi', horaires: '12h-14h30 · 19h-23h'),
-    _RestaurantData(id: 'resto_004', name: 'CAFE CLOCK', location: 'Derb Chtouka, Kasbah', price: 12, rating: 4.5, reviews: 712, imageUrl: 'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=600&q=80', tags: ['Burger Chameau', 'Live Music', 'Culturel'], category: 'Street Food', specialite: 'Fusion', horaires: '9h-22h'),
-    _RestaurantData(id: 'resto_005', name: 'La Table du Palais', location: 'Royal Mansour, Médina', price: 120, rating: 4.9, reviews: 234, imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=80', tags: ['Gastronomique', 'Étoilé', 'Luxe'], category: 'International', specialite: 'Français-Marocain', horaires: '19h-23h'),
-    _RestaurantData(id: 'resto_006', name: 'Chez Lamine Hadj Mustapha', location: 'Place Jemaa el-Fna', price: 8, rating: 4.6, reviews: 1024, imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80', tags: ['Tanjia', 'Authentique', 'Populaire'], category: 'Street Food', specialite: 'Tanjia Marrakchia', horaires: '11h-22h'),
+    _RestaurantData(id: 'resto_001', name: 'Le Jardin', location: 'Souk Sidi Abdelaziz, Médina', price: 25, rating: 4.7, reviews: 487, imageUrl: 'assets/images/restaurants/le_jardin/1.png', tags: ['Terrasse', 'Végétarien', 'Bio'], category: 'International', specialite: 'Méditerranéen', horaires: '12h-23h'),
+    _RestaurantData(id: 'resto_002', name: 'Nomad', location: 'Derb Aarjan, Médina', price: 30, rating: 4.8, reviews: 623, imageUrl: 'assets/images/restaurants/nomad/1.png', tags: ['Rooftop', 'Vue Médina', 'Cocktails'], category: 'Rooftop', specialite: 'Marocain Moderne', horaires: '10h-23h'),
+    _RestaurantData(id: 'resto_003', name: 'Al Fassia', location: 'Guéliz, Marrakech', price: 35, rating: 4.9, reviews: 389, imageUrl: 'assets/images/restaurants/al_fassia/1.png', tags: ['Tajine', 'Couscous', 'Familial'], category: 'Marocain', specialite: 'Cuisine Fassi', horaires: '12h-14h30 · 19h-23h'),
+    _RestaurantData(id: 'resto_004', name: 'CAFE CLOCK', location: 'Derb Chtouka, Kasbah', price: 12, rating: 4.5, reviews: 712, imageUrl: 'assets/images/restaurants/cafe_clock/1.png', tags: ['Burger Chameau', 'Live Music', 'Culturel'], category: 'Street Food', specialite: 'Fusion', horaires: '9h-22h'),
+    _RestaurantData(id: 'resto_005', name: 'La Table du Palais', location: 'Royal Mansour, Médina', price: 120, rating: 4.9, reviews: 234, imageUrl: 'assets/images/restaurants/la_table_du_palais/1.png', tags: ['Gastronomique', 'Étoilé', 'Luxe'], category: 'International', specialite: 'Français-Marocain', horaires: '19h-23h'),
+    _RestaurantData(id: 'resto_006', name: 'Chez Lamine Hadj Mustapha', location: 'Place Jemaa el-Fna', price: 8, rating: 4.6, reviews: 1024, imageUrl: 'assets/images/restaurants/chez_lamine/1.png', tags: ['Tanjia', 'Authentique', 'Populaire'], category: 'Street Food', specialite: 'Tanjia Marrakchia', horaires: '11h-22h'),
   ];
 
   @override
@@ -105,8 +105,7 @@ class _RestaurantCard extends StatelessWidget {
       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.03), borderRadius: BorderRadius.circular(18), border: Border.all(color: Colors.white.withValues(alpha: 0.06))),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Stack(children: [
-          ClipRRect(borderRadius: const BorderRadius.vertical(top: Radius.circular(18)), child: AspectRatio(aspectRatio: 16 / 9, child: Image.network(restaurant.imageUrl, fit: BoxFit.cover, cacheWidth: 600,
-            loadingBuilder: (ctx, child, p) => p == null ? child : Container(color: const Color(0xFF2A2A2A), child: const Center(child: CircularProgressIndicator(color: Color(0xFFFF8C00), strokeWidth: 2))),
+          ClipRRect(borderRadius: const BorderRadius.vertical(top: Radius.circular(18)), child: AspectRatio(aspectRatio: 16 / 9, child: Image.asset(restaurant.imageUrl, fit: BoxFit.cover,
             errorBuilder: (_, __, ___) => Container(color: const Color(0xFF2A2A2A), child: const Center(child: Icon(Icons.restaurant_rounded, size: 40, color: Color(0xFF555555))))))),
           Positioned(top: 12, left: 12, child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), decoration: BoxDecoration(color: const Color(0xFFFF8C00).withValues(alpha: 0.9), borderRadius: BorderRadius.circular(10)),
             child: Text(restaurant.category, style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.black, fontSize: 11, fontWeight: FontWeight.w700)))),

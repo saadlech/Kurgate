@@ -19,12 +19,12 @@ class _BoutiqueListScreenState extends State<BoutiqueListScreen> with TickerProv
   final _filters = const ['Tous', 'Tapis', 'Poterie', 'Cuir', 'Bijoux', 'Textile'];
 
   final _boutiques = const [
-    _BoutiqueData(id: 'boutique_001', name: 'Tapis Berbères El Badi', artisan: 'Maître Hassan El Badi', location: 'Souk des Tapis, Médina', rating: 4.8, reviews: 312, imageUrl: 'https://images.unsplash.com/photo-1600166898405-da9535204843?w=600&q=80', tags: ['Fait main', 'Berbère', 'Laine'], category: 'Tapis', prixMoyen: '150-2000'),
-    _BoutiqueData(id: 'boutique_002', name: 'Atelier Céramique Safi', artisan: 'Fatima Zahra Bennani', location: 'Derb Dabachi, Médina', rating: 4.7, reviews: 198, imageUrl: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&q=80', tags: ['Zellige', 'Assiettes', 'Vases'], category: 'Poterie', prixMoyen: '20-300'),
-    _BoutiqueData(id: 'boutique_003', name: 'Maroquinerie Artisanale Youssef', artisan: 'Youssef Amrani', location: 'Souk Cherratine, Médina', rating: 4.6, reviews: 456, imageUrl: 'https://images.unsplash.com/photo-1473188588951-666fce8e7c68?w=600&q=80', tags: ['Babouches', 'Sacs', 'Ceintures'], category: 'Cuir', prixMoyen: '30-500'),
-    _BoutiqueData(id: 'boutique_004', name: 'Bijoux Touareg Amina', artisan: 'Amina Ait Brahim', location: 'Place des Ferblantiers', rating: 4.9, reviews: 167, imageUrl: 'https://images.unsplash.com/photo-1515562141589-67f0d569b6c4?w=600&q=80', tags: ['Argent', 'Touareg', 'Pierres'], category: 'Bijoux', prixMoyen: '50-800'),
-    _BoutiqueData(id: 'boutique_005', name: 'Tissages Tradition Amazigh', artisan: 'Khadija Oulhaj', location: 'Souk Haddadine, Médina', rating: 4.7, reviews: 234, imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&q=80', tags: ['Caftans', 'Foulards', 'Coussins'], category: 'Textile', prixMoyen: '40-600'),
-    _BoutiqueData(id: 'boutique_006', name: 'Poterie d\'Art Tamegroute', artisan: 'Ahmed Bel Kacem', location: 'Quartier des Potiers', rating: 4.5, reviews: 289, imageUrl: 'https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=600&q=80', tags: ['Tamegroute', 'Vert', 'Traditionnel'], category: 'Poterie', prixMoyen: '15-200'),
+    _BoutiqueData(id: 'boutique_001', name: 'Tapis Berbères El Badi', artisan: 'Maître Hassan El Badi', location: 'Souk des Tapis, Médina', rating: 4.8, reviews: 312, imageUrl: 'assets/images/boutiques/tapis_berberes/1.png', tags: ['Fait main', 'Berbère', 'Laine'], category: 'Tapis', prixMoyen: '150-2000'),
+    _BoutiqueData(id: 'boutique_002', name: 'Atelier Céramique Safi', artisan: 'Fatima Zahra Bennani', location: 'Derb Dabachi, Médina', rating: 4.7, reviews: 198, imageUrl: 'assets/images/boutiques/ceramique_safi/1.png', tags: ['Zellige', 'Assiettes', 'Vases'], category: 'Poterie', prixMoyen: '20-300'),
+    _BoutiqueData(id: 'boutique_003', name: 'Maroquinerie Artisanale Youssef', artisan: 'Youssef Amrani', location: 'Souk Cherratine, Médina', rating: 4.6, reviews: 456, imageUrl: 'assets/images/boutiques/maroquinerie_youssef/1.png', tags: ['Babouches', 'Sacs', 'Ceintures'], category: 'Cuir', prixMoyen: '30-500'),
+    _BoutiqueData(id: 'boutique_004', name: 'Bijoux Touareg Amina', artisan: 'Amina Ait Brahim', location: 'Place des Ferblantiers', rating: 4.9, reviews: 167, imageUrl: 'assets/images/boutiques/bijoux_touareg/1.png', tags: ['Argent', 'Touareg', 'Pierres'], category: 'Bijoux', prixMoyen: '50-800'),
+    _BoutiqueData(id: 'boutique_005', name: 'Tissages Tradition Amazigh', artisan: 'Khadija Oulhaj', location: 'Souk Haddadine, Médina', rating: 4.7, reviews: 234, imageUrl: 'assets/images/boutiques/tissages_amazigh/1.png', tags: ['Caftans', 'Foulards', 'Coussins'], category: 'Textile', prixMoyen: '40-600'),
+    _BoutiqueData(id: 'boutique_006', name: 'Poterie d\'Art Tamegroute', artisan: 'Ahmed Bel Kacem', location: 'Quartier des Potiers', rating: 4.5, reviews: 289, imageUrl: 'assets/images/boutiques/poterie_tamegroute/1.png', tags: ['Tamegroute', 'Vert', 'Traditionnel'], category: 'Poterie', prixMoyen: '15-200'),
   ];
 
   @override
@@ -101,8 +101,7 @@ class _BoutiqueCard extends StatelessWidget {
       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.03), borderRadius: BorderRadius.circular(18), border: Border.all(color: Colors.white.withValues(alpha: 0.06))),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Stack(children: [
-          ClipRRect(borderRadius: const BorderRadius.vertical(top: Radius.circular(18)), child: AspectRatio(aspectRatio: 16 / 9, child: Image.network(boutique.imageUrl, fit: BoxFit.cover, cacheWidth: 600,
-            loadingBuilder: (ctx, child, p) => p == null ? child : Container(color: const Color(0xFF2A2A2A), child: const Center(child: CircularProgressIndicator(color: Color(0xFFFF8C00), strokeWidth: 2))),
+          ClipRRect(borderRadius: const BorderRadius.vertical(top: Radius.circular(18)), child: AspectRatio(aspectRatio: 16 / 9, child: Image.asset(boutique.imageUrl, fit: BoxFit.cover,
             errorBuilder: (_, __, ___) => Container(color: const Color(0xFF2A2A2A), child: const Center(child: Icon(Icons.storefront_rounded, size: 40, color: Color(0xFF555555))))))),
           Positioned(top: 12, left: 12, child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), decoration: BoxDecoration(color: const Color(0xFFFF8C00).withValues(alpha: 0.9), borderRadius: BorderRadius.circular(10)),
             child: Text(boutique.category, style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.black, fontSize: 11, fontWeight: FontWeight.w700)))),

@@ -37,8 +37,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 85,
       rating: 4.8,
       reviews: 342,
-      imageUrl:
-          'https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=600&q=80',
+      imageUrl: 'assets/images/experiences/safari_agafay/1.png',
       tags: ['Quad', 'Coucher de soleil', 'Dîner'],
       category: 'Aventure',
       duree: '6h',
@@ -51,8 +50,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 35,
       rating: 4.7,
       reviews: 528,
-      imageUrl:
-          'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?w=600&q=80',
+      imageUrl: 'assets/images/experiences/medina_visite/1.png',
       tags: ['Guide local', 'Souks', 'Histoire'],
       category: 'Culture',
       duree: '3h',
@@ -65,8 +63,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 60,
       rating: 4.9,
       reviews: 189,
-      imageUrl:
-          'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=600&q=80',
+      imageUrl: 'assets/images/experiences/randonnee_atlas/1.png',
       tags: ['Trekking', 'Cascades', 'Montagne'],
       category: 'Nature',
       duree: '8h',
@@ -79,8 +76,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 50,
       rating: 4.8,
       reviews: 267,
-      imageUrl:
-          'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=600&q=80',
+      imageUrl: 'assets/images/experiences/cours_cuisine/1.png',
       tags: ['Tajine', 'Couscous', 'Pâtisseries'],
       category: 'Gastronomie',
       duree: '4h',
@@ -93,8 +89,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 180,
       rating: 4.9,
       reviews: 124,
-      imageUrl:
-          'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=600&q=80',
+      imageUrl: 'assets/images/experiences/vol_montgolfiere/1.png',
       tags: ['Vue panoramique', 'Lever du soleil', 'Photos'],
       category: 'Aventure',
       duree: '2h',
@@ -107,8 +102,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 15,
       rating: 4.7,
       reviews: 892,
-      imageUrl:
-          'https://images.unsplash.com/photo-1591378603223-e15b45a81640?w=600&q=80',
+      imageUrl: 'assets/images/experiences/jardin_majorelle/1.png',
       tags: ['Jardin', 'Musée', 'Art'],
       category: 'Culture',
       duree: '2h',
@@ -384,21 +378,9 @@ class _ExperienceCard extends StatelessWidget {
                   ),
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
-                    child: Image.network(
+                    child: Image.asset(
                       experience.imageUrl,
                       fit: BoxFit.cover,
-                      cacheWidth: 600,
-                      loadingBuilder: (ctx, child, progress) => progress == null
-                          ? child
-                          : Container(
-                              color: const Color(0xFF2A2A2A),
-                              child: const Center(
-                                child: CircularProgressIndicator(
-                                  color: Color(0xFFFF8C00),
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                            ),
                       errorBuilder: (ctx, e, s) => Container(
                         color: const Color(0xFF2A2A2A),
                         child: const Center(

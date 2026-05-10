@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
+import '../providers/booking_provider.dart';
 
-class VehiculeDetailScreen extends StatefulWidget {
+class VehiculeDetailScreen extends ConsumerStatefulWidget {
   final String vehiculeId;
   const VehiculeDetailScreen({super.key, required this.vehiculeId});
 
   @override
-  State<VehiculeDetailScreen> createState() => _VehiculeDetailScreenState();
+  ConsumerState<VehiculeDetailScreen> createState() => _VehiculeDetailScreenState();
 }
 
-class _VehiculeDetailScreenState extends State<VehiculeDetailScreen> {
+class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
   bool _bookingExpanded = false;
   late DateTime _pickupDate;
   late DateTime _returnDate;
@@ -77,7 +79,26 @@ class _VehiculeDetailScreenState extends State<VehiculeDetailScreen> {
     setState(() => _isConfirming = true);
     showModalBottomSheet(
       context: context, backgroundColor: Colors.transparent, isScrollControlled: true,
-      builder: (ctx) => _ReservationSheet(vehiculeName: _vehicule.name, pickupDate: _pickupDate, returnDate: _returnDate, days: _days, totalPrice: _totalPrice, withDriver: _withDriver, withInsurance: _withInsurance),
+      builder: (ctx) => _ReservationSheet(vehiculeName: _vehicule.name, pickupDate: _pickupDate, returnDate: _returnDate, days: _days, totalPrice: _totalPrice, withDriver: _withDriver, withInsurance: _withInsurance,
+        onConfirmed: () {
+          ref.read(bookingProvider.notifier).addBooking(Booking(
+            id: 'vehicule_${DateTime.now().millisecondsSinceEpoch}',
+            type: BookingType.vehicule,
+            name: _vehicule.name,
+            subtitle: '${_vehicule.agence} · ${_vehicule.category}',
+            imageUrl: _vehicule.images.first,
+            totalPrice: _totalPrice,
+            createdAt: DateTime.now(),
+            details: {
+              'Début': _fmtDate(_pickupDate),
+              'Retour': _fmtDate(_returnDate),
+              'Jours': '$_days',
+              if (_withDriver) 'Chauffeur': 'Oui',
+              if (_withInsurance) 'Assurance': 'Oui',
+            },
+          ));
+        },
+      ),
     ).then((_) => setState(() => _isConfirming = false));
   }
 
@@ -277,7 +298,8 @@ class _ReservationSheet extends StatefulWidget {
   final DateTime pickupDate, returnDate;
   final int days, totalPrice;
   final bool withDriver, withInsurance;
-  const _ReservationSheet({required this.vehiculeName, required this.pickupDate, required this.returnDate, required this.days, required this.totalPrice, required this.withDriver, required this.withInsurance});
+  final VoidCallback onConfirmed;
+  const _ReservationSheet({required this.vehiculeName, required this.pickupDate, required this.returnDate, required this.days, required this.totalPrice, required this.withDriver, required this.withInsurance, required this.onConfirmed});
 
   @override
   State<_ReservationSheet> createState() => _ReservationSheetState();
@@ -303,6 +325,7 @@ class _ReservationSheetState extends State<_ReservationSheet> with SingleTickerP
   void _confirm() {
     setState(() => _confirmed = true);
     _animCtrl.forward();
+    widget.onConfirmed();
     Future.delayed(const Duration(seconds: 2), () { if (mounted) Navigator.of(context).pop(); });
   }
 

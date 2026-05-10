@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
+import '../providers/booking_provider.dart';
 
-class HotelDetailScreen extends StatefulWidget {
+class HotelDetailScreen extends ConsumerStatefulWidget {
   final String hotelId;
   const HotelDetailScreen({super.key, required this.hotelId});
 
   @override
-  State<HotelDetailScreen> createState() => _HotelDetailScreenState();
+  ConsumerState<HotelDetailScreen> createState() => _HotelDetailScreenState();
 }
 
-class _HotelDetailScreenState extends State<HotelDetailScreen> {
+class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
   bool _bookingExpanded = false;
   late DateTime _checkIn;
   late DateTime _checkOut;
@@ -263,6 +265,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     );
   }
 
+  String _fmtDateShort(DateTime d) => '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year}';
+
   void _confirmReservation() {
     if (_isConfirming) return;
     setState(() => _isConfirming = true);
@@ -281,6 +285,24 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
         bedType: _beds[_selectedBed].name,
         totalPrice: _totalPrice,
         nights: _nights,
+        onConfirmed: () {
+          ref.read(bookingProvider.notifier).addBooking(Booking(
+            id: 'hotel_${DateTime.now().millisecondsSinceEpoch}',
+            type: BookingType.hotel,
+            name: _hotel.name,
+            subtitle: '${_hotel.location} · ${_rooms[_selectedRoom].name}',
+            imageUrl: _hasGallery ? _hotel.imageAssets.first : '',
+            totalPrice: _totalPrice,
+            createdAt: DateTime.now(),
+            details: {
+              'Arrivée': _fmtDateShort(_checkIn),
+              'Départ': _fmtDateShort(_checkOut),
+              'Nuits': '$_nights',
+              'Chambre': _rooms[_selectedRoom].name,
+              'Personnes': '$_adults adultes${_children > 0 ? ' + $_children enfants' : ''}',
+            },
+          ));
+        },
       ),
     ).then((_) => setState(() => _isConfirming = false));
   }
@@ -1282,6 +1304,7 @@ class _ReservationConfirmationSheet extends StatefulWidget {
   final DateTime checkIn, checkOut;
   final int adults, children, totalPrice, nights;
   final String roomType, bedType;
+  final VoidCallback onConfirmed;
 
   const _ReservationConfirmationSheet({
     required this.hotelName,
@@ -1293,6 +1316,7 @@ class _ReservationConfirmationSheet extends StatefulWidget {
     required this.bedType,
     required this.totalPrice,
     required this.nights,
+    required this.onConfirmed,
   });
 
   @override
@@ -1332,6 +1356,7 @@ class _ReservationConfirmationSheetState
   void _confirm() {
     setState(() => _confirmed = true);
     _animCtrl.forward();
+    widget.onConfirmed();
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) Navigator.of(context).pop();
     });

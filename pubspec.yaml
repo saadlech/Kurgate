@@ -82,6 +82,24 @@ flutter:
     - assets/images/vehicules/toyota_hilux/
     - assets/images/vehicules/peugeot_3008/
     - assets/images/vehicules/citroen_berlingo/
+    - assets/images/experiences/safari_agafay/
+    - assets/images/experiences/medina_visite/
+    - assets/images/experiences/randonnee_atlas/
+    - assets/images/experiences/cours_cuisine/
+    - assets/images/experiences/vol_montgolfiere/
+    - assets/images/experiences/jardin_majorelle/
+    - assets/images/restaurants/le_jardin/
+    - assets/images/restaurants/nomad/
+    - assets/images/restaurants/al_fassia/
+    - assets/images/restaurants/cafe_clock/
+    - assets/images/restaurants/la_table_du_palais/
+    - assets/images/restaurants/chez_lamine/
+    - assets/images/boutiques/tapis_berberes/
+    - assets/images/boutiques/ceramique_safi/
+    - assets/images/boutiques/maroquinerie_youssef/
+    - assets/images/boutiques/bijoux_touareg/
+    - assets/images/boutiques/tissages_amazigh/
+    - assets/images/boutiques/poterie_tamegroute/
 
   fonts:
     - family: DarkerGrotesque

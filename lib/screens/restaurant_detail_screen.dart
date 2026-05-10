@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
+import '../providers/booking_provider.dart';
 
-class RestaurantDetailScreen extends StatefulWidget {
+class RestaurantDetailScreen extends ConsumerStatefulWidget {
   final String restaurantId;
   const RestaurantDetailScreen({super.key, required this.restaurantId});
   @override
-  State<RestaurantDetailScreen> createState() => _RestaurantDetailScreenState();
+  ConsumerState<RestaurantDetailScreen> createState() => _RestaurantDetailScreenState();
 }
 
-class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
+class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen> {
   bool _bookingExpanded = false;
   late DateTime _date;
   int _guests = 2;
   int _selectedTime = 1;
   bool _isConfirming = false;
+  int _currentPage = 0;
 
   static const _dataMap = {
-    'resto_001': _Info(name: 'Le Jardin', location: 'Souk Sidi Abdelaziz, Médina', rating: 4.7, reviews: 487, description: 'Un havre de paix caché au cœur de la Médina. Le Jardin propose une cuisine méditerranéenne bio dans un cadre verdoyant et apaisant. Salades fraîches, plats du jour créatifs et jus pressés sous les bananiers et les bougainvilliers.', imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80', price: 25, specialite: 'Méditerranéen', horaires: '12h-23h', capacite: 60),
-    'resto_002': _Info(name: 'Nomad', location: 'Derb Aarjan, Médina', rating: 4.8, reviews: 623, description: 'Restaurant rooftop emblématique offrant une vue panoramique sur la Médina et les montagnes de l\'Atlas. Cuisine marocaine revisitée avec des touches contemporaines, cocktails signature et ambiance cosmopolite.', imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80', price: 30, specialite: 'Marocain Moderne', horaires: '10h-23h', capacite: 80),
-    'resto_003': _Info(name: 'Al Fassia', location: 'Guéliz, Marrakech', rating: 4.9, reviews: 389, description: 'Institution culinaire dirigée exclusivement par des femmes, Al Fassia est réputé pour sa cuisine fassi authentique. Tajines mijotés, pastilla croustillante et couscous du vendredi préparés selon des recettes transmises de génération en génération.', imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80', price: 35, specialite: 'Cuisine Fassi', horaires: '12h-14h30 · 19h-23h', capacite: 100),
-    'resto_004': _Info(name: 'CAFE CLOCK', location: 'Derb Chtouka, Kasbah', rating: 4.5, reviews: 712, description: 'Café culturel iconique de la Kasbah, célèbre pour son burger au chameau et ses événements culturels. Musique live, contes traditionnels et ateliers artistiques dans un riad historique sur plusieurs niveaux avec terrasse panoramique.', imageUrl: 'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800&q=80', price: 12, specialite: 'Fusion', horaires: '9h-22h', capacite: 120),
-    'resto_005': _Info(name: 'La Table du Palais', location: 'Royal Mansour, Médina', rating: 4.9, reviews: 234, description: 'Restaurant gastronomique étoilé du Royal Mansour, orchestré par le chef Yannick Alléno. Une expérience culinaire d\'exception mêlant haute cuisine française et saveurs marocaines dans un cadre palatial d\'une beauté à couper le souffle.', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80', price: 120, specialite: 'Français-Marocain', horaires: '19h-23h', capacite: 40),
-    'resto_006': _Info(name: 'Chez Lamine Hadj Mustapha', location: 'Place Jemaa el-Fna', rating: 4.6, reviews: 1024, description: 'Le stand le plus célèbre de la Place Jemaa el-Fna depuis 1942. Spécialiste incontesté de la tanjia marrakchia, ce plat emblématique cuit lentement dans les cendres du hammam. Une expérience gustative authentique et populaire.', imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80', price: 8, specialite: 'Tanjia Marrakchia', horaires: '11h-22h', capacite: 50),
+    'resto_001': _Info(name: 'Le Jardin', location: 'Souk Sidi Abdelaziz, Médina', rating: 4.7, reviews: 487, description: 'Un havre de paix caché au cœur de la Médina. Le Jardin propose une cuisine méditerranéenne bio dans un cadre verdoyant et apaisant. Salades fraîches, plats du jour créatifs et jus pressés sous les bananiers et les bougainvilliers.', imageUrl: 'assets/images/restaurants/le_jardin/1.png', images: ['assets/images/restaurants/le_jardin/1.png', 'assets/images/restaurants/le_jardin/2.png', 'assets/images/restaurants/le_jardin/3.png'], price: 25, specialite: 'Méditerranéen', horaires: '12h-23h', capacite: 60),
+    'resto_002': _Info(name: 'Nomad', location: 'Derb Aarjan, Médina', rating: 4.8, reviews: 623, description: 'Restaurant rooftop emblématique offrant une vue panoramique sur la Médina et les montagnes de l\'Atlas. Cuisine marocaine revisitée avec des touches contemporaines, cocktails signature et ambiance cosmopolite.', imageUrl: 'assets/images/restaurants/nomad/1.png', images: ['assets/images/restaurants/nomad/1.png', 'assets/images/restaurants/nomad/2.png', 'assets/images/restaurants/nomad/3.png'], price: 30, specialite: 'Marocain Moderne', horaires: '10h-23h', capacite: 80),
+    'resto_003': _Info(name: 'Al Fassia', location: 'Guéliz, Marrakech', rating: 4.9, reviews: 389, description: 'Institution culinaire dirigée exclusivement par des femmes, Al Fassia est réputé pour sa cuisine fassi authentique. Tajines mijotés, pastilla croustillante et couscous du vendredi préparés selon des recettes transmises de génération en génération.', imageUrl: 'assets/images/restaurants/al_fassia/1.png', images: ['assets/images/restaurants/al_fassia/1.png', 'assets/images/restaurants/al_fassia/2.png', 'assets/images/restaurants/al_fassia/3.png'], price: 35, specialite: 'Cuisine Fassi', horaires: '12h-14h30 · 19h-23h', capacite: 100),
+    'resto_004': _Info(name: 'CAFE CLOCK', location: 'Derb Chtouka, Kasbah', rating: 4.5, reviews: 712, description: 'Café culturel iconique de la Kasbah, célèbre pour son burger au chameau et ses événements culturels. Musique live, contes traditionnels et ateliers artistiques dans un riad historique sur plusieurs niveaux avec terrasse panoramique.', imageUrl: 'assets/images/restaurants/cafe_clock/1.png', images: ['assets/images/restaurants/cafe_clock/1.png', 'assets/images/restaurants/cafe_clock/2.png', 'assets/images/restaurants/cafe_clock/3.png'], price: 12, specialite: 'Fusion', horaires: '9h-22h', capacite: 120),
+    'resto_005': _Info(name: 'La Table du Palais', location: 'Royal Mansour, Médina', rating: 4.9, reviews: 234, description: 'Restaurant gastronomique étoilé du Royal Mansour, orchestré par le chef Yannick Alléno. Une expérience culinaire d\'exception mêlant haute cuisine française et saveurs marocaines dans un cadre palatial d\'une beauté à couper le souffle.', imageUrl: 'assets/images/restaurants/la_table_du_palais/1.png', images: ['assets/images/restaurants/la_table_du_palais/1.png', 'assets/images/restaurants/la_table_du_palais/2.png', 'assets/images/restaurants/la_table_du_palais/3.png'], price: 120, specialite: 'Français-Marocain', horaires: '19h-23h', capacite: 40),
+    'resto_006': _Info(name: 'Chez Lamine Hadj Mustapha', location: 'Place Jemaa el-Fna', rating: 4.6, reviews: 1024, description: 'Le stand le plus célèbre de la Place Jemaa el-Fna depuis 1942. Spécialiste incontesté de la tanjia marrakchia, ce plat emblématique cuit lentement dans les cendres du hammam. Une expérience gustative authentique et populaire.', imageUrl: 'assets/images/restaurants/chez_lamine/1.png', images: ['assets/images/restaurants/chez_lamine/1.png', 'assets/images/restaurants/chez_lamine/2.png', 'assets/images/restaurants/chez_lamine/3.png'], price: 8, specialite: 'Tanjia Marrakchia', horaires: '11h-22h', capacite: 50),
   };
 
   final _timeSlots = const ['12:00', '12:30', '13:00', '13:30', '19:00', '19:30', '20:00', '20:30', '21:00'];
@@ -50,7 +53,24 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
     if (_isConfirming) return;
     setState(() => _isConfirming = true);
     showModalBottomSheet(context: context, backgroundColor: Colors.transparent, isScrollControlled: true,
-      builder: (ctx) => _ReservationSheet(restoName: _resto.name, date: _date, time: _timeSlots[_selectedTime], guests: _guests),
+      builder: (ctx) => _ReservationSheet(restoName: _resto.name, date: _date, time: _timeSlots[_selectedTime], guests: _guests,
+        onConfirmed: () {
+          ref.read(bookingProvider.notifier).addBooking(Booking(
+            id: 'resto_${DateTime.now().millisecondsSinceEpoch}',
+            type: BookingType.restaurant,
+            name: _resto.name,
+            subtitle: '${_resto.location} · ${_resto.specialite}',
+            imageUrl: _resto.images.first,
+            totalPrice: _resto.price * _guests,
+            createdAt: DateTime.now(),
+            details: {
+              'Date': _fmtDate(_date),
+              'Heure': _timeSlots[_selectedTime],
+              'Convives': '$_guests',
+            },
+          ));
+        },
+      ),
     ).then((_) => setState(() => _isConfirming = false));
   }
 
@@ -64,8 +84,16 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             leading: _circleBtn(Icons.arrow_back_ios_rounded, () => context.pop()),
             actions: [_circleBtn(Icons.share_rounded, () {}), const SizedBox(width: 4), _circleBtn(Icons.favorite_border_rounded, () {}), const SizedBox(width: 12)],
             flexibleSpace: FlexibleSpaceBar(background: Stack(fit: StackFit.expand, children: [
-              Image.network(_resto.imageUrl, fit: BoxFit.cover, cacheWidth: 800, errorBuilder: (_, __, ___) => Container(color: const Color(0xFF2A2A2A))),
+              PageView.builder(
+                itemCount: _resto.images.length,
+                onPageChanged: (i) => setState(() => _currentPage = i),
+                itemBuilder: (context, i) => Image.asset(_resto.images[i], fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(color: const Color(0xFF2A2A2A))),
+              ),
               Positioned(bottom: 0, left: 0, right: 0, height: 80, child: Container(decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [const Color(0xFF1A1A1A).withValues(alpha: 0.8), Colors.transparent])))),
+              // Dot indicators
+              Positioned(bottom: 12, left: 0, right: 0, child: Row(mainAxisAlignment: MainAxisAlignment.center, children: List.generate(_resto.images.length, (i) => AnimatedContainer(duration: const Duration(milliseconds: 250), margin: const EdgeInsets.symmetric(horizontal: 3), width: _currentPage == i ? 20 : 6, height: 6, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: _currentPage == i ? const Color(0xFFFF8C00) : Colors.white.withValues(alpha: 0.35)))))),
+              // Counter badge
+              Positioned(bottom: 16, right: 16, child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5), borderRadius: BorderRadius.circular(12)), child: Text('${_currentPage + 1}/${_resto.images.length}', style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)))),
             ])),
           ),
           SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.fromLTRB(20, 20, 20, 120), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -196,7 +224,8 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
 
 class _ReservationSheet extends StatefulWidget {
   final String restoName, time; final DateTime date; final int guests;
-  const _ReservationSheet({required this.restoName, required this.date, required this.time, required this.guests});
+  final VoidCallback onConfirmed;
+  const _ReservationSheet({required this.restoName, required this.date, required this.time, required this.guests, required this.onConfirmed});
   @override
   State<_ReservationSheet> createState() => _ReservationSheetState();
 }
@@ -210,7 +239,7 @@ class _ReservationSheetState extends State<_ReservationSheet> with SingleTickerP
   @override
   void dispose() { _animCtrl.dispose(); super.dispose(); }
   String _fmtDate(DateTime d) => '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year}';
-  void _confirm() { setState(() => _confirmed = true); _animCtrl.forward(); Future.delayed(const Duration(seconds: 2), () { if (mounted) Navigator.of(context).pop(); }); }
+  void _confirm() { setState(() => _confirmed = true); _animCtrl.forward(); widget.onConfirmed(); Future.delayed(const Duration(seconds: 2), () { if (mounted) Navigator.of(context).pop(); }); }
 
   @override
   Widget build(BuildContext context) {
@@ -251,6 +280,7 @@ class _ReservationSheetState extends State<_ReservationSheet> with SingleTickerP
 
 class _Info {
   final String name, location, description, imageUrl, specialite, horaires;
+  final List<String> images;
   final double rating; final int reviews, price, capacite;
-  const _Info({required this.name, required this.location, required this.rating, required this.reviews, required this.description, required this.imageUrl, required this.price, required this.specialite, required this.horaires, required this.capacite});
+  const _Info({required this.name, required this.location, required this.rating, required this.reviews, required this.description, required this.imageUrl, required this.images, required this.price, required this.specialite, required this.horaires, required this.capacite});
 }

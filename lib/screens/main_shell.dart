@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import 'bookings_screen.dart';
+import 'cart_screen.dart';
+import 'profile_screen.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -24,6 +27,12 @@ class _MainShellState extends State<MainShell> {
     switch (index) {
       case 0:
         return const HomeScreen();
+      case 1:
+        return const BookingsScreen();
+      case 3:
+        return const CartScreen();
+      case 4:
+        return const ProfileScreen();
       default:
         return _placeholder(_tabs[index].label);
     }
