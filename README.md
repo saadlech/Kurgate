@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/images/logo_full.png" alt="Kurgate Logo" width="280"/>
+  <img src="https://raw.githubusercontent.com/saadlech/Kurgate/main/assets/images/logo_full.png" alt="Kurgate Logo" width="280"/>
 </p>
 
 <h1 align="center">Kurgate</h1>
