@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/kurgate_button.dart';
+import '../widgets/reviews_section.dart';
 
 class ExperienceDetailScreen extends StatefulWidget {
   final String experienceId;
@@ -340,6 +342,29 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(height: 8),
+                                GestureDetector(
+                                  onTap: () => launchUrl(
+                                    Uri.parse('https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(_exp.name + ', Marrakech')}'),
+                                    mode: LaunchMode.externalApplication,
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.06),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.navigation_rounded, size: 14, color: const Color(0xFFFF8C00)),
+                                        const SizedBox(width: 6),
+                                        Text('Itinéraire', style: TextStyle(fontFamily: 'DarkerGrotesque', color: const Color(0xFFFF8C00), fontSize: 13, fontWeight: FontWeight.w700)),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -414,6 +439,13 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
                       _buildIncludes(),
                       const SizedBox(height: 24),
                       _buildBookingSection(),
+                      const SizedBox(height: 28),
+                      ReviewsSection(
+                        itemId: widget.experienceId,
+                        itemName: _exp.name,
+                        itemType: 'Expérience',
+                      ),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),

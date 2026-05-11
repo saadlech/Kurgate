@@ -19,6 +19,7 @@ import '../screens/restaurant_list_screen.dart';
 import '../screens/restaurant_detail_screen.dart';
 import '../screens/boutique_list_screen.dart';
 import '../screens/boutique_detail_screen.dart';
+import '../screens/payment_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -376,6 +377,27 @@ final routerProvider = Provider<GoRouter>((ref) {
           return CustomTransitionPage(
             key: state.pageKey,
             child: BoutiqueDetailScreen(boutiqueId: boutiqueId),
+            transitionDuration: const Duration(milliseconds: 400),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(begin: const Offset(0, 0.15), end: Offset.zero)
+                    .animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+                child: FadeTransition(opacity: animation, child: child),
+              );
+            },
+          );
+        },
+      ),
+
+      // Payment
+      GoRoute(
+        path: '/payment/:id',
+        name: 'payment',
+        pageBuilder: (context, state) {
+          final bookingId = state.pathParameters['id']!;
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: PaymentScreen(bookingId: bookingId),
             transitionDuration: const Duration(milliseconds: 400),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return SlideTransition(

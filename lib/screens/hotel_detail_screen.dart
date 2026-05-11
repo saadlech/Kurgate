@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
 import '../providers/booking_provider.dart';
+import '../widgets/reviews_section.dart';
 
 class HotelDetailScreen extends ConsumerStatefulWidget {
   final String hotelId;
@@ -288,6 +290,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         onConfirmed: () {
           ref.read(bookingProvider.notifier).addBooking(Booking(
             id: 'hotel_${DateTime.now().millisecondsSinceEpoch}',
+            itemId: widget.hotelId,
             type: BookingType.hotel,
             name: _hotel.name,
             subtitle: '${_hotel.location} · ${_rooms[_selectedRoom].name}',
@@ -488,6 +491,29 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
                                       ),
                                     ),
                                   ],
+                                ),
+                                const SizedBox(height: 8),
+                                GestureDetector(
+                                  onTap: () => launchUrl(
+                                    Uri.parse('https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(_hotel.name + ', ' + _hotel.location)}'),
+                                    mode: LaunchMode.externalApplication,
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.06),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.navigation_rounded, size: 14, color: const Color(0xFFFF8C00)),
+                                        const SizedBox(width: 6),
+                                        Text('Itinéraire', style: TextStyle(fontFamily: 'DarkerGrotesque', color: const Color(0xFFFF8C00), fontSize: 13, fontWeight: FontWeight.w700)),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -779,6 +805,14 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
                   const SizedBox(height: 20),
                   // Summary
                   _buildSummary(),
+                  const SizedBox(height: 28),
+                  // Reviews section
+                  ReviewsSection(
+                    itemId: widget.hotelId,
+                    itemName: _hotel.name,
+                    itemType: 'Hôtel',
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),

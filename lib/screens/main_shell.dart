@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'bookings_screen.dart';
+import 'map_screen.dart';
 import 'cart_screen.dart';
 import 'profile_screen.dart';
 
@@ -36,6 +37,8 @@ class _MainShellState extends State<MainShell> {
         return HomeScreen(onProfileTap: () => _switchToTab(4));
       case 1:
         return const BookingsScreen();
+      case 2:
+        return const MapScreen();
       case 3:
         return const CartScreen();
       case 4:

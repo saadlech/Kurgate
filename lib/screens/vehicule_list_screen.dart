@@ -340,7 +340,7 @@ class _VehiculeListScreenState extends State<VehiculeListScreen>
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                     itemCount: _filteredVehicules.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 20),
+                    separatorBuilder: (_, _) => const SizedBox(height: 20),
                     itemBuilder: (context, index) {
                       final vehicule = _filteredVehicules[index];
                       final fadeIdx = index.clamp(0, _cardFades.length - 1);
@@ -547,11 +547,15 @@ class _VehiculeCard extends StatelessWidget {
                     children: [
                       _specChip(Icons.settings_rounded, vehicule.transmission),
                       const SizedBox(width: 8),
-                      _specChip(Icons.local_gas_station_rounded,
-                          vehicule.carburant),
+                      _specChip(
+                        Icons.local_gas_station_rounded,
+                        vehicule.carburant,
+                      ),
                       const SizedBox(width: 8),
-                      _specChip(Icons.people_rounded,
-                          '${vehicule.places} places'),
+                      _specChip(
+                        Icons.people_rounded,
+                        '${vehicule.places} places',
+                      ),
                     ],
                   ),
                   const SizedBox(height: 8),
