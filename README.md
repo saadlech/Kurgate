@@ -12,6 +12,7 @@
   <img src="https://img.shields.io/badge/Flutter-3.11+-blue?logo=flutter" alt="Flutter"/>
   <img src="https://img.shields.io/badge/Dart-3.11+-0175C2?logo=dart" alt="Dart"/>
   <img src="https://img.shields.io/badge/Supabase-Backend-3ECF8E?logo=supabase" alt="Supabase"/>
+  <img src="https://img.shields.io/badge/Hive-Local%20Storage-orange?logo=hive" alt="Hive"/>
   <img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Web-orange" alt="Platform"/>
   <img src="https://img.shields.io/badge/License-Private-red" alt="License"/>
 </p>
@@ -32,7 +33,17 @@ L'application permet aux utilisateurs d'explorer des hôtels, louer des véhicul
 - Inscription avec vérification par email (Supabase Auth)
 - Connexion sécurisée avec gestion d'erreurs contextuelle
 - Réinitialisation de mot de passe par email
+- **Remember Me** — Persistance des identifiants via Hive (stockage local sécurisé)
+- **Auto-login** — Reconnexion automatique au lancement si Remember Me est activé
 - Gestion de session persistante
+
+### 🏠 Écran d'Accueil
+- **Hub centralisé** avec 5 sections de contenu (Hôtels, Véhicules, Expériences, Restaurants, Boutiques)
+- **Recherche globale** — Recherche en temps réel à travers toutes les catégories
+- **Navigation rapide** — Badge Marrakech → écran destinations, Avatar → profil
+- Carrousel horizontal par catégorie avec images locales haute qualité
+- Bannière AI Travel Assistant
+- Catégories interactives avec navigation directe
 
 ### 🏨 Hôtels
 - Catalogue de 6 hôtels premium de Marrakech (Royal Mansour, La Mamounia, La Sultana, Mandarin Oriental, Riad Kniza, Riad Yasmine)
@@ -48,18 +59,30 @@ L'application permet aux utilisateurs d'explorer des hôtels, louer des véhicul
 
 ### 🎯 Expériences
 - Activités locales : Safari désert, randonnée Atlas, cours de cuisine, vol en montgolfière
+- Galerie de 3 photos par expérience
 - Filtrage par catégorie (Aventure, Culture, Nature, Gastronomie)
 - Détails : durée, capacité, prix par personne
 
 ### 🍽️ Restaurants
-- Sélection de restaurants authentiques de Marrakech
-- Fiches avec menus, spécialités et localisations
+- Sélection de 6 restaurants authentiques de Marrakech (Le Jardin, Nomad, Al Fassia, Cafe Clock, La Table du Palais, Chez Lamine)
+- Fiches avec spécialités, horaires et localisations
+- Filtrage par catégorie (Marocain, International, Rooftop, Street Food)
 - Système de notation et avis
 
 ### 🏺 Boutiques Artisanales
-- Artisanat marocain : tapis, poteries, maroquinerie, bijoux
+- 6 boutiques artisanales (Tapis Berbères, Céramique Safi, Maroquinerie, Bijoux Touareg, Tissages Amazigh, Poterie Tamegroute)
+- Galerie de 3 photos par boutique
 - Catalogue produits avec prix et descriptions
-- Navigation par catégorie
+- Navigation par catégorie (Tapis, Poterie, Cuir, Bijoux, Textile)
+
+### 📅 Réservations & Panier
+- Système de réservation centralisé (hôtels, véhicules, expériences, restaurants)
+- Panier pour les produits artisanaux
+- Onglets dédiés dans la navigation principale
+
+### 👤 Profil
+- Affichage des informations utilisateur (nom, email, téléphone)
+- Déconnexion sécurisée avec effacement des données locales
 
 ---
 
@@ -72,6 +95,7 @@ L'application permet aux utilisateurs d'explorer des hôtels, louer des véhicul
 | **State Management** | Riverpod (flutter_riverpod) |
 | **Navigation** | GoRouter (go_router) |
 | **Backend** | Supabase (Auth + Database) |
+| **Stockage Local** | Hive (hive_flutter) |
 | **Typographie** | Darker Grotesque (custom font) |
 | **Design System** | Dark theme, accent orange `#FF8C00` |
 
@@ -82,7 +106,7 @@ L'application permet aux utilisateurs d'explorer des hôtels, louer des véhicul
 ```
 kurgate/
 ├── lib/
-│   ├── main.dart                    # Point d'entrée de l'application
+│   ├── main.dart                    # Point d'entrée (init Hive + Supabase)
 │   ├── models/                      # Modèles de données
 │   │   ├── utilisateur.dart         # Modèle utilisateur
 │   │   ├── hotel.dart               # Modèle hôtel
@@ -92,21 +116,27 @@ kurgate/
 │   │   ├── boutique_artisanale.dart # Modèle boutique
 │   │   ├── destination.dart         # Modèle destination
 │   │   ├── reservation.dart         # Modèle réservation
+│   │   ├── offre_touristique.dart   # Modèle offre touristique
+│   │   ├── produit.dart             # Modèle produit artisanal
 │   │   └── ...
 │   ├── providers/                   # State management (Riverpod)
-│   │   ├── auth_provider.dart       # Authentification & gestion utilisateur
-│   │   ├── destination_provider.dart
-│   │   └── onboarding_provider.dart
+│   │   ├── auth_provider.dart       # Auth, login, signup, remember me, auto-login
+│   │   ├── booking_provider.dart    # Gestion des réservations
+│   │   ├── cart_provider.dart       # Panier artisanal
+│   │   └── ...
+│   ├── services/
+│   │   └── local_storage_service.dart # Stockage Hive (credentials, remember me)
 │   ├── router/
-│   │   └── app_router.dart          # Configuration GoRouter
+│   │   └── app_router.dart          # Configuration GoRouter (18 routes)
 │   ├── screens/                     # Écrans de l'application
-│   │   ├── splash_screen.dart       # Écran de démarrage animé
+│   │   ├── splash_screen.dart       # Splash animé + auto-login
 │   │   ├── onboarding_screen.dart   # Onboarding (3 pages)
-│   │   ├── login_screen.dart        # Connexion
+│   │   ├── login_screen.dart        # Connexion + Remember Me
 │   │   ├── signup_screen.dart       # Inscription
 │   │   ├── forgot_password_screen.dart
-│   │   ├── home_screen.dart         # Écran principal
-│   │   ├── main_shell.dart          # Shell avec bottom navigation
+│   │   ├── destination_screen.dart  # Sélection de ville
+│   │   ├── main_shell.dart          # Shell avec bottom navigation (5 onglets)
+│   │   ├── home_screen.dart         # Hub principal avec recherche + 5 sections
 │   │   ├── hotel_list_screen.dart   # Liste des hôtels
 │   │   ├── hotel_detail_screen.dart # Détail hôtel + réservation
 │   │   ├── vehicule_list_screen.dart
@@ -117,7 +147,9 @@ kurgate/
 │   │   ├── restaurant_detail_screen.dart
 │   │   ├── boutique_list_screen.dart
 │   │   ├── boutique_detail_screen.dart
-│   │   └── destination_screen.dart
+│   │   ├── bookings_screen.dart     # Mes réservations
+│   │   ├── cart_screen.dart         # Panier artisanal
+│   │   └── profile_screen.dart      # Profil utilisateur
 │   └── widgets/                     # Composants réutilisables
 │       ├── kurgate_button.dart      # Bouton animé personnalisé
 │       ├── kurgate_loading_overlay.dart
@@ -128,11 +160,38 @@ kurgate/
 │       ├── hotels/                  # 6 hôtels × 6 photos
 │       │   ├── la_mamounia/
 │       │   ├── royal_mansour/
-│       │   └── ...
-│       └── vehicules/               # 6 véhicules × 4 photos
-│           ├── dacia_duster/
-│           ├── mercedes_classe_e/
-│           └── ...
+│       │   ├── riad_yasmine/
+│       │   ├── la_sultana/
+│       │   ├── mandarin_oriental/
+│       │   └── riad_kniza/
+│       ├── vehicules/               # 6 véhicules × 4 photos
+│       │   ├── dacia_duster/
+│       │   ├── renault_clio/
+│       │   ├── mercedes_classe_e/
+│       │   ├── toyota_hilux/
+│       │   ├── peugeot_3008/
+│       │   └── citroen_berlingo/
+│       ├── experiences/             # 6 expériences × 3 photos
+│       │   ├── safari_agafay/
+│       │   ├── medina_visite/
+│       │   ├── randonnee_atlas/
+│       │   ├── cours_cuisine/
+│       │   ├── vol_montgolfiere/
+│       │   └── jardin_majorelle/
+│       ├── restaurants/             # 6 restaurants × 3 photos
+│       │   ├── le_jardin/
+│       │   ├── nomad/
+│       │   ├── al_fassia/
+│       │   ├── cafe_clock/
+│       │   ├── la_table_du_palais/
+│       │   └── chez_lamine/
+│       └── boutiques/               # 6 boutiques × 3 photos
+│           ├── tapis_berberes/
+│           ├── ceramique_safi/
+│           ├── maroquinerie_youssef/
+│           ├── bijoux_touareg/
+│           ├── tissages_amazigh/
+│           └── poterie_tamegroute/
 └── pubspec.yaml
 ```
 
@@ -151,7 +210,7 @@ kurgate/
 
 ```bash
 # 1. Cloner le projet
-git clone https://github.com/your-username/kurgate.git
+git clone https://github.com/saadlech/Kurgate.git
 cd kurgate
 
 # 2. Installer les dépendances
@@ -178,9 +237,6 @@ flutter build apk --release
 
 # Build pour iOS
 flutter build ios --release
-
-# Générer les icônes de l'application
-dart run flutter_launcher_icons
 ```
 
 ---
@@ -194,6 +250,8 @@ dart run flutter_launcher_icons
 | 🟠 **Orange** | `#FF8C00` | Accent principal, CTA, étoiles |
 | 🟡 **Orange clair** | `#FCA91C` | Accent secondaire |
 | 🟠 **Orange foncé** | `#E77728` | Accent tertiaire |
+| 🟢 **Vert succès** | `#4ADE80` | Confirmations, succès |
+| 🔴 **Rouge erreur** | `#FF5252` | Erreurs, déconnexion |
 | ⬛ **Noir profond** | `#1A1A1A` | Fond principal |
 | ⬛ **Gris foncé** | `#2A2A2A` | Cartes, conteneurs |
 
@@ -207,16 +265,23 @@ La police **Darker Grotesque** est utilisée en 7 graisses (300–900) pour cré
 - **Animations fluides** — Transitions de page, entrées d'éléments, micro-interactions
 - **Glassmorphism** — Effets de transparence sur les cartes et overlays
 - **Responsive** — Adapté à toutes les tailles d'écrans mobiles
+- **Orbes animés** — Effets lumineux subtils en arrière-plan
 
 ---
 
-## 🗄️ Backend (Supabase)
+## 🗄️ Backend & Stockage
 
-Le backend utilise **Supabase** pour :
+### Supabase (Cloud)
 
 - **Authentication** — Email/password avec vérification, reset password
 - **Database (PostgreSQL)** — Table `utilisateurs` pour les profils
 - **Row Level Security** — Sécurité au niveau des lignes
+
+### Hive (Local)
+
+- **Remember Me** — Persistance sécurisée des identifiants
+- **Auto-login** — Reconnexion automatique via les credentials stockés
+- **Préférences** — Flag remember me (boolean)
 
 ### Configuration Supabase
 
@@ -224,19 +289,60 @@ L'URL et la clé anonyme sont configurées dans `lib/main.dart`. Pour un déploi
 
 ---
 
+## 🔄 Flux Utilisateur
+
+```
+Splash Screen (animation + auto-login check)
+    ├── [Remember Me ON] → Auto-login → Home Screen
+    └── [Remember Me OFF] → Onboarding → Login/Signup
+                                              │
+                                    Destination Screen (Marrakech)
+                                              │
+                                         Home Screen
+                                    ┌────┬────┬────┬────┐
+                                    │    │    │    │    │
+                                  Home Bookings Map Cart Profile
+                                    │
+                    ┌────────┬──────┬──────┬──────┬──────┐
+                  Hotels  Vehicles Experiences Restaurants Boutiques
+                    │        │         │          │         │
+                  Detail   Detail    Detail     Detail   Detail
+                    │        │         │          │
+                 Booking  Booking   Booking    Booking
+```
+
+---
+
 ## 📱 Captures d'Écran
 
 | Splash | Onboarding | Login |
 |--------|-----------|-------|
-| Écran animé avec logo | 3 pages de découverte | Connexion avec animations |
+| Écran animé avec logo | 3 pages de découverte | Connexion avec Remember Me |
 
-| Accueil | Hôtels | Détail Hôtel |
-|---------|--------|-------------|
-| Dashboard principal | Liste avec filtres | Galerie + Réservation |
+| Accueil | Recherche | Destinations |
+|---------|-----------|-------------|
+| Hub avec 5 sections | Recherche globale temps réel | Sélection de ville |
 
-| Véhicules | Détail Véhicule | Expériences |
-|-----------|----------------|-------------|
-| 6 voitures réelles | Slider 4 images | Activités filtrables |
+| Hôtels | Détail Hôtel | Véhicules |
+|--------|-------------|-----------|
+| Liste avec filtres | Galerie 6 photos + Réservation | 6 voitures réelles |
+
+| Expériences | Restaurants | Boutiques |
+|-------------|-------------|-----------|
+| Activités filtrables | 6 adresses authentiques | Artisanat marocain |
+
+---
+
+## 📦 Dépendances Principales
+
+```yaml
+dependencies:
+  flutter_riverpod: ^2.6.1    # State management
+  go_router: ^14.8.1           # Navigation déclarative
+  supabase_flutter: ^2.8.4     # Backend Supabase
+  hive: ^2.2.3                 # Stockage local
+  hive_flutter: ^1.1.0         # Hive Flutter bindings
+```
 
 ---
 
