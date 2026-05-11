@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../providers/booking_provider.dart';
 import '../providers/review_provider.dart';
 import '../providers/auth_provider.dart';
+import '../models/avis.dart';
 import '../widgets/feedback_sheet.dart';
 
 class PaymentScreen extends ConsumerStatefulWidget {
@@ -83,7 +84,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
             isScrollControlled: true,
             backgroundColor: Colors.transparent,
             builder: (_) => FeedbackSheet(
-              bookingName: booking.name,
+              bookingName: booking.nom,
               bookingType: booking.typeLabel,
               onSubmit: (rating, comment) {
                 ref
@@ -92,14 +93,14 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                 // Also save to global reviews so all users can see it
                 final user = ref.read(authProvider).currentUser;
                 if (user != null && booking != null) {
-                  ref.read(reviewProvider.notifier).addReview(Review(
-                    id: '${booking.itemId}_${user.id}',
+                  ref.read(reviewProvider.notifier).addReview(Avis(
+                    idAvis: '${booking.itemId}_${user.id}',
                     itemId: booking.itemId,
                     userId: user.id,
                     userName: user.nom,
-                    rating: rating,
-                    comment: comment,
-                    createdAt: DateTime.now(),
+                    note: rating,
+                    commentaire: comment,
+                    datePublication: DateTime.now(),
                   ));
                 }
               },
@@ -115,7 +116,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
   @override
   Widget build(BuildContext context) {
     final booking =
-        ref.watch(bookingProvider).where((b) => b.id == widget.bookingId);
+        ref.watch(bookingProvider).where((b) => b.idReservation == widget.bookingId);
     if (booking.isEmpty) {
       return Scaffold(
         backgroundColor: const Color(0xFF1A1A1A),
@@ -163,7 +164,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
   }
 
   // ─── SUCCESS ─────────────────────────────────────────
-  Widget _buildSuccessState(Booking b) {
+  Widget _buildSuccessState(Reservation b) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -196,7 +197,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
           ),
           const SizedBox(height: 8),
           Text(
-            '${b.name} · \$${b.totalPrice}',
+            '${b.nom} · \$${b.prixTotal}',
             style: TextStyle(
               fontFamily: 'DarkerGrotesque',
               color: Colors.white.withValues(alpha: 0.4),
@@ -283,7 +284,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
   }
 
   // ─── FORM ────────────────────────────────────────────
-  Widget _buildPaymentForm(Booking b) {
+  Widget _buildPaymentForm(Reservation b) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 40),
@@ -437,7 +438,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        'Payer \$${b.totalPrice}',
+                        'Payer \$${b.prixTotal}',
                         style: TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           fontSize: 18,
@@ -472,7 +473,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
     );
   }
 
-  Widget _buildOrderSummary(Booking b) {
+  Widget _buildOrderSummary(Reservation b) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -505,7 +506,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  b.name,
+                  b.nom,
                   style: const TextStyle(
                     fontFamily: 'DarkerGrotesque',
                     color: Colors.white,
@@ -528,7 +529,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
             ),
           ),
           Text(
-            '\$${b.totalPrice}',
+            '\$${b.prixTotal}',
             style: const TextStyle(
               fontFamily: 'DarkerGrotesque',
               color: Color(0xFFFF8C00),

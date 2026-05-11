@@ -200,15 +200,17 @@ class _RestaurantDetailScreenState
           ref
               .read(bookingProvider.notifier)
               .addBooking(
-                Booking(
-                  id: 'resto_${DateTime.now().millisecondsSinceEpoch}',
+                Reservation(
+                  idReservation: 'resto_${DateTime.now().millisecondsSinceEpoch}',
                   itemId: widget.restaurantId,
-                  type: BookingType.restaurant,
-                  name: _resto.name,
-                  subtitle: '${_resto.location} · ${_resto.specialite}',
+                  typeOffre: 'restaurant',
+                  nom: _resto.name,
+                  sousTitre: '${_resto.location} · ${_resto.specialite}',
                   imageUrl: _resto.images.first,
-                  totalPrice: _resto.price * _guests,
-                  createdAt: DateTime.now(),
+                  nbPersonnes: _guests,
+                  dateDebut: _date,
+                  dateFin: _date,
+                  prixTotal: _resto.price * _guests,
                   details: {
                     'Date': _fmtDate(_date),
                     'Heure': _timeSlots[_selectedTime],

@@ -288,15 +288,17 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         totalPrice: _totalPrice,
         nights: _nights,
         onConfirmed: () {
-          ref.read(bookingProvider.notifier).addBooking(Booking(
-            id: 'hotel_${DateTime.now().millisecondsSinceEpoch}',
+          ref.read(bookingProvider.notifier).addBooking(Reservation(
+            idReservation: 'hotel_${DateTime.now().millisecondsSinceEpoch}',
             itemId: widget.hotelId,
-            type: BookingType.hotel,
-            name: _hotel.name,
-            subtitle: '${_hotel.location} · ${_rooms[_selectedRoom].name}',
+            typeOffre: 'hotel',
+            nom: _hotel.name,
+            sousTitre: '${_hotel.location} · ${_rooms[_selectedRoom].name}',
             imageUrl: _hasGallery ? _hotel.imageAssets.first : '',
-            totalPrice: _totalPrice,
-            createdAt: DateTime.now(),
+            nbPersonnes: _adults + _children,
+            dateDebut: _checkIn,
+            dateFin: _checkOut,
+            prixTotal: _totalPrice,
             details: {
               'Arrivée': _fmtDateShort(_checkIn),
               'Départ': _fmtDateShort(_checkOut),

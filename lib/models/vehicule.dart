@@ -9,6 +9,12 @@ class Vehicule {
   final double prixParJour;
   final String imageUrl;
   final bool estDisponible;
+  final String description;
+  final String agence;
+  final double note;
+  final int nbAvis;
+  final String categorie;
+  final List<String> images;
 
   const Vehicule({
     required this.idVehicule,
@@ -21,7 +27,16 @@ class Vehicule {
     required this.prixParJour,
     required this.imageUrl,
     this.estDisponible = true,
+    this.description = '',
+    this.agence = '',
+    this.note = 0.0,
+    this.nbAvis = 0,
+    this.categorie = '',
+    this.images = const [],
   });
+
+  /// Display name combining brand and model
+  String get nom => '$marque $modele';
 
   Map<String, dynamic> toMap() {
     return {
@@ -35,6 +50,12 @@ class Vehicule {
       'prixParJour': prixParJour,
       'imageUrl': imageUrl,
       'estDisponible': estDisponible,
+      'description': description,
+      'agence': agence,
+      'note': note,
+      'nbAvis': nbAvis,
+      'categorie': categorie,
+      'images': images,
     };
   }
 
@@ -50,6 +71,12 @@ class Vehicule {
       prixParJour: (map['prixParJour'] as num).toDouble(),
       imageUrl: map['imageUrl'] as String,
       estDisponible: map['estDisponible'] as bool? ?? true,
+      description: map['description'] as String? ?? '',
+      agence: map['agence'] as String? ?? '',
+      note: (map['note'] as num?)?.toDouble() ?? 0.0,
+      nbAvis: map['nbAvis'] as int? ?? 0,
+      categorie: map['categorie'] as String? ?? '',
+      images: (map['images'] as List<dynamic>?)?.cast<String>() ?? [],
     );
   }
 

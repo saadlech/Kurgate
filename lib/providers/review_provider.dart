@@ -1,40 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/avis.dart';
 
-class Review {
-  final String id;
-  final String itemId;       // hotel_1, resto_1, etc.
-  final String userId;
-  final String userName;
-  final int rating;           // 1-5
-  final String comment;
-  final DateTime createdAt;
-
-  const Review({
-    required this.id,
-    required this.itemId,
-    required this.userId,
-    required this.userName,
-    required this.rating,
-    required this.comment,
-    required this.createdAt,
-  });
-}
-
-class ReviewNotifier extends StateNotifier<List<Review>> {
+class ReviewNotifier extends StateNotifier<List<Avis>> {
   ReviewNotifier() : super(_seedReviews);
 
   /// Add a review (one per user per item)
-  bool addReview(Review review) {
+  bool addReview(Avis avis) {
     final exists = state.any(
-      (r) => r.itemId == review.itemId && r.userId == review.userId,
+      (r) => r.itemId == avis.itemId && r.userId == avis.userId,
     );
-    if (exists) return false; // already reviewed
-    state = [review, ...state];
+    if (exists) return false;
+    state = [avis, ...state];
     return true;
   }
 
   /// Get all reviews for a specific item
-  List<Review> reviewsFor(String itemId) =>
+  List<Avis> reviewsFor(String itemId) =>
       state.where((r) => r.itemId == itemId).toList();
 
   /// Check if a user already reviewed an item
@@ -45,22 +26,22 @@ class ReviewNotifier extends StateNotifier<List<Review>> {
   double avgRating(String itemId) {
     final reviews = reviewsFor(itemId);
     if (reviews.isEmpty) return 0;
-    return reviews.map((r) => r.rating).reduce((a, b) => a + b) / reviews.length;
+    return reviews.map((r) => r.note).reduce((a, b) => a + b) / reviews.length;
   }
 }
 
 // Seed data so screens aren't empty on first launch
-final _seedReviews = <Review>[
-  Review(id: 's1', itemId: 'hotel_1', userId: 'seed_1', userName: 'Amina B.', rating: 5, comment: 'Un séjour exceptionnel, le service était parfait !', createdAt: DateTime(2026, 4, 28)),
-  Review(id: 's2', itemId: 'hotel_1', userId: 'seed_2', userName: 'Youssef K.', rating: 4, comment: 'Très bel hôtel, piscine magnifique.', createdAt: DateTime(2026, 5, 1)),
-  Review(id: 's3', itemId: 'hotel_2', userId: 'seed_1', userName: 'Amina B.', rating: 5, comment: 'Le riad le plus charmant de Marrakech.', createdAt: DateTime(2026, 4, 20)),
-  Review(id: 's4', itemId: 'resto_1', userId: 'seed_3', userName: 'Fatima Z.', rating: 5, comment: 'La meilleure cuisine marocaine que j\'ai goûtée !', createdAt: DateTime(2026, 5, 3)),
-  Review(id: 's5', itemId: 'resto_1', userId: 'seed_2', userName: 'Youssef K.', rating: 4, comment: 'Ambiance superbe, plats délicieux.', createdAt: DateTime(2026, 5, 5)),
-  Review(id: 's6', itemId: 'exp_1', userId: 'seed_1', userName: 'Amina B.', rating: 5, comment: 'Une expérience inoubliable dans le désert !', createdAt: DateTime(2026, 4, 15)),
-  Review(id: 's7', itemId: 'boutique_1', userId: 'seed_3', userName: 'Fatima Z.', rating: 4, comment: 'De très beaux produits artisanaux.', createdAt: DateTime(2026, 5, 2)),
+final _seedReviews = <Avis>[
+  Avis(idAvis: 's1', itemId: 'hotel_001', userId: 'seed_1', userName: 'Amina B.', note: 5, commentaire: 'Un séjour exceptionnel, le service était parfait !', datePublication: DateTime(2026, 4, 28)),
+  Avis(idAvis: 's2', itemId: 'hotel_001', userId: 'seed_2', userName: 'Youssef K.', note: 4, commentaire: 'Très bel hôtel, piscine magnifique.', datePublication: DateTime(2026, 5, 1)),
+  Avis(idAvis: 's3', itemId: 'hotel_002', userId: 'seed_1', userName: 'Amina B.', note: 5, commentaire: 'Le riad le plus charmant de Marrakech.', datePublication: DateTime(2026, 4, 20)),
+  Avis(idAvis: 's4', itemId: 'resto_001', userId: 'seed_3', userName: 'Fatima Z.', note: 5, commentaire: 'La meilleure cuisine marocaine que j\'ai goûtée !', datePublication: DateTime(2026, 5, 3)),
+  Avis(idAvis: 's5', itemId: 'resto_001', userId: 'seed_2', userName: 'Youssef K.', note: 4, commentaire: 'Ambiance superbe, plats délicieux.', datePublication: DateTime(2026, 5, 5)),
+  Avis(idAvis: 's6', itemId: 'exp_001', userId: 'seed_1', userName: 'Amina B.', note: 5, commentaire: 'Une expérience inoubliable dans le désert !', datePublication: DateTime(2026, 4, 15)),
+  Avis(idAvis: 's7', itemId: 'boutique_001', userId: 'seed_3', userName: 'Fatima Z.', note: 4, commentaire: 'De très beaux produits artisanaux.', datePublication: DateTime(2026, 5, 2)),
 ];
 
 final reviewProvider =
-    StateNotifierProvider<ReviewNotifier, List<Review>>((ref) {
+    StateNotifierProvider<ReviewNotifier, List<Avis>>((ref) {
   return ReviewNotifier();
 });

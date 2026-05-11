@@ -22,10 +22,10 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
   ];
   final _filterTypes = const [
     null,
-    BookingType.hotel,
-    BookingType.vehicule,
-    BookingType.experience,
-    BookingType.restaurant,
+    'hotel',
+    'vehicule',
+    'experience',
+    'restaurant',
   ];
 
   @override
@@ -34,7 +34,7 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
     final filtered = _selectedFilter == 0
         ? bookings
         : bookings
-              .where((b) => b.type == _filterTypes[_selectedFilter])
+              .where((b) => b.typeOffre == _filterTypes[_selectedFilter])
               .toList();
 
     return Scaffold(
@@ -225,7 +225,7 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
     ),
   );
 
-  Widget _buildBookingList(List<Booking> bookings) => ListView.separated(
+  Widget _buildBookingList(List<Reservation> bookings) => ListView.separated(
     physics: const BouncingScrollPhysics(),
     padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
     itemCount: bookings.length,
@@ -235,13 +235,13 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
       return _BookingCard(
         booking: booking,
         onDelete: () => _showDeleteDialog(context, booking),
-        onPay: () => context.push('/payment/${booking.id}'),
+        onPay: () => context.push('/payment/${booking.idReservation}'),
         onFeedback: () => _showFeedbackSheet(booking),
       );
     },
   );
 
-  void _showDeleteDialog(BuildContext context, Booking booking) {
+  void _showDeleteDialog(BuildContext context, Reservation booking) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -257,7 +257,7 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
           ),
         ),
         content: Text(
-          '${booking.name} sera supprimé de vos réservations.',
+          '${booking.nom} sera supprimé de vos réservations.',
           style: TextStyle(
             fontFamily: 'DarkerGrotesque',
             color: Colors.white.withValues(alpha: 0.6),
@@ -278,11 +278,11 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
-              ref.read(bookingProvider.notifier).removeBooking(booking.id);
+              ref.read(bookingProvider.notifier).removeBooking(booking.idReservation);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    '${booking.name} supprimé',
+                    '${booking.nom} supprimé',
                     style: const TextStyle(fontFamily: 'DarkerGrotesque'),
                   ),
                   backgroundColor: const Color(0xFF2A2A2A),
@@ -309,18 +309,18 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
     );
   }
 
-  void _showFeedbackSheet(Booking booking) {
+  void _showFeedbackSheet(Reservation booking) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => FeedbackSheet(
-        bookingName: booking.name,
+        bookingName: booking.nom,
         bookingType: booking.typeLabel,
         onSubmit: (rating, comment) {
           ref
               .read(bookingProvider.notifier)
-              .addFeedback(booking.id, rating, comment);
+              .addFeedback(booking.idReservation, rating, comment);
         },
       ),
     );
@@ -382,7 +382,7 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
 // ─── BOOKING CARD ──────────────────────────────────────
 
 class _BookingCard extends StatelessWidget {
-  final Booking booking;
+  final Reservation booking;
   final VoidCallback onDelete;
   final VoidCallback onPay;
   final VoidCallback onFeedback;
@@ -394,50 +394,54 @@ class _BookingCard extends StatelessWidget {
   });
 
   IconData get _icon {
-    switch (booking.type) {
-      case BookingType.hotel:
+    switch (booking.typeOffre) {
+      case 'hotel':
         return Icons.hotel_rounded;
-      case BookingType.vehicule:
+      case 'vehicule':
         return Icons.directions_car_rounded;
-      case BookingType.experience:
+      case 'experience':
         return Icons.explore_rounded;
-      case BookingType.restaurant:
+      case 'restaurant':
         return Icons.restaurant_rounded;
+      default:
+        return Icons.bookmark_rounded;
     }
   }
 
   Color get _typeColor {
-    switch (booking.type) {
-      case BookingType.hotel:
+    switch (booking.typeOffre) {
+      case 'hotel':
         return const Color(0xFF4A90D9);
-      case BookingType.vehicule:
+      case 'vehicule':
         return const Color(0xFF2ECC71);
-      case BookingType.experience:
+      case 'experience':
         return const Color(0xFFE74C3C);
-      case BookingType.restaurant:
+      case 'restaurant':
         return const Color(0xFFF39C12);
+      default:
+        return const Color(0xFF888888);
     }
   }
 
   Color get _statusColor {
-    switch (booking.status) {
-      case BookingStatus.pending:
-        return const Color(0xFFFF8C00);
-      case BookingStatus.paid:
+    switch (booking.statut) {
+      case 'Payée':
         return const Color(0xFF2ECC71);
-      case BookingStatus.cancelled:
+      case 'Annulée':
         return const Color(0xFFFF5252);
+      default:
+        return const Color(0xFFFF8C00);
     }
   }
 
   IconData get _statusIcon {
-    switch (booking.status) {
-      case BookingStatus.pending:
-        return Icons.schedule_rounded;
-      case BookingStatus.paid:
+    switch (booking.statut) {
+      case 'Payée':
         return Icons.check_circle_rounded;
-      case BookingStatus.cancelled:
+      case 'Annulée':
         return Icons.cancel_rounded;
+      default:
+        return Icons.schedule_rounded;
     }
   }
 
@@ -524,7 +528,7 @@ class _BookingCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    '\$${booking.totalPrice}',
+                    '\$${booking.prixTotal}',
                     style: const TextStyle(
                       fontFamily: 'DarkerGrotesque',
                       color: Color(0xFFFF8C00),
@@ -578,7 +582,7 @@ class _BookingCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        booking.name,
+                        booking.nom,
                         style: const TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           color: Colors.white,
@@ -607,7 +611,7 @@ class _BookingCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  booking.subtitle,
+                  booking.sousTitre,
                   style: TextStyle(
                     fontFamily: 'DarkerGrotesque',
                     color: Colors.white.withValues(alpha: 0.4),
@@ -662,7 +666,7 @@ class _BookingCard extends StatelessWidget {
                 ),
 
                 // Rating display (if feedback exists)
-                if (booking.rating != null) ...[
+                if (booking.note != null) ...[
                   const SizedBox(height: 12),
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -681,7 +685,7 @@ class _BookingCard extends StatelessWidget {
                         ...List.generate(
                           5,
                           (i) => Icon(
-                            i < booking.rating!
+                            i < booking.note!
                                 ? Icons.star_rounded
                                 : Icons.star_border_rounded,
                             color: const Color(0xFFFF8C00),
@@ -690,7 +694,7 @@ class _BookingCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '${booking.rating}/5',
+                          '${booking.note}/5',
                           style: const TextStyle(
                             fontFamily: 'DarkerGrotesque',
                             color: Color(0xFFFF8C00),
@@ -698,12 +702,12 @@ class _BookingCard extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        if (booking.feedback != null &&
-                            booking.feedback!.isNotEmpty) ...[
+                        if (booking.commentaire != null &&
+                            booking.commentaire!.isNotEmpty) ...[
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              '« ${booking.feedback} »',
+                              '« ${booking.commentaire} »',
                               style: TextStyle(
                                 fontFamily: 'DarkerGrotesque',
                                 color: Colors.white.withValues(alpha: 0.4),
@@ -731,7 +735,7 @@ class _BookingCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      'Réservé le ${_fmtDate(booking.createdAt)}',
+                      'Réservé le ${_fmtDate(booking.dateDebut)}',
                       style: TextStyle(
                         fontFamily: 'DarkerGrotesque',
                         color: Colors.white.withValues(alpha: 0.25),
@@ -741,15 +745,15 @@ class _BookingCard extends StatelessWidget {
                     const Spacer(),
 
                     // Action button based on status
-                    if (booking.status == BookingStatus.pending)
+                    if (booking.statut == 'En attente')
                       _actionBtn(
                         icon: Icons.payment_rounded,
                         label: 'Payer',
                         color: const Color(0xFFFF8C00),
                         onTap: onPay,
                       ),
-                    if (booking.status == BookingStatus.paid &&
-                        booking.rating == null)
+                    if (booking.statut == 'Payée' &&
+                        booking.note == null)
                       _actionBtn(
                         icon: Icons.rate_review_rounded,
                         label: 'Avis',

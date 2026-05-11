@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/review_provider.dart';
 import '../providers/auth_provider.dart';
+import '../models/avis.dart';
 import '../widgets/feedback_sheet.dart';
 
 class ReviewsSection extends ConsumerWidget {
@@ -26,7 +27,7 @@ class ReviewsSection extends ConsumerWidget {
     final hasReviewed = reviews.any((r) => r.userId == userId);
     final avg = reviews.isEmpty
         ? 0.0
-        : reviews.map((r) => r.rating).reduce((a, b) => a + b) / reviews.length;
+        : reviews.map((r) => r.note).reduce((a, b) => a + b) / reviews.length;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +124,7 @@ class ReviewsSection extends ConsumerWidget {
             ),
           )
         else
-          ...reviews.map((r) => _ReviewCard(review: r)),
+          ...reviews.map((r) => _ReviewCard(avis: r)),
       ],
     );
   }
@@ -139,14 +140,14 @@ class ReviewsSection extends ConsumerWidget {
         bookingName: itemName,
         bookingType: itemType,
         onSubmit: (rating, comment) {
-          ref.read(reviewProvider.notifier).addReview(Review(
-            id: '${itemId}_${user.id}',
+          ref.read(reviewProvider.notifier).addReview(Avis(
+            idAvis: '${itemId}_${user.id}',
             itemId: itemId,
             userId: user.id,
             userName: user.nom,
-            rating: rating,
-            comment: comment,
-            createdAt: DateTime.now(),
+            note: rating,
+            commentaire: comment,
+            datePublication: DateTime.now(),
           ));
         },
       ),
@@ -155,8 +156,8 @@ class ReviewsSection extends ConsumerWidget {
 }
 
 class _ReviewCard extends StatelessWidget {
-  final Review review;
-  const _ReviewCard({required this.review});
+  final Avis avis;
+  const _ReviewCard({required this.avis});
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +183,7 @@ class _ReviewCard extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    review.userName.isNotEmpty ? review.userName[0].toUpperCase() : '?',
+                    avis.userName.isNotEmpty ? avis.userName[0].toUpperCase() : '?',
                     style: const TextStyle(
                       fontFamily: 'DarkerGrotesque',
                       color: Color(0xFFFF8C00),
@@ -196,24 +197,24 @@ class _ReviewCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(review.userName, style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700)),
+                    Text(avis.userName, style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700)),
                     Text(
-                      '${review.createdAt.day.toString().padLeft(2, '0')}/${review.createdAt.month.toString().padLeft(2, '0')}/${review.createdAt.year}',
+                      '${avis.datePublication.day.toString().padLeft(2, '0')}/${avis.datePublication.month.toString().padLeft(2, '0')}/${avis.datePublication.year}',
                       style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.25), fontSize: 11),
                     ),
                   ],
                 ),
               ),
               ...List.generate(5, (i) => Icon(
-                i < review.rating ? Icons.star_rounded : Icons.star_border_rounded,
+                i < avis.note ? Icons.star_rounded : Icons.star_border_rounded,
                 color: const Color(0xFFFF8C00), size: 14,
               )),
             ],
           ),
-          if (review.comment.isNotEmpty) ...[
+          if (avis.commentaire.isNotEmpty) ...[
             const SizedBox(height: 10),
             Text(
-              review.comment,
+              avis.commentaire,
               style: TextStyle(
                 fontFamily: 'DarkerGrotesque',
                 color: Colors.white.withValues(alpha: 0.6),

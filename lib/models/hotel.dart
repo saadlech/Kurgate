@@ -2,7 +2,6 @@ import 'offre_touristique.dart';
 import 'chambre.dart';
 
 class Hotel extends OffreTouristique {
-  final String localisation;
   final int nbEtoiles;
   final List<Chambre> chambres;
 
@@ -12,7 +11,10 @@ class Hotel extends OffreTouristique {
     required super.prix,
     super.note,
     super.imageUrl,
-    required this.localisation,
+    super.description,
+    super.localisation,
+    super.images,
+    super.nbAvis,
     required this.nbEtoiles,
     this.chambres = const [],
   }) : super(type: 'Hotel');
@@ -20,7 +22,6 @@ class Hotel extends OffreTouristique {
   @override
   Map<String, dynamic> toMap() {
     final map = super.toMap();
-    map['localisation'] = localisation;
     map['nbEtoiles'] = nbEtoiles;
     map['chambres'] = chambres.map((c) => c.toMap()).toList();
     return map;
@@ -33,7 +34,10 @@ class Hotel extends OffreTouristique {
       prix: (map['prix'] as num).toDouble(),
       note: (map['note'] as num?)?.toDouble() ?? 0.0,
       imageUrl: map['imageUrl'] as String?,
-      localisation: map['localisation'] as String,
+      description: map['description'] as String? ?? '',
+      localisation: map['localisation'] as String? ?? '',
+      images: (map['images'] as List<dynamic>?)?.cast<String>() ?? [],
+      nbAvis: map['nbAvis'] as int? ?? 0,
       nbEtoiles: map['nbEtoiles'] as int,
       chambres: (map['chambres'] as List<dynamic>?)
               ?.map((c) => Chambre.fromMap(c as Map<String, dynamic>))

@@ -5,6 +5,10 @@ class OffreTouristique {
   final double note;
   final String type;
   final String? imageUrl;
+  final String description;
+  final String localisation;
+  final List<String> images;
+  final int nbAvis;
 
   const OffreTouristique({
     required this.idOffre,
@@ -13,6 +17,10 @@ class OffreTouristique {
     this.note = 0.0,
     required this.type,
     this.imageUrl,
+    this.description = '',
+    this.localisation = '',
+    this.images = const [],
+    this.nbAvis = 0,
   });
 
   /// Vérifie la disponibilité de l'offre pour une période donnée
@@ -21,7 +29,6 @@ class OffreTouristique {
     required DateTime fin,
     required int nbPersonnes,
   }) {
-    // TODO: Implement actual availability check with backend
     if (fin.isBefore(debut)) return false;
     if (nbPersonnes <= 0) return false;
     return true;
@@ -35,6 +42,10 @@ class OffreTouristique {
       'note': note,
       'type': type,
       'imageUrl': imageUrl,
+      'description': description,
+      'localisation': localisation,
+      'images': images,
+      'nbAvis': nbAvis,
     };
   }
 
@@ -46,6 +57,10 @@ class OffreTouristique {
       note: (map['note'] as num?)?.toDouble() ?? 0.0,
       type: map['type'] as String,
       imageUrl: map['imageUrl'] as String?,
+      description: map['description'] as String? ?? '',
+      localisation: map['localisation'] as String? ?? '',
+      images: (map['images'] as List<dynamic>?)?.cast<String>() ?? [],
+      nbAvis: map['nbAvis'] as int? ?? 0,
     );
   }
 

@@ -234,15 +234,17 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
           ref
               .read(bookingProvider.notifier)
               .addBooking(
-                Booking(
-                  id: 'vehicule_${DateTime.now().millisecondsSinceEpoch}',
+                Reservation(
+                  idReservation: 'vehicule_${DateTime.now().millisecondsSinceEpoch}',
                   itemId: widget.vehiculeId,
-                  type: BookingType.vehicule,
-                  name: _vehicule.name,
-                  subtitle: '${_vehicule.agence} · ${_vehicule.category}',
+                  typeOffre: 'vehicule',
+                  nom: _vehicule.name,
+                  sousTitre: '${_vehicule.agence} · ${_vehicule.category}',
                   imageUrl: _vehicule.images.first,
-                  totalPrice: _totalPrice,
-                  createdAt: DateTime.now(),
+                  nbPersonnes: 1,
+                  dateDebut: _pickupDate,
+                  dateFin: _returnDate,
+                  prixTotal: _totalPrice,
                   details: {
                     'Début': _fmtDate(_pickupDate),
                     'Retour': _fmtDate(_returnDate),
