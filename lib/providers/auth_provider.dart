@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/utilisateur.dart';
+import '../services/local_storage_service.dart';
 
 // Auth state
 class AuthState {
@@ -97,7 +96,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
 
     if (msg.contains('password') &&
-        (msg.contains('weak') || msg.contains('short') || msg.contains('too'))) {
+        (msg.contains('weak') ||
+            msg.contains('short') ||
+            msg.contains('too'))) {
       return (
         message: 'Password is too weak. Use at least 6 characters.',
         type: AuthErrorType.weakPassword,
@@ -112,83 +113,27 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
 
     // Fallback to the original message
-    return (
-      message: e.message,
-      type: AuthErrorType.unknown,
-    );
-  }
-
-  /// Handle generic errors with proper network detection
-  void _handleGenericError(Object error, String context) {
-    debugPrint('=== AUTH ERROR ($context) ===');
-    debugPrint('Error type: ${error.runtimeType}');
-    debugPrint('Error: $error');
-    debugPrint('============================');
-
-    if (_isNetworkError(error)) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: 'No internet connection. Please check your network and try again.',
-        errorType: AuthErrorType.networkError,
-      );
-    } else {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: 'An unexpected error occurred. Please try again later.',
-        errorType: AuthErrorType.serverError,
-      );
-    }
+    return (message: e.message, type: AuthErrorType.unknown);
   }
 
   /// Fetch user profile from the `utilisateurs` table
   Future<Utilisateur?> _fetchUserProfile(String userId) async {
-    try {
-      final response = await _supabase
-          .from('utilisateurs')
-          .select()
-          .eq('id', userId)
-          .maybeSingle();
+    final response = await _supabase
+        .from('utilisateurs')
+        .select()
+        .eq('id', userId)
+        .maybeSingle();
 
-      if (response != null) {
-        return Utilisateur.fromMap(response);
-      }
-    } catch (e) {
-      debugPrint('Failed to fetch user profile: $e');
+    if (response != null) {
+      return Utilisateur.fromMap(response);
     }
     return null;
-  }
-
-  /// Create or update user profile in the `utilisateurs` table
-  Future<Utilisateur?> _upsertUserProfile({
-    required String userId,
-    required String nom,
-    required String email,
-    required int numDeTelephone,
-  }) async {
-    try {
-      final userData = {
-        'id': userId,
-        'nom': nom,
-        'email': email,
-        'num_de_telephone': numDeTelephone,
-      };
-      await _supabase.from('utilisateurs').upsert(userData);
-      return Utilisateur.fromMap(userData);
-    } catch (e) {
-      debugPrint('Failed to upsert user profile: $e');
-      // Return a local-only user object so auth still works
-      return Utilisateur(
-        id: userId,
-        nom: nom,
-        email: email,
-        numDeTelephone: numDeTelephone,
-      );
-    }
   }
 
   Future<bool> login({
     required String email,
     required String password,
+    bool rememberMe = false,
   }) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
@@ -209,6 +154,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
           email: email,
           numDeTelephone: (response.user!.userMetadata?['numDeTelephone'] as num?)?.toInt() ?? 0,
         );
+
+        // Persist or clear credentials based on Remember Me
+        if (rememberMe) {
+          await LocalStorageService.saveCredentials(
+            email: email,
+            password: password,
+          );
+        } else {
+          await LocalStorageService.clearCredentials();
+        }
 
         state = state.copyWith(
           isAuthenticated: true,
@@ -233,7 +188,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       return false;
     } catch (e) {
-      _handleGenericError(e, 'login');
+      if (_isNetworkError(e)) {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage:
+              'No internet connection. Please check your network and try again.',
+          errorType: AuthErrorType.networkError,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage: 'An unexpected error occurred. Please try again later.',
+          errorType: AuthErrorType.serverError,
+        );
+      }
       return false;
     }
   }
@@ -250,27 +218,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final response = await _supabase.auth.signUp(
         email: email,
         password: password,
-        data: {
-          'nom': nom,
-          'numDeTelephone': numDeTelephone,
-        },
+        data: {'nom': nom, 'numDeTelephone': numDeTelephone},
       );
 
       if (response.user != null) {
-        // Insert user profile into the utilisateurs table (with fallback)
-        await _upsertUserProfile(
-          userId: response.user!.id,
-          nom: nom,
-          email: email,
-          numDeTelephone: numDeTelephone,
-        );
+        // Insert user profile into the utilisateurs table
+        final userData = {
+          'id': response.user!.id,
+          'nom': nom,
+          'email': email,
+          'num_de_telephone': numDeTelephone,
+        };
+        await _supabase.from('utilisateurs').insert(userData);
 
-        // Sign out immediately — user must confirm email before logging in
-        await _supabase.auth.signOut();
+        final user = Utilisateur.fromMap(userData);
 
         state = state.copyWith(
-          isAuthenticated: false,
+          isAuthenticated: true,
           isLoading: false,
+          currentUser: user,
         );
         return true;
       }
@@ -289,12 +255,31 @@ class AuthNotifier extends StateNotifier<AuthState> {
         errorType: mapped.type,
       );
       return false;
-    } catch (e) {
-      _handleGenericError(e, 'signup');
+    } catch (e, stackTrace) {
+      // DEBUG: Print the actual error to console
+      print('=== SIGNUP ERROR ===');
+      print('Error type: ${e.runtimeType}');
+      print('Error: $e');
+      print('Stack trace: $stackTrace');
+      print('====================');
+      if (_isNetworkError(e)) {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage:
+              'No internet connection. Please check your network and try again.',
+          errorType: AuthErrorType.networkError,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage:
+              'An unexpected error occurred. Please try again later.\nDebug: ${e.runtimeType}: $e',
+          errorType: AuthErrorType.serverError,
+        );
+      }
       return false;
     }
   }
-
   /// Send a password reset email
   Future<bool> resetPassword({required String email}) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
@@ -315,12 +300,38 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       return false;
     } catch (e) {
-      _handleGenericError(e, 'resetPassword');
+      if (_isNetworkError(e)) {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage:
+              'No internet connection. Please check your network and try again.',
+          errorType: AuthErrorType.networkError,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage: 'An unexpected error occurred. Please try again later.',
+          errorType: AuthErrorType.serverError,
+        );
+      }
       return false;
     }
   }
 
+  /// Attempt auto-login using saved Hive credentials.
+  /// Returns true if auto-login succeeded.
+  Future<bool> tryAutoLogin() async {
+    if (!LocalStorageService.isRememberMeEnabled) return false;
+
+    final email = LocalStorageService.savedEmail;
+    final password = LocalStorageService.savedPassword;
+    if (email == null || password == null) return false;
+
+    return login(email: email, password: password, rememberMe: true);
+  }
+
   Future<void> logout() async {
+    await LocalStorageService.clearCredentials();
     await _supabase.auth.signOut();
     state = const AuthState();
   }

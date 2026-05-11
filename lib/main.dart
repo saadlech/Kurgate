@@ -3,9 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'router/app_router.dart';
+import 'services/local_storage_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Hive local storage
+  await LocalStorageService.init();
 
   await Supabase.initialize(
     url: 'https://aurxykjqywoaiezwkvff.supabase.co',

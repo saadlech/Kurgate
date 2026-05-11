@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
+import '../services/local_storage_service.dart';
 import '../widgets/auth_error_snackbar.dart';
 import '../widgets/kurgate_button.dart';
 
@@ -126,6 +127,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
 
     _entryController.forward();
+
+    // Load saved credentials from Hive
+    _loadSavedCredentials();
+  }
+
+  void _loadSavedCredentials() {
+    if (LocalStorageService.isRememberMeEnabled) {
+      final savedEmail = LocalStorageService.savedEmail;
+      final savedPassword = LocalStorageService.savedPassword;
+      if (savedEmail != null && savedPassword != null) {
+        _emailController.text = savedEmail;
+        _passwordController.text = savedPassword;
+        setState(() => _rememberMe = true);
+      }
+    }
   }
 
   @override
@@ -147,6 +163,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     final success = await ref.read(authProvider.notifier).login(
       email: _emailController.text.trim(),
       password: _passwordController.text,
+      rememberMe: _rememberMe,
     );
 
     if (mounted) {

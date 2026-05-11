@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../providers/auth_provider.dart';
+import '../services/local_storage_service.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController _iconController;
   late AnimationController _logoController;
@@ -127,7 +130,21 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 600));
 
     if (mounted) {
-      context.go('/onboarding');
+      // Try auto-login if Remember Me is enabled
+      if (LocalStorageService.isRememberMeEnabled) {
+        final success =
+            await ref.read(authProvider.notifier).tryAutoLogin();
+        if (mounted) {
+          if (success) {
+            context.go('/destinations');
+          } else {
+            // Auto-login failed (expired session, wrong password, etc.)
+            context.go('/login');
+          }
+        }
+      } else {
+        context.go('/onboarding');
+      }
     }
   }
 

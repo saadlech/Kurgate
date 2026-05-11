@@ -23,10 +23,17 @@ class _MainShellState extends State<MainShell> {
     _TabItem(icon: Icons.person_rounded, label: 'Profile'),
   ];
 
+  void _switchToTab(int index) {
+    setState(() {
+      _initializedTabs.add(index);
+      _currentIndex = index;
+    });
+  }
+
   Widget _buildTab(int index) {
     switch (index) {
       case 0:
-        return const HomeScreen();
+        return HomeScreen(onProfileTap: () => _switchToTab(4));
       case 1:
         return const BookingsScreen();
       case 3:
@@ -71,10 +78,7 @@ class _MainShellState extends State<MainShell> {
                 final tab = _tabs[i];
                 final active = i == _currentIndex;
                 return GestureDetector(
-                  onTap: () => setState(() {
-                    _initializedTabs.add(i);
-                    _currentIndex = i;
-                  }),
+                  onTap: () => _switchToTab(i),
                   behavior: HitTestBehavior.opaque,
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
