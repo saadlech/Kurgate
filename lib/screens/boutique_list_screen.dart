@@ -367,6 +367,8 @@ class _BoutiqueCard extends StatelessWidget {
                     child: Image.asset(
                       boutique.imageUrl,
                       fit: BoxFit.cover,
+                      cacheWidth: 600,
+                      gaplessPlayback: true,
                       errorBuilder: (_, _, _) => Container(
                         color: const Color(0xFF2A2A2A),
                         child: const Center(

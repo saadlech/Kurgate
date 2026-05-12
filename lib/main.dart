@@ -22,6 +22,10 @@ Future<void> main() async {
       statusBarIconBrightness: Brightness.light,
     ),
   );
+  // Optimize image cache — limit memory for 125+ large asset images
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 100 * 1024 * 1024; // 100 MB
+  PaintingBinding.instance.imageCache.maximumSize = 50; // max 50 images cached
+
   runApp(const ProviderScope(child: KurgateApp()));
 }
 

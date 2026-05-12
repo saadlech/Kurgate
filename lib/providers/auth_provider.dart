@@ -330,10 +330,120 @@ class AuthNotifier extends StateNotifier<AuthState> {
     return login(email: email, password: password, rememberMe: true);
   }
 
+  /// Update user profile in Supabase and refresh local state
+  Future<bool> updateProfile({
+    String? nom,
+    String? email,
+    int? numDeTelephone,
+  }) async {
+    final currentUser = state.currentUser;
+    if (currentUser == null) return false;
+
+    state = state.copyWith(isLoading: true, errorMessage: null);
+
+    try {
+      final updates = <String, dynamic>{};
+      if (nom != null) updates['nom'] = nom;
+      if (email != null) updates['email'] = email;
+      if (numDeTelephone != null) updates['num_de_telephone'] = numDeTelephone;
+
+      // Update Supabase auth email if changed
+      if (email != null && email != currentUser.email) {
+        await _supabase.auth.updateUser(UserAttributes(email: email));
+      }
+
+      // Update the utilisateurs table
+      await _supabase
+          .from('utilisateurs')
+          .update(updates)
+          .eq('id', currentUser.id);
+
+      // Update local state
+      final updatedUser = currentUser.modifierProfil(
+        nom: nom,
+        email: email,
+        numDeTelephone: numDeTelephone,
+      );
+
+      state = state.copyWith(
+        isLoading: false,
+        currentUser: updatedUser,
+      );
+      return true;
+    } on AuthException catch (e) {
+      final mapped = _mapAuthError(e);
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: mapped.message,
+        errorType: mapped.type,
+      );
+      return false;
+    } catch (e) {
+      if (_isNetworkError(e)) {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage:
+              'No internet connection. Please check your network and try again.',
+          errorType: AuthErrorType.networkError,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage: 'Failed to update profile. Please try again.',
+          errorType: AuthErrorType.serverError,
+        );
+      }
+      return false;
+    }
+  }
+
   Future<void> logout() async {
     await LocalStorageService.clearCredentials();
     await _supabase.auth.signOut();
     state = const AuthState();
+  }
+
+  /// Delete the current user's account permanently.
+  /// Removes profile from `utilisateurs`, signs out, and clears local data.
+  Future<bool> deleteAccount() async {
+    final currentUser = state.currentUser;
+    if (currentUser == null) return false;
+
+    state = state.copyWith(isLoading: true, errorMessage: null);
+
+    try {
+      // Delete user profile from the utilisateurs table
+      await _supabase
+          .from('utilisateurs')
+          .delete()
+          .eq('id', currentUser.id);
+
+      // Clear local credentials
+      await LocalStorageService.clearCredentials();
+
+      // Sign out from Supabase Auth
+      await _supabase.auth.signOut();
+
+      // Reset state
+      state = const AuthState();
+      return true;
+    } catch (e) {
+      if (_isNetworkError(e)) {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage:
+              'No internet connection. Please check your network and try again.',
+          errorType: AuthErrorType.networkError,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage: 'Failed to delete account. Please try again.',
+          errorType: AuthErrorType.serverError,
+        );
+      }
+      return false;
+    }
   }
 }
 

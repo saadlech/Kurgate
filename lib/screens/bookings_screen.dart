@@ -237,6 +237,7 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
         onDelete: () => _showDeleteDialog(context, booking),
         onPay: () => context.push('/payment/${booking.idReservation}'),
         onFeedback: () => _showFeedbackSheet(booking),
+        onCancel: () => _showCancelDialog(context, booking),
       );
     },
   );
@@ -297,6 +298,102 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
             },
             child: const Text(
               'Supprimer',
+              style: TextStyle(
+                fontFamily: 'DarkerGrotesque',
+                color: Color(0xFFFF5252),
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showCancelDialog(BuildContext context, Reservation booking) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF222222),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: Color(0xFFFF8C00), size: 22),
+            SizedBox(width: 10),
+            Text(
+              'Annuler la réservation ?',
+              style: TextStyle(
+                fontFamily: 'DarkerGrotesque',
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 18,
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              booking.nom,
+              style: const TextStyle(
+                fontFamily: 'DarkerGrotesque',
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Cette réservation a déjà été payée (\$${booking.prixTotal}). L\'annulation entraînera un remboursement.',
+              style: TextStyle(
+                fontFamily: 'DarkerGrotesque',
+                color: Colors.white.withValues(alpha: 0.6),
+                fontSize: 14,
+                height: 1.4,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'Garder',
+              style: TextStyle(
+                fontFamily: 'DarkerGrotesque',
+                color: Colors.white.withValues(alpha: 0.5),
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              ref.read(bookingProvider.notifier).cancelBooking(booking.idReservation);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          '${booking.nom} annulée — Remboursement en cours',
+                          style: const TextStyle(fontFamily: 'DarkerGrotesque'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: const Color(0xFF2A2A2A),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              );
+            },
+            child: const Text(
+              'Annuler la réservation',
               style: TextStyle(
                 fontFamily: 'DarkerGrotesque',
                 color: Color(0xFFFF5252),
@@ -386,11 +483,13 @@ class _BookingCard extends StatelessWidget {
   final VoidCallback onDelete;
   final VoidCallback onPay;
   final VoidCallback onFeedback;
+  final VoidCallback onCancel;
   const _BookingCard({
     required this.booking,
     required this.onDelete,
     required this.onPay,
     required this.onFeedback,
+    required this.onCancel,
   });
 
   IconData get _icon {
@@ -470,6 +569,8 @@ class _BookingCard extends StatelessWidget {
                   child: Image.asset(
                     booking.imageUrl,
                     fit: BoxFit.cover,
+                    cacheWidth: 600,
+                    gaplessPlayback: true,
                     errorBuilder: (_, _, _) => Container(
                       color: const Color(0xFF2A2A2A),
                       child: Center(
@@ -752,14 +853,24 @@ class _BookingCard extends StatelessWidget {
                         color: const Color(0xFFFF8C00),
                         onTap: onPay,
                       ),
-                    if (booking.statut == 'Payée' &&
-                        booking.note == null)
-                      _actionBtn(
-                        icon: Icons.rate_review_rounded,
-                        label: 'Avis',
-                        color: const Color(0xFF4A90D9),
-                        onTap: onFeedback,
-                      ),
+                    if (booking.statut == 'Payée') ...[
+                      if (booking.dateDebut.isAfter(DateTime.now()))
+                        _actionBtn(
+                          icon: Icons.cancel_outlined,
+                          label: 'Annuler',
+                          color: const Color(0xFFFF5252),
+                          onTap: onCancel,
+                        ),
+                      if (booking.note == null) ...[
+                        const SizedBox(width: 8),
+                        _actionBtn(
+                          icon: Icons.rate_review_rounded,
+                          label: 'Avis',
+                          color: const Color(0xFF4A90D9),
+                          onTap: onFeedback,
+                        ),
+                      ],
+                    ],
                   ],
                 ),
               ],

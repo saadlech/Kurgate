@@ -232,6 +232,8 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
                         itemBuilder: (context, i) => Image.asset(
                           _boutique.images[i],
                           fit: BoxFit.cover,
+                          cacheWidth: 800,
+                          gaplessPlayback: true,
                           errorBuilder: (_, _, _) =>
                               Container(color: const Color(0xFF2A2A2A)),
                         ),

@@ -209,7 +209,7 @@ class _DetailSheetState extends State<_DetailSheet> {
               PageView.builder(
                 controller: _pc, itemCount: poi.images.length,
                 onPageChanged: (i) => setState(() => _page = i),
-                itemBuilder: (ctx, i) => Image.asset(poi.images[i], fit: BoxFit.cover, width: double.infinity,
+                itemBuilder: (ctx, i) => Image.asset(poi.images[i], fit: BoxFit.cover, width: double.infinity, cacheWidth: 600, gaplessPlayback: true,
                   errorBuilder: (_, _, _) => Container(color: const Color(0xFF2A2A2A), child: Center(child: Icon(poi.icon, size: 40, color: c.withValues(alpha: 0.3))))),
               ),
               // Dots

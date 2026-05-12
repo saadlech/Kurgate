@@ -218,6 +218,8 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
                         itemBuilder: (context, i) => Image.asset(
                           _exp.images[i],
                           fit: BoxFit.cover,
+                          cacheWidth: 800,
+                          gaplessPlayback: true,
                           errorBuilder: (_, _, _) =>
                               Container(color: const Color(0xFF2A2A2A)),
                         ),

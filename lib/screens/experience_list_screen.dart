@@ -381,6 +381,8 @@ class _ExperienceCard extends StatelessWidget {
                     child: Image.asset(
                       experience.imageUrl,
                       fit: BoxFit.cover,
+                      cacheWidth: 600,
+                      gaplessPlayback: true,
                       errorBuilder: (ctx, e, s) => Container(
                         color: const Color(0xFF2A2A2A),
                         child: const Center(

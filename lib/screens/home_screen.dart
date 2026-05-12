@@ -227,7 +227,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     ),
   ];
 
-  List<_Item> get _allItems => [
+  late final List<_Item> _allItems = [
     ..._hotels,
     ..._vehicles,
     ..._experiences,
@@ -471,6 +471,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           width: 56,
                           height: 56,
                           fit: BoxFit.cover,
+                          cacheWidth: 112,
+                          cacheHeight: 112,
+                          gaplessPlayback: true,
                           errorBuilder: (_, _, _) => Container(
                             width: 56,
                             height: 56,
@@ -969,6 +972,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                               Image.asset(
                                 item.image,
                                 fit: BoxFit.cover,
+                                cacheWidth: 320,
+                                cacheHeight: 220,
+                                gaplessPlayback: true,
                                 errorBuilder: (_, _, _) => Container(
                                   color: const Color(0xFF2A2A2A),
                                   child: const Center(

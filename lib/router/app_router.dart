@@ -20,6 +20,7 @@ import '../screens/restaurant_detail_screen.dart';
 import '../screens/boutique_list_screen.dart';
 import '../screens/boutique_detail_screen.dart';
 import '../screens/payment_screen.dart';
+import '../screens/edit_profile_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -408,6 +409,24 @@ final routerProvider = Provider<GoRouter>((ref) {
             },
           );
         },
+      ),
+
+      // Edit Profile
+      GoRoute(
+        path: '/edit-profile',
+        name: 'editProfile',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const EditProfileScreen(),
+          transitionDuration: const Duration(milliseconds: 400),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: Tween<Offset>(begin: const Offset(0, 0.15), end: Offset.zero)
+                  .animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+              child: FadeTransition(opacity: animation, child: child),
+            );
+          },
+        ),
       ),
     ],
   );

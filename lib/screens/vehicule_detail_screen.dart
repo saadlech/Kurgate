@@ -23,6 +23,7 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
   bool _isConfirming = false;
   int _currentImageIndex = 0;
   final PageController _pageController = PageController();
+  final _addressController = TextEditingController();
 
   static const _vehiculeDataMap = {
     'vehicule_001': _VehiculeInfo(
@@ -218,6 +219,17 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
   void _confirmReservation() {
     if (_isConfirming) return;
     setState(() => _isConfirming = true);
+    final address = _addressController.text.trim();
+    if (address.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text('Veuillez saisir une adresse de livraison.', style: TextStyle(fontFamily: 'DarkerGrotesque')),
+        backgroundColor: const Color(0xFFFF5252),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ));
+      setState(() => _isConfirming = false);
+      return;
+    }
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -230,6 +242,7 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
         totalPrice: _totalPrice,
         withDriver: _withDriver,
         withInsurance: _withInsurance,
+        deliveryAddress: address,
         onConfirmed: () {
           ref
               .read(bookingProvider.notifier)
@@ -251,6 +264,7 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
                     'Jours': '$_days',
                     if (_withDriver) 'Chauffeur': 'Oui',
                     if (_withInsurance) 'Assurance': 'Oui',
+                    'Adresse de livraison': address,
                   },
                 ),
               );
@@ -297,6 +311,8 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
                         itemBuilder: (context, i) => Image.asset(
                           _vehicule.images[i],
                           fit: BoxFit.cover,
+                          cacheWidth: 800,
+                          gaplessPlayback: true,
                           errorBuilder: (_, _, _) =>
                               Container(color: const Color(0xFF2A2A2A)),
                         ),
@@ -715,6 +731,38 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
                   (v) => setState(() => _withInsurance = v),
                 ),
                 const SizedBox(height: 20),
+                // Delivery address
+                Text(
+                  'Adresse de livraison',
+                  style: TextStyle(
+                    fontFamily: 'DarkerGrotesque',
+                    color: Colors.white.withValues(alpha: 0.4),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                  ),
+                  child: TextField(
+                    controller: _addressController,
+                    style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                    maxLines: 2,
+                    minLines: 1,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.location_on_rounded, color: const Color(0xFFFF8C00).withValues(alpha: 0.6), size: 18),
+                      hintText: 'Ex: 123 Rue Mohamed V, Guéliz, Marrakech',
+                      hintStyle: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.15), fontSize: 13),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 // Summary
                 _buildSummary(),
               ],
@@ -913,6 +961,7 @@ class _ReservationSheet extends StatefulWidget {
   final DateTime pickupDate, returnDate;
   final int days, totalPrice;
   final bool withDriver, withInsurance;
+  final String deliveryAddress;
   final VoidCallback onConfirmed;
   const _ReservationSheet({
     required this.vehiculeName,
@@ -922,6 +971,7 @@ class _ReservationSheet extends StatefulWidget {
     required this.totalPrice,
     required this.withDriver,
     required this.withInsurance,
+    required this.deliveryAddress,
     required this.onConfirmed,
   });
 
@@ -1054,6 +1104,7 @@ class _ReservationSheetState extends State<_ReservationSheet>
                     _row(Icons.person_rounded, 'Avec chauffeur'),
                   if (widget.withInsurance)
                     _row(Icons.security_rounded, 'Assurance complète'),
+                  _row(Icons.location_on_rounded, widget.deliveryAddress),
                   const Divider(height: 20, color: Color(0xFF444444)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

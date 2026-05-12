@@ -174,7 +174,7 @@ class _CartItemCard extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.03), borderRadius: BorderRadius.circular(16), border: Border.all(color: Colors.white.withValues(alpha: 0.06))),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        ClipRRect(borderRadius: BorderRadius.circular(12), child: SizedBox(width: 80, height: 80, child: Image.asset(item.imageUrl, fit: BoxFit.cover, errorBuilder: (_, _, _) => Container(color: const Color(0xFF2A2A2A), child: const Center(child: Icon(Icons.storefront_rounded, color: Color(0xFF555555), size: 28)))))),
+        ClipRRect(borderRadius: BorderRadius.circular(12), child: SizedBox(width: 80, height: 80, child: Image.asset(item.imageUrl, fit: BoxFit.cover, cacheWidth: 160, cacheHeight: 160, gaplessPlayback: true, errorBuilder: (_, _, _) => Container(color: const Color(0xFF2A2A2A), child: const Center(child: Icon(Icons.storefront_rounded, color: Color(0xFF555555), size: 28)))))),
         const SizedBox(width: 12),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
@@ -226,6 +226,7 @@ class _CartPaymentSheetState extends State<_CartPaymentSheet> with TickerProvide
   final _expiryCtrl = TextEditingController();
   final _cvvCtrl = TextEditingController();
   final _nameCtrl = TextEditingController();
+  final _addressCtrl = TextEditingController();
   bool _processing = false;
   bool _success = false;
   late AnimationController _pulseCtrl;
@@ -241,9 +242,9 @@ class _CartPaymentSheetState extends State<_CartPaymentSheet> with TickerProvide
   }
 
   @override
-  void dispose() { _cardCtrl.dispose(); _expiryCtrl.dispose(); _cvvCtrl.dispose(); _nameCtrl.dispose(); _pulseCtrl.dispose(); _successCtrl.dispose(); super.dispose(); }
+  void dispose() { _cardCtrl.dispose(); _expiryCtrl.dispose(); _cvvCtrl.dispose(); _nameCtrl.dispose(); _addressCtrl.dispose(); _pulseCtrl.dispose(); _successCtrl.dispose(); super.dispose(); }
 
-  bool get _formValid => _cardCtrl.text.replaceAll(' ', '').length == 16 && _expiryCtrl.text.length == 5 && _cvvCtrl.text.length == 3 && _nameCtrl.text.trim().isNotEmpty;
+  bool get _formValid => _cardCtrl.text.replaceAll(' ', '').length == 16 && _expiryCtrl.text.length == 5 && _cvvCtrl.text.length == 3 && _nameCtrl.text.trim().isNotEmpty && _addressCtrl.text.trim().isNotEmpty;
 
   void _pay() {
     if (!_formValid || _processing) return;
@@ -275,6 +276,12 @@ class _CartPaymentSheetState extends State<_CartPaymentSheet> with TickerProvide
             const Text('Paiement réussi !', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
             const SizedBox(height: 8),
             Text('${widget.totalItems} articles commandés avec succès.', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 14)),
+            const SizedBox(height: 8),
+            Row(mainAxisSize: MainAxisSize.min, children: [
+              Icon(Icons.location_on_rounded, color: const Color(0xFFFF8C00).withValues(alpha: 0.6), size: 16),
+              const SizedBox(width: 4),
+              Flexible(child: Text(_addressCtrl.text.trim(), style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.35), fontSize: 13), textAlign: TextAlign.center)),
+            ]),
             const SizedBox(height: 24),
           ] else if (_processing) ...[
             const SizedBox(height: 20),
@@ -307,6 +314,32 @@ class _CartPaymentSheetState extends State<_CartPaymentSheet> with TickerProvide
               ]),
             ),
             const SizedBox(height: 20),
+            // Delivery address
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [
+                Icon(Icons.location_on_rounded, color: const Color(0xFFFF8C00), size: 16),
+                const SizedBox(width: 6),
+                Text('Adresse de livraison', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 12, fontWeight: FontWeight.w600)),
+              ]),
+              const SizedBox(height: 6),
+              Container(
+                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white.withValues(alpha: 0.08))),
+                child: TextField(
+                  controller: _addressCtrl,
+                  style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                  maxLines: 2,
+                  minLines: 1,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.home_rounded, size: 16, color: Colors.white.withValues(alpha: 0.3)),
+                    hintText: 'Ex: 123 Rue Mohamed V, Guéliz, Marrakech',
+                    hintStyle: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.15), fontSize: 13),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(height: 20),
             // Card form
             _field('Numéro de carte', '0000 0000 0000 0000', _cardCtrl, Icons.credit_card_rounded, TextInputType.number, [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(16), _CardFmt()]),
             const SizedBox(height: 12),
@@ -321,7 +354,7 @@ class _CartPaymentSheetState extends State<_CartPaymentSheet> with TickerProvide
             Row(children: [Icon(Icons.shield_rounded, size: 12, color: Colors.white.withValues(alpha: 0.2)), const SizedBox(width: 6), Text('Paiement sécurisé et chiffré', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.2), fontSize: 11))]),
             const SizedBox(height: 20),
             SizedBox(width: double.infinity, height: 50, child: AnimatedBuilder(
-              animation: Listenable.merge([_cardCtrl, _expiryCtrl, _cvvCtrl, _nameCtrl]),
+              animation: Listenable.merge([_cardCtrl, _expiryCtrl, _cvvCtrl, _nameCtrl, _addressCtrl]),
               builder: (ctx, _) {
                 final v = _formValid;
                 return ElevatedButton(

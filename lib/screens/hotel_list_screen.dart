@@ -376,6 +376,7 @@ class _HotelListScreenState extends State<HotelListScreen>
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                     itemCount: _filteredHotels.length,
+                    addAutomaticKeepAlives: false,
                     separatorBuilder: (_, _) => const SizedBox(height: 20),
                     itemBuilder: (context, index) {
                       final hotel = _filteredHotels[index];
@@ -458,6 +459,8 @@ class _HotelCardState extends State<_HotelCard> {
                             itemBuilder: (ctx, i) => Image.asset(
                               widget.hotel.imageAssets[i],
                               fit: BoxFit.cover,
+                              cacheWidth: 600,
+                              gaplessPlayback: true,
                               errorBuilder: (ctx, e, s) => Container(
                                 color: const Color(0xFF2A2A2A),
                                 child: const Center(

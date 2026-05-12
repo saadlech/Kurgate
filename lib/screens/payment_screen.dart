@@ -57,8 +57,57 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
   bool get _formValid =>
       _cardNumberCtrl.text.replaceAll(' ', '').length == 16 &&
       _expiryCtrl.text.length == 5 &&
+      _isExpiryValid &&
       _cvvCtrl.text.length == 3 &&
       _nameCtrl.text.trim().isNotEmpty;
+
+  /// Returns true if the expiry MM/YY is a real month and not in the past.
+  bool get _isExpiryValid {
+    final raw = _expiryCtrl.text;
+    if (raw.length != 5 || !raw.contains('/')) return false;
+    final parts = raw.split('/');
+    final month = int.tryParse(parts[0]);
+    final year = int.tryParse(parts[1]);
+    if (month == null || year == null) return false;
+    if (month < 1 || month > 12) return false;
+    // Convert YY to full year
+    final fullYear = 2000 + year;
+    final now = DateTime.now();
+    // Card is valid through the last day of the expiry month
+    if (fullYear < now.year) return false;
+    if (fullYear == now.year && month < now.month) return false;
+    return true;
+  }
+
+  /// User-facing error message for the expiry field.
+  String? get _expiryError {
+    final raw = _expiryCtrl.text;
+    if (raw.isEmpty) return null;
+    if (raw.length < 5) return null; // still typing
+    if (!raw.contains('/')) return 'Format MM/AA';
+    final parts = raw.split('/');
+    final month = int.tryParse(parts[0]);
+    final year = int.tryParse(parts[1]);
+    if (month == null || year == null) return 'Format invalide';
+    if (month < 1 || month > 12) return 'Mois invalide';
+    final fullYear = 2000 + year;
+    final now = DateTime.now();
+    if (fullYear < now.year || (fullYear == now.year && month < now.month)) {
+      return 'Carte expirée';
+    }
+    return null;
+  }
+
+  /// Detect card brand from the first digit.
+  /// 4 → Visa, 2 or 5 → Mastercard
+  String? _detectCardBrand(String cardNumber) {
+    final digits = cardNumber.replaceAll(' ', '');
+    if (digits.isEmpty) return null;
+    final first = digits[0];
+    if (first == '4') return 'visa';
+    if (first == '2' || first == '5') return 'mastercard';
+    return null;
+  }
 
   void _processPayment() {
     if (!_formValid || _processing) return;
@@ -322,18 +371,148 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
           ),
           const SizedBox(height: 20),
 
-          // Card number
-          _buildField(
-            label: 'Numéro de carte',
-            hint: '0000 0000 0000 0000',
-            controller: _cardNumberCtrl,
-            icon: Icons.credit_card_rounded,
-            keyboardType: TextInputType.number,
-            formatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(16),
-              _CardNumberFormatter(),
-            ],
+          // Card number + brand detection
+          AnimatedBuilder(
+            animation: _cardNumberCtrl,
+            builder: (context, _) {
+              final brand = _detectCardBrand(_cardNumberCtrl.text);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Numéro de carte',
+                        style: TextStyle(
+                          fontFamily: 'DarkerGrotesque',
+                          color: Colors.white.withValues(alpha: 0.4),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Spacer(),
+                      // Brand badge
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        switchInCurve: Curves.easeOutCubic,
+                        transitionBuilder: (child, anim) => FadeTransition(
+                          opacity: anim,
+                          child: SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(0.3, 0),
+                              end: Offset.zero,
+                            ).animate(anim),
+                            child: child,
+                          ),
+                        ),
+                        child: brand != null
+                            ? Container(
+                                key: ValueKey(brand),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: brand == 'visa'
+                                      ? const Color(0xFF1A1F71).withValues(alpha: 0.25)
+                                      : const Color(0xFFEB001B).withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: brand == 'visa'
+                                        ? const Color(0xFF1A1F71).withValues(alpha: 0.4)
+                                        : const Color(0xFFEB001B).withValues(alpha: 0.3),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (brand == 'visa') ...[
+                                      const Text(
+                                        'VISA',
+                                        style: TextStyle(
+                                          fontFamily: 'DarkerGrotesque',
+                                          color: Color(0xFF4A6CF7),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w900,
+                                          letterSpacing: 1.5,
+                                        ),
+                                      ),
+                                    ] else ...[
+                                      Container(
+                                        width: 12,
+                                        height: 12,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: const Color(0xFFEB001B).withValues(alpha: 0.8),
+                                        ),
+                                      ),
+                                      Transform.translate(
+                                        offset: const Offset(-4, 0),
+                                        child: Container(
+                                          width: 12,
+                                          height: 12,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: const Color(0xFFF79E1B).withValues(alpha: 0.8),
+                                          ),
+                                        ),
+                                      ),
+                                      const Text(
+                                        'Mastercard',
+                                        style: TextStyle(
+                                          fontFamily: 'DarkerGrotesque',
+                                          color: Color(0xFFF79E1B),
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              )
+                            : const SizedBox.shrink(key: ValueKey('none')),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                    ),
+                    child: TextField(
+                      controller: _cardNumberCtrl,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(16),
+                        _CardNumberFormatter(),
+                      ],
+                      style: const TextStyle(
+                        fontFamily: 'DarkerGrotesque',
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 1.2,
+                      ),
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.credit_card_rounded,
+                            size: 18, color: Colors.white.withValues(alpha: 0.3)),
+                        hintText: '0000 0000 0000 0000',
+                        hintStyle: TextStyle(
+                          fontFamily: 'DarkerGrotesque',
+                          color: Colors.white.withValues(alpha: 0.15),
+                          fontSize: 16,
+                          letterSpacing: 1.2,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 16),
 
@@ -341,16 +520,52 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
           Row(
             children: [
               Expanded(
-                child: _buildField(
-                  label: 'Expiration',
-                  hint: 'MM/AA',
-                  controller: _expiryCtrl,
-                  icon: Icons.calendar_today_rounded,
-                  keyboardType: TextInputType.number,
-                  formatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(4),
-                    _ExpiryFormatter(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildField(
+                      label: 'Expiration',
+                      hint: 'MM/AA',
+                      controller: _expiryCtrl,
+                      icon: Icons.calendar_today_rounded,
+                      keyboardType: TextInputType.number,
+                      formatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(4),
+                        _ExpiryFormatter(),
+                      ],
+                    ),
+                    // Expiry error message
+                    AnimatedBuilder(
+                      animation: _expiryCtrl,
+                      builder: (context, _) {
+                        final err = _expiryError;
+                        return AnimatedSize(
+                          duration: const Duration(milliseconds: 200),
+                          child: err != null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(left: 12, top: 4),
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.error_outline_rounded,
+                                          size: 12, color: Color(0xFFFF5252)),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        err,
+                                        style: const TextStyle(
+                                          fontFamily: 'DarkerGrotesque',
+                                          color: Color(0xFFFF5252),
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -492,6 +707,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
               child: Image.asset(
                 b.imageUrl,
                 fit: BoxFit.cover,
+                cacheWidth: 120,
+                cacheHeight: 120,
+                gaplessPlayback: true,
                 errorBuilder: (_, _, _) => Container(
                   color: const Color(0xFF2A2A2A),
                   child: Icon(Icons.image_rounded,
@@ -648,7 +866,31 @@ class _ExpiryFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    final text = newValue.text.replaceAll('/', '');
+    var text = newValue.text.replaceAll('/', '');
+    if (text.isEmpty) {
+      return newValue.copyWith(text: '');
+    }
+
+    // Validate & auto-correct month
+    if (text.length >= 1) {
+      final firstDigit = int.parse(text[0]);
+      // If first digit > 1, it can't start a valid month → prefix with 0
+      if (firstDigit > 1) {
+        text = '0$text';
+      }
+    }
+    if (text.length >= 2) {
+      final month = int.parse(text.substring(0, 2));
+      if (month == 0) {
+        text = '01${text.substring(2)}';
+      } else if (month > 12) {
+        text = '12${text.substring(2)}';
+      }
+    }
+
+    // Limit to 4 digits (MMYY)
+    if (text.length > 4) text = text.substring(0, 4);
+
     final buffer = StringBuffer();
     for (int i = 0; i < text.length; i++) {
       if (i == 2) buffer.write('/');
