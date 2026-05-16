@@ -183,7 +183,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       child: Transform.rotate(
                         angle: _iconRotation.value,
                         child: Image.asset(
-                          'assets/images/icon_orange.png',
+                          'assets/images/branding/icon_orange.png',
                           height: 100,
                           width: 100,
                         ),

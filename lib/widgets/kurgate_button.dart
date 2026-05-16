@@ -99,7 +99,10 @@ class _KurgateButtonState extends State<KurgateButton>
       _startFlyAway();
     }
 
-    if (!widget.isLoading && !widget.isSuccess && oldWidget.isLoading && !_flyingAway) {
+    if (!widget.isLoading &&
+        !widget.isSuccess &&
+        oldWidget.isLoading &&
+        !_flyingAway) {
       _stopLoading();
     }
   }
@@ -130,7 +133,8 @@ class _KurgateButtonState extends State<KurgateButton>
 
   @override
   Widget build(BuildContext context) {
-    final enabled = widget.onPressed != null && !widget.isLoading && !widget.isSuccess;
+    final enabled =
+        widget.onPressed != null && !widget.isLoading && !widget.isSuccess;
 
     return GestureDetector(
       onTapDown: enabled ? (_) => setState(() => _pressed = true) : null,
@@ -184,8 +188,9 @@ class _KurgateButtonState extends State<KurgateButton>
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFFF8C00)
-                      .withValues(alpha: _glowAnim.value),
+                  color: const Color(
+                    0xFFFF8C00,
+                  ).withValues(alpha: _glowAnim.value),
                   blurRadius: _pressed ? 8 : 20,
                   offset: const Offset(0, 8),
                 ),
@@ -215,8 +220,9 @@ class _KurgateButtonState extends State<KurgateButton>
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFFF8C00)
-                      .withValues(alpha: _glowAnim.value * 0.15),
+                  color: const Color(
+                    0xFFFF8C00,
+                  ).withValues(alpha: _glowAnim.value * 0.15),
                   blurRadius: 12,
                 ),
               ],
@@ -253,7 +259,8 @@ class _KurgateButtonState extends State<KurgateButton>
                   // Each smoke puff trails behind at a fraction of the logo position
                   final trailFraction = (i + 1) / 7;
                   final smokeX = xOffset * (1.0 - trailFraction * 0.8);
-                  final smokeOpacity = (0.5 - i * 0.08).clamp(0.0, 1.0) *
+                  final smokeOpacity =
+                      (0.5 - i * 0.08).clamp(0.0, 1.0) *
                       (1.0 - flyProgress).clamp(0.0, 1.0);
                   final smokeSize = 12.0 + i * 4.0;
                   // Slight vertical spread for organic feel
@@ -285,7 +292,7 @@ class _KurgateButtonState extends State<KurgateButton>
                 child: RotationTransition(
                   turns: _spinController,
                   child: Image.asset(
-                    'assets/images/icon_orange.png',
+                    'assets/images/branding/icon_orange.png',
                     height: 32,
                     width: 32,
                     color: Colors.black,

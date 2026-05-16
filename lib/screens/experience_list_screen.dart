@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../providers/destination_provider.dart';
 
-class ExperienceListScreen extends StatefulWidget {
+class ExperienceListScreen extends ConsumerStatefulWidget {
   const ExperienceListScreen({super.key});
 
   @override
-  State<ExperienceListScreen> createState() => _ExperienceListScreenState();
+  ConsumerState<ExperienceListScreen> createState() => _ExperienceListScreenState();
 }
 
-class _ExperienceListScreenState extends State<ExperienceListScreen>
+class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
     with TickerProviderStateMixin {
   int _selectedFilter = 0;
   final _searchController = TextEditingController();
@@ -37,7 +39,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 85,
       rating: 4.8,
       reviews: 342,
-      imageUrl: 'assets/images/experiences/safari_agafay/1.png',
+      imageUrl: 'assets/images/marrakech/experiences/safari_agafay/1.png',
       tags: ['Quad', 'Coucher de soleil', 'Dîner'],
       category: 'Aventure',
       duree: '6h',
@@ -50,7 +52,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 35,
       rating: 4.7,
       reviews: 528,
-      imageUrl: 'assets/images/experiences/medina_visite/1.png',
+      imageUrl: 'assets/images/marrakech/experiences/medina_visite/1.png',
       tags: ['Guide local', 'Souks', 'Histoire'],
       category: 'Culture',
       duree: '3h',
@@ -63,7 +65,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 60,
       rating: 4.9,
       reviews: 189,
-      imageUrl: 'assets/images/experiences/randonnee_atlas/1.png',
+      imageUrl: 'assets/images/marrakech/experiences/randonnee_atlas/1.png',
       tags: ['Trekking', 'Cascades', 'Montagne'],
       category: 'Nature',
       duree: '8h',
@@ -76,7 +78,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 50,
       rating: 4.8,
       reviews: 267,
-      imageUrl: 'assets/images/experiences/cours_cuisine/1.png',
+      imageUrl: 'assets/images/marrakech/experiences/cours_cuisine/1.png',
       tags: ['Tajine', 'Couscous', 'Pâtisseries'],
       category: 'Gastronomie',
       duree: '4h',
@@ -89,7 +91,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 180,
       rating: 4.9,
       reviews: 124,
-      imageUrl: 'assets/images/experiences/vol_montgolfiere/1.png',
+      imageUrl: 'assets/images/marrakech/experiences/vol_montgolfiere/1.png',
       tags: ['Vue panoramique', 'Lever du soleil', 'Photos'],
       category: 'Aventure',
       duree: '2h',
@@ -102,11 +104,51 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
       price: 15,
       rating: 4.7,
       reviews: 892,
-      imageUrl: 'assets/images/experiences/jardin_majorelle/1.png',
+      imageUrl: 'assets/images/marrakech/experiences/jardin_majorelle/1.png',
       tags: ['Jardin', 'Musée', 'Art'],
       category: 'Culture',
       duree: '2h',
       capacite: 20,
+    ),
+  ];
+
+  // Casablanca experiences
+  final _experiencesCasa = const [
+    _ExperienceData(
+      id: 'exp_casa_001', name: 'Visite de la Mosquée Hassan II',
+      location: 'Boulevard de la Corniche, Casablanca', price: 12, rating: 4.9, reviews: 1245,
+      imageUrl: 'assets/images/casablanca/experiences/mosquee_hassan/1.png',
+      tags: ['Monument', 'Architecture', 'Spirituel'], category: 'Culture', duree: '2h', capacite: 30,
+    ),
+    _ExperienceData(
+      id: 'exp_casa_002', name: 'Promenade Corniche Ain Diab',
+      location: 'Ain Diab, Casablanca', price: 0, rating: 4.6, reviews: 678,
+      imageUrl: 'assets/images/casablanca/experiences/corniche_casa/1.png',
+      tags: ['Bord de mer', 'Plage', 'Sunset'], category: 'Nature', duree: '3h', capacite: 20,
+    ),
+    _ExperienceData(
+      id: 'exp_casa_003', name: 'Tour de l\'Ancienne Médina',
+      location: 'Ancienne Médina, Casablanca', price: 25, rating: 4.7, reviews: 423,
+      imageUrl: 'assets/images/casablanca/experiences/medina_casa/1.png',
+      tags: ['Guide local', 'Histoire', 'Marchés'], category: 'Culture', duree: '3h', capacite: 15,
+    ),
+    _ExperienceData(
+      id: 'exp_casa_004', name: 'Morocco Mall & Shopping',
+      location: 'Morocco Mall, Casablanca', price: 0, rating: 4.5, reviews: 892,
+      imageUrl: 'assets/images/casablanca/experiences/morocco_mall/1.png',
+      tags: ['Shopping', 'Aquarium', 'Loisirs'], category: 'Aventure', duree: '4h', capacite: 20,
+    ),
+    _ExperienceData(
+      id: 'exp_casa_005', name: 'Quartier Art Déco & Habous',
+      location: 'Quartier Habous, Casablanca', price: 20, rating: 4.8, reviews: 312,
+      imageUrl: 'assets/images/casablanca/experiences/art_deco_tour/1.png',
+      tags: ['Architecture', 'Pâtisseries', 'Artisanat'], category: 'Culture', duree: '3h', capacite: 12,
+    ),
+    _ExperienceData(
+      id: 'exp_casa_006', name: 'Coucher de soleil en Yacht',
+      location: 'Marina, Casablanca', price: 200, rating: 4.9, reviews: 156,
+      imageUrl: 'assets/images/casablanca/experiences/yacht_casa/1.png',
+      tags: ['Yacht', 'Sunset', 'Champagne'], category: 'Aventure', duree: '3h', capacite: 8,
     ),
   ];
 
@@ -151,10 +193,16 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
     super.dispose();
   }
 
+  List<_ExperienceData> get _activeExperiences {
+    final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
+    return isCasa ? _experiencesCasa : _experiences;
+  }
+
   List<_ExperienceData> get _filteredExperiences {
-    if (_selectedFilter == 0) return _experiences;
+    final base = _activeExperiences;
+    if (_selectedFilter == 0) return base;
     final filterName = _filters[_selectedFilter];
-    return _experiences.where((e) => e.category == filterName).toList();
+    return base.where((e) => e.category == filterName).toList();
   }
 
   @override
@@ -200,7 +248,7 @@ class _ExperienceListScreenState extends State<ExperienceListScreen>
                                 ),
                               ),
                               Text(
-                                'Marrakech · ${_filteredExperiences.length} activités',
+                                '${ref.watch(selectedDestinationProvider).nom} · ${_filteredExperiences.length} activités',
                                 style: TextStyle(
                                   fontFamily: 'DarkerGrotesque',
                                   color: Colors.white.withValues(alpha: 0.4),

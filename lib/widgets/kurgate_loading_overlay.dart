@@ -177,7 +177,7 @@ class _KurgateLoadingOverlayState extends State<KurgateLoadingOverlay>
                             child: RotationTransition(
                               turns: _spinController,
                               child: Image.asset(
-                                'assets/images/icon_orange.png',
+                                'assets/images/branding/icon_orange.png',
                                 height: 80,
                                 width: 80,
                               ),

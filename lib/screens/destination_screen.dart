@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../models/destination.dart';
+import '../providers/destination_provider.dart';
 
 class DestinationScreen extends StatefulWidget {
   const DestinationScreen({super.key});
@@ -164,7 +166,7 @@ class _DestinationScreenState extends State<DestinationScreen>
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20, top: 12),
                           child: Image.asset(
-                            'assets/images/logo_full.png',
+                            'assets/images/branding/logo_full.png',
                             height: 40,
                           ),
                         ),
@@ -249,16 +251,16 @@ class _DestinationScreenState extends State<DestinationScreen>
 // Featured (available) card — Marrakech
 // ──────────────────────────────────────────────
 
-class _FeaturedCard extends StatefulWidget {
+class _FeaturedCard extends ConsumerStatefulWidget {
   const _FeaturedCard({required this.destination});
 
   final Destination destination;
 
   @override
-  State<_FeaturedCard> createState() => _FeaturedCardState();
+  ConsumerState<_FeaturedCard> createState() => _FeaturedCardState();
 }
 
-class _FeaturedCardState extends State<_FeaturedCard> {
+class _FeaturedCardState extends ConsumerState<_FeaturedCard> {
   bool _pressed = false;
 
   @override
@@ -416,6 +418,7 @@ class _FeaturedCardState extends State<_FeaturedCard> {
   }
 
   void _onExplore() {
+    ref.read(selectedDestinationProvider.notifier).state = widget.destination;
     context.go('/home');
   }
 }

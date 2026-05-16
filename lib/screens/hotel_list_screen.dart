@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../providers/destination_provider.dart';
 
-class HotelListScreen extends StatefulWidget {
+class HotelListScreen extends ConsumerStatefulWidget {
   const HotelListScreen({super.key});
 
   @override
-  State<HotelListScreen> createState() => _HotelListScreenState();
+  ConsumerState<HotelListScreen> createState() => _HotelListScreenState();
 }
 
-class _HotelListScreenState extends State<HotelListScreen>
+class _HotelListScreenState extends ConsumerState<HotelListScreen>
     with TickerProviderStateMixin {
   int _selectedFilter = 0;
   final _searchController = TextEditingController();
@@ -37,12 +39,12 @@ class _HotelListScreenState extends State<HotelListScreen>
       imageUrl:
           'https://images.unsplash.com/photo-1548018560-c7196e4f6bec?w=600&q=80',
       imageAssets: [
-        'assets/images/hotels/la_mamounia/1.png',
-        'assets/images/hotels/la_mamounia/2.png',
-        'assets/images/hotels/la_mamounia/3.png',
-        'assets/images/hotels/la_mamounia/4.png',
-        'assets/images/hotels/la_mamounia/5.png',
-        'assets/images/hotels/la_mamounia/6.png',
+        'assets/images/marrakech/hotels/la_mamounia/1.png',
+        'assets/images/marrakech/hotels/la_mamounia/2.png',
+        'assets/images/marrakech/hotels/la_mamounia/3.png',
+        'assets/images/marrakech/hotels/la_mamounia/4.png',
+        'assets/images/marrakech/hotels/la_mamounia/5.png',
+        'assets/images/marrakech/hotels/la_mamounia/6.png',
       ],
       tags: ['5 étoiles', 'Spa', 'Restaurant'],
       category: 'Luxe',
@@ -57,12 +59,12 @@ class _HotelListScreenState extends State<HotelListScreen>
       imageUrl:
           'https://images.unsplash.com/photo-1591378603223-e15b45a81640?w=600&q=80',
       imageAssets: [
-        'assets/images/hotels/riad_yasmine/1.png',
-        'assets/images/hotels/riad_yasmine/2.png',
-        'assets/images/hotels/riad_yasmine/3.png',
-        'assets/images/hotels/riad_yasmine/4.png',
-        'assets/images/hotels/riad_yasmine/5.png',
-        'assets/images/hotels/riad_yasmine/6.png',
+        'assets/images/marrakech/hotels/riad_yasmine/1.png',
+        'assets/images/marrakech/hotels/riad_yasmine/2.png',
+        'assets/images/marrakech/hotels/riad_yasmine/3.png',
+        'assets/images/marrakech/hotels/riad_yasmine/4.png',
+        'assets/images/marrakech/hotels/riad_yasmine/5.png',
+        'assets/images/marrakech/hotels/riad_yasmine/6.png',
       ],
       tags: ['Riad', 'Jardin', 'Terrasse'],
       category: 'Riad',
@@ -77,12 +79,12 @@ class _HotelListScreenState extends State<HotelListScreen>
       imageUrl:
           'https://images.unsplash.com/photo-1548018560-c7196e4f6bec?w=600&q=80',
       imageAssets: [
-        'assets/images/hotels/la_sultana/1.png',
-        'assets/images/hotels/la_sultana/2.png',
-        'assets/images/hotels/la_sultana/3.png',
-        'assets/images/hotels/la_sultana/4.png',
-        'assets/images/hotels/la_sultana/5.png',
-        'assets/images/hotels/la_sultana/6.png',
+        'assets/images/marrakech/hotels/la_sultana/1.png',
+        'assets/images/marrakech/hotels/la_sultana/2.png',
+        'assets/images/marrakech/hotels/la_sultana/3.png',
+        'assets/images/marrakech/hotels/la_sultana/4.png',
+        'assets/images/marrakech/hotels/la_sultana/5.png',
+        'assets/images/marrakech/hotels/la_sultana/6.png',
       ],
       tags: ['5 étoiles', 'Spa', 'Terrasse'],
       category: 'Luxe',
@@ -97,12 +99,12 @@ class _HotelListScreenState extends State<HotelListScreen>
       imageUrl:
           'https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=600&q=80',
       imageAssets: [
-        'assets/images/hotels/mandarin_oriental/1.png',
-        'assets/images/hotels/mandarin_oriental/2.png',
-        'assets/images/hotels/mandarin_oriental/3.png',
-        'assets/images/hotels/mandarin_oriental/4.png',
-        'assets/images/hotels/mandarin_oriental/5.png',
-        'assets/images/hotels/mandarin_oriental/6.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/1.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/2.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/3.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/4.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/5.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/6.png',
       ],
       tags: ['5 étoiles', 'Villas', 'Piscine'],
       category: 'Luxe',
@@ -117,12 +119,12 @@ class _HotelListScreenState extends State<HotelListScreen>
       imageUrl:
           'https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=600&q=80',
       imageAssets: [
-        'assets/images/hotels/riad_kniza/1.png',
-        'assets/images/hotels/riad_kniza/2.png',
-        'assets/images/hotels/riad_kniza/3.png',
-        'assets/images/hotels/riad_kniza/4.png',
-        'assets/images/hotels/riad_kniza/5.png',
-        'assets/images/hotels/riad_kniza/6.png',
+        'assets/images/marrakech/hotels/riad_kniza/1.png',
+        'assets/images/marrakech/hotels/riad_kniza/2.png',
+        'assets/images/marrakech/hotels/riad_kniza/3.png',
+        'assets/images/marrakech/hotels/riad_kniza/4.png',
+        'assets/images/marrakech/hotels/riad_kniza/5.png',
+        'assets/images/marrakech/hotels/riad_kniza/6.png',
       ],
       tags: ['Riad', 'Spa', 'Restaurant'],
       category: 'Riad',
@@ -137,15 +139,61 @@ class _HotelListScreenState extends State<HotelListScreen>
       imageUrl:
           'https://images.unsplash.com/photo-1548018560-c7196e4f6bec?w=600&q=80',
       imageAssets: [
-        'assets/images/hotels/royal_mansour/1.png',
-        'assets/images/hotels/royal_mansour/2.png',
-        'assets/images/hotels/royal_mansour/3.png',
-        'assets/images/hotels/royal_mansour/4.png',
-        'assets/images/hotels/royal_mansour/5.png',
-        'assets/images/hotels/royal_mansour/6.png',
+        'assets/images/marrakech/hotels/royal_mansour/1.png',
+        'assets/images/marrakech/hotels/royal_mansour/2.png',
+        'assets/images/marrakech/hotels/royal_mansour/3.png',
+        'assets/images/marrakech/hotels/royal_mansour/4.png',
+        'assets/images/marrakech/hotels/royal_mansour/5.png',
+        'assets/images/marrakech/hotels/royal_mansour/6.png',
       ],
       tags: ['5 étoiles', 'Palace', 'Spa'],
       category: 'Luxe',
+    ),
+  ];
+
+  // Casablanca hotels
+  final _hotelsCasa = const [
+    _HotelData(
+      id: 'hotel_casa_001', name: 'Four Seasons Casablanca', location: 'Anfa Place, Casablanca',
+      price: 380, rating: 4.9, reviews: 412,
+      imageUrl: 'assets/images/casablanca/hotels/four_seasons_casa/1.png',
+      imageAssets: ['assets/images/casablanca/hotels/four_seasons_casa/1.png', 'assets/images/casablanca/hotels/four_seasons_casa/2.png', 'assets/images/casablanca/hotels/four_seasons_casa/3.png'],
+      tags: ['5 étoiles', 'Spa', 'Piscine'], category: 'Luxe',
+    ),
+    _HotelData(
+      id: 'hotel_casa_002', name: 'Hôtel & Spa Le Doge', location: 'Quartier Gauthier, Casablanca',
+      price: 250, rating: 4.8, reviews: 287,
+      imageUrl: 'assets/images/casablanca/hotels/le_doge_casa/1.png',
+      imageAssets: ['assets/images/casablanca/hotels/le_doge_casa/1.png', 'assets/images/casablanca/hotels/le_doge_casa/2.png', 'assets/images/casablanca/hotels/le_doge_casa/3.png'],
+      tags: ['Art Déco', 'Spa', 'Charme'], category: 'Luxe',
+    ),
+    _HotelData(
+      id: 'hotel_casa_003', name: 'Hyatt Regency Casablanca', location: 'Place des Nations Unies, Casablanca',
+      price: 180, rating: 4.7, reviews: 534,
+      imageUrl: 'assets/images/casablanca/hotels/hyatt_casa/1.png',
+      imageAssets: ['assets/images/casablanca/hotels/hyatt_casa/1.png', 'assets/images/casablanca/hotels/hyatt_casa/2.png', 'assets/images/casablanca/hotels/hyatt_casa/3.png'],
+      tags: ['Business', 'Restaurant', 'Centre-ville'], category: 'Business',
+    ),
+    _HotelData(
+      id: 'hotel_casa_004', name: 'Kenzi Tower Hotel', location: 'Twin Center, Casablanca',
+      price: 160, rating: 4.6, reviews: 389,
+      imageUrl: 'assets/images/casablanca/hotels/kenzi_tower/1.png',
+      imageAssets: ['assets/images/casablanca/hotels/kenzi_tower/1.png', 'assets/images/casablanca/hotels/kenzi_tower/2.png', 'assets/images/casablanca/hotels/kenzi_tower/3.png'],
+      tags: ['Panoramique', 'Business', 'Spa'], category: 'Business',
+    ),
+    _HotelData(
+      id: 'hotel_casa_005', name: 'Sofitel Casablanca', location: 'Tour Blanche, Casablanca',
+      price: 300, rating: 4.8, reviews: 445,
+      imageUrl: 'assets/images/casablanca/hotels/sofitel_casa/1.png',
+      imageAssets: ['assets/images/casablanca/hotels/sofitel_casa/1.png', 'assets/images/casablanca/hotels/sofitel_casa/2.png', 'assets/images/casablanca/hotels/sofitel_casa/3.png'],
+      tags: ['5 étoiles', 'Gastronomie', 'Luxe'], category: 'Luxe',
+    ),
+    _HotelData(
+      id: 'hotel_casa_006', name: 'Hôtel Transatlantique', location: 'Rue El Ouahda, Casablanca',
+      price: 75, rating: 4.3, reviews: 623,
+      imageUrl: 'assets/images/casablanca/hotels/transatlantique/1.png',
+      imageAssets: ['assets/images/casablanca/hotels/transatlantique/1.png', 'assets/images/casablanca/hotels/transatlantique/2.png', 'assets/images/casablanca/hotels/transatlantique/3.png'],
+      tags: ['Historique', 'Centre', 'Économique'], category: 'Budget',
     ),
   ];
 
@@ -195,10 +243,16 @@ class _HotelListScreenState extends State<HotelListScreen>
     super.dispose();
   }
 
+  List<_HotelData> get _activeHotels {
+    final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
+    return isCasa ? _hotelsCasa : _hotels;
+  }
+
   List<_HotelData> get _filteredHotels {
-    if (_selectedFilter == 0) return _hotels;
+    final base = _activeHotels;
+    if (_selectedFilter == 0) return base;
     final filterName = _filters[_selectedFilter];
-    return _hotels.where((h) => h.category == filterName).toList();
+    return base.where((h) => h.category == filterName).toList();
   }
 
   @override
@@ -244,7 +298,7 @@ class _HotelListScreenState extends State<HotelListScreen>
                                 ),
                               ),
                               Text(
-                                'Marrakech · ${_filteredHotels.length} établissements',
+                                '${ref.watch(selectedDestinationProvider).nom} · ${_filteredHotels.length} établissements',
                                 style: TextStyle(
                                   fontFamily: 'DarkerGrotesque',
                                   color: Colors.white.withValues(alpha: 0.4),

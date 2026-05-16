@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../providers/destination_provider.dart';
 
-class RestaurantListScreen extends StatefulWidget {
+class RestaurantListScreen extends ConsumerStatefulWidget {
   const RestaurantListScreen({super.key});
   @override
-  State<RestaurantListScreen> createState() => _RestaurantListScreenState();
+  ConsumerState<RestaurantListScreen> createState() => _RestaurantListScreenState();
 }
 
-class _RestaurantListScreenState extends State<RestaurantListScreen>
+class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
     with TickerProviderStateMixin {
   int _selectedFilter = 0;
   final _searchController = TextEditingController();
@@ -33,7 +35,7 @@ class _RestaurantListScreenState extends State<RestaurantListScreen>
       price: 25,
       rating: 4.7,
       reviews: 487,
-      imageUrl: 'assets/images/restaurants/le_jardin/1.png',
+      imageUrl: 'assets/images/marrakech/restaurants/le_jardin/1.png',
       tags: ['Terrasse', 'Végétarien', 'Bio'],
       category: 'International',
       specialite: 'Méditerranéen',
@@ -46,7 +48,7 @@ class _RestaurantListScreenState extends State<RestaurantListScreen>
       price: 30,
       rating: 4.8,
       reviews: 623,
-      imageUrl: 'assets/images/restaurants/nomad/1.png',
+      imageUrl: 'assets/images/marrakech/restaurants/nomad/1.png',
       tags: ['Rooftop', 'Vue Médina', 'Cocktails'],
       category: 'Rooftop',
       specialite: 'Marocain Moderne',
@@ -59,7 +61,7 @@ class _RestaurantListScreenState extends State<RestaurantListScreen>
       price: 35,
       rating: 4.9,
       reviews: 389,
-      imageUrl: 'assets/images/restaurants/al_fassia/1.png',
+      imageUrl: 'assets/images/marrakech/restaurants/al_fassia/1.png',
       tags: ['Tajine', 'Couscous', 'Familial'],
       category: 'Marocain',
       specialite: 'Cuisine Fassi',
@@ -72,7 +74,7 @@ class _RestaurantListScreenState extends State<RestaurantListScreen>
       price: 12,
       rating: 4.5,
       reviews: 712,
-      imageUrl: 'assets/images/restaurants/cafe_clock/1.png',
+      imageUrl: 'assets/images/marrakech/restaurants/cafe_clock/1.png',
       tags: ['Burger Chameau', 'Live Music', 'Culturel'],
       category: 'Street Food',
       specialite: 'Fusion',
@@ -85,7 +87,7 @@ class _RestaurantListScreenState extends State<RestaurantListScreen>
       price: 120,
       rating: 4.9,
       reviews: 234,
-      imageUrl: 'assets/images/restaurants/la_table_du_palais/1.png',
+      imageUrl: 'assets/images/marrakech/restaurants/la_table_du_palais/1.png',
       tags: ['Gastronomique', 'Étoilé', 'Luxe'],
       category: 'International',
       specialite: 'Français-Marocain',
@@ -98,11 +100,57 @@ class _RestaurantListScreenState extends State<RestaurantListScreen>
       price: 8,
       rating: 4.6,
       reviews: 1024,
-      imageUrl: 'assets/images/restaurants/chez_lamine/1.png',
+      imageUrl: 'assets/images/marrakech/restaurants/chez_lamine/1.png',
       tags: ['Tanjia', 'Authentique', 'Populaire'],
       category: 'Street Food',
       specialite: 'Tanjia Marrakchia',
       horaires: '11h-22h',
+    ),
+  ];
+
+  // Casablanca restaurants
+  final _restaurantsCasa = const [
+    _RestaurantData(
+      id: 'resto_casa_001', name: 'Rick\'s Café', location: 'Ancienne Médina, Casablanca',
+      price: 40, rating: 4.7, reviews: 1023,
+      imageUrl: 'assets/images/casablanca/restaurants/ricks_cafe/1.png',
+      tags: ['Légendaire', 'Piano Bar', 'Cocktails'], category: 'International',
+      specialite: 'Franco-Marocain', horaires: '12h-01h',
+    ),
+    _RestaurantData(
+      id: 'resto_casa_002', name: 'La Sqala', location: 'Boulevard des Almohades, Casablanca',
+      price: 25, rating: 4.8, reviews: 756,
+      imageUrl: 'assets/images/casablanca/restaurants/la_sqala/1.png',
+      tags: ['Terrasse', 'Brunch', 'Jardin'], category: 'Marocain',
+      specialite: 'Marocain Traditionnel', horaires: '8h-23h',
+    ),
+    _RestaurantData(
+      id: 'resto_casa_003', name: 'Le Cabestan', location: 'Corniche, Ain Diab',
+      price: 50, rating: 4.9, reviews: 534,
+      imageUrl: 'assets/images/casablanca/restaurants/le_cabestan/1.png',
+      tags: ['Vue Océan', 'Fruits de mer', 'Gastronomique'], category: 'Rooftop',
+      specialite: 'Poissons & Fruits de mer', horaires: '12h-00h',
+    ),
+    _RestaurantData(
+      id: 'resto_casa_004', name: 'Basmane', location: 'Maarif, Casablanca',
+      price: 35, rating: 4.6, reviews: 412,
+      imageUrl: 'assets/images/casablanca/restaurants/basmane/1.png',
+      tags: ['Japonais', 'Sushi', 'Moderne'], category: 'International',
+      specialite: 'Cuisine Japonaise', horaires: '12h-23h',
+    ),
+    _RestaurantData(
+      id: 'resto_casa_005', name: 'La Bodega', location: 'Rue Allal Ben Abdellah',
+      price: 30, rating: 4.6, reviews: 623,
+      imageUrl: 'assets/images/casablanca/restaurants/la_bodega/1.png',
+      tags: ['Tapas', 'Ambiance', 'Convivial'], category: 'International',
+      specialite: 'Tapas & Cuisine Espagnole', horaires: '12h-01h',
+    ),
+    _RestaurantData(
+      id: 'resto_casa_006', name: 'Blend Gourmet Burger', location: 'Maarif, Casablanca',
+      price: 15, rating: 4.5, reviews: 845,
+      imageUrl: 'assets/images/casablanca/restaurants/blend/1.png',
+      tags: ['Burgers', 'Street Food', 'Tendance'], category: 'Street Food',
+      specialite: 'Burgers Gourmet', horaires: '11h-23h',
     ),
   ];
 
@@ -146,11 +194,15 @@ class _RestaurantListScreenState extends State<RestaurantListScreen>
     super.dispose();
   }
 
+  List<_RestaurantData> get _activeRestaurants {
+    final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
+    return isCasa ? _restaurantsCasa : _restaurants;
+  }
+
   List<_RestaurantData> get _filtered {
-    if (_selectedFilter == 0) return _restaurants;
-    return _restaurants
-        .where((r) => r.category == _filters[_selectedFilter])
-        .toList();
+    final base = _activeRestaurants;
+    if (_selectedFilter == 0) return base;
+    return base.where((r) => r.category == _filters[_selectedFilter]).toList();
   }
 
   @override
@@ -196,7 +248,7 @@ class _RestaurantListScreenState extends State<RestaurantListScreen>
                                 ),
                               ),
                               Text(
-                                'Marrakech · ${_filtered.length} adresses',
+                                '${ref.watch(selectedDestinationProvider).nom} · ${_filtered.length} adresses',
                                 style: TextStyle(
                                   fontFamily: 'DarkerGrotesque',
                                   color: Colors.white.withValues(alpha: 0.4),

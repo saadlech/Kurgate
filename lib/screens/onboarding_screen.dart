@@ -15,7 +15,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<OnboardingData> _pages = [
     OnboardingData(
-      imageUrl: 'assets/images/discover_morocco.png',
+      imageUrl: 'assets/images/onboarding/discover_morocco.png',
       isLocal: true,
       title: 'Discover Morocco',
       description:
@@ -24,7 +24,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           'Plan your perfect trip with personalized recommendations powered by artificial intelligence.',
     ),
     OnboardingData(
-      imageUrl: 'assets/images/smart_recommendations.png',
+      imageUrl: 'assets/images/onboarding/smart_recommendations.png',
       isLocal: true,
       title: 'Smart Recommendations',
       description:
@@ -33,7 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           'From hidden gems to popular landmarks, we curate the best of Morocco just for you.',
     ),
     OnboardingData(
-      imageUrl: 'assets/images/book_with_ease.png',
+      imageUrl: 'assets/images/onboarding/book_with_ease.png',
       isLocal: true,
       title: 'Book with Ease',
       description:
@@ -70,7 +70,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Image.asset(
-                  'assets/images/logo_full.png',
+                  'assets/images/branding/logo_full.png',
                   height: 60,
                 ),
               ),

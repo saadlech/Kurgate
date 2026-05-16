@@ -146,6 +146,55 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
         'assets/images/vehicules/citroen_berlingo/4.png',
       ],
     ),
+    // Casablanca vehicles
+    'vehicule_casa_001': _VehiculeInfo(
+      name: 'Dacia Duster 2024', agence: 'Casablanca Auto Location',
+      rating: 4.6, reviews: 198,
+      description: 'Le SUV le plus populaire au Maroc. Parfait pour explorer Casablanca et sa région côtière. Robuste, confortable et économique.',
+      imageUrl: 'assets/images/vehicules/dacia_duster/1.png', price: 45,
+      transmission: 'Manuelle', carburant: 'Diesel', places: 5, category: 'SUV',
+      images: ['assets/images/vehicules/dacia_duster/1.png', 'assets/images/vehicules/dacia_duster/2.png', 'assets/images/vehicules/dacia_duster/3.png', 'assets/images/vehicules/dacia_duster/4.png'],
+    ),
+    'vehicule_casa_002': _VehiculeInfo(
+      name: 'Renault Clio 5', agence: 'Eco Rent Casablanca',
+      rating: 4.4, reviews: 445,
+      description: 'La citadine idéale pour naviguer dans le trafic casablancais. Économique et agile, parfaite pour la ville.',
+      imageUrl: 'assets/images/vehicules/renault_clio/1.png', price: 22,
+      transmission: 'Manuelle', carburant: 'Essence', places: 5, category: 'Citadine',
+      images: ['assets/images/vehicules/renault_clio/1.png', 'assets/images/vehicules/renault_clio/2.png', 'assets/images/vehicules/renault_clio/3.png', 'assets/images/vehicules/renault_clio/4.png'],
+    ),
+    'vehicule_casa_003': _VehiculeInfo(
+      name: 'Mercedes Classe E', agence: 'Premium Cars Casablanca',
+      rating: 4.9, reviews: 134,
+      description: 'L\'excellence pour les déplacements d\'affaires à Casablanca. Confort, prestige et technologie de pointe.',
+      imageUrl: 'assets/images/vehicules/mercedes_classe_e/1.png', price: 150,
+      transmission: 'Automatique', carburant: 'Essence', places: 5, category: 'Berline',
+      images: ['assets/images/vehicules/mercedes_classe_e/1.png', 'assets/images/vehicules/mercedes_classe_e/2.png', 'assets/images/vehicules/mercedes_classe_e/3.png', 'assets/images/vehicules/mercedes_classe_e/4.png'],
+    ),
+    'vehicule_casa_004': _VehiculeInfo(
+      name: 'Toyota Hilux 4x4', agence: 'Casa 4x4 Rental',
+      rating: 4.8, reviews: 156,
+      description: 'Le pick-up tout-terrain par excellence. Idéal pour les excursions vers les plages sauvages et l\'arrière-pays casablancais.',
+      imageUrl: 'assets/images/vehicules/toyota_hilux/1.png', price: 120,
+      transmission: 'Automatique', carburant: 'Diesel', places: 5, category: 'SUV',
+      images: ['assets/images/vehicules/toyota_hilux/1.png', 'assets/images/vehicules/toyota_hilux/2.png', 'assets/images/vehicules/toyota_hilux/3.png', 'assets/images/vehicules/toyota_hilux/4.png'],
+    ),
+    'vehicule_casa_005': _VehiculeInfo(
+      name: 'Peugeot 3008', agence: 'City Cars Casablanca',
+      rating: 4.7, reviews: 267,
+      description: 'Le SUV familial parfait pour découvrir Casablanca et ses environs. i-Cockpit futuriste et confort exceptionnel.',
+      imageUrl: 'assets/images/vehicules/peugeot_3008/1.png', price: 65,
+      transmission: 'Automatique', carburant: 'Diesel', places: 5, category: 'SUV',
+      images: ['assets/images/vehicules/peugeot_3008/1.png', 'assets/images/vehicules/peugeot_3008/2.png', 'assets/images/vehicules/peugeot_3008/3.png', 'assets/images/vehicules/peugeot_3008/4.png'],
+    ),
+    'vehicule_casa_006': _VehiculeInfo(
+      name: 'Citroën Berlingo', agence: 'Casablanca Van Rental',
+      rating: 4.3, reviews: 145,
+      description: 'Le véhicule utilitaire idéal pour les groupes visitant Casablanca. 7 places et coffre généreux.',
+      imageUrl: 'assets/images/vehicules/citroen_berlingo/1.png', price: 40,
+      transmission: 'Manuelle', carburant: 'Diesel', places: 7, category: 'Utilitaire',
+      images: ['assets/images/vehicules/citroen_berlingo/1.png', 'assets/images/vehicules/citroen_berlingo/2.png', 'assets/images/vehicules/citroen_berlingo/3.png', 'assets/images/vehicules/citroen_berlingo/4.png'],
+    ),
   };
 
   _VehiculeInfo get _vehicule =>

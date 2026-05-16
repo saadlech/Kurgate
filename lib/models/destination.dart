@@ -43,26 +43,27 @@ class Destination {
       idDestination: 'dest_001',
       nom: 'Marrakech',
       sousTitre: 'The Red City',
-      imageUrl: 'assets/images/marrakech.png',
+      imageUrl: 'assets/images/cities/marrakech.png',
       estDisponible: true,
     ),
     Destination(
       idDestination: 'dest_002',
       nom: 'Casablanca',
       sousTitre: 'The White City',
-      imageUrl: 'assets/images/casablanca.png',
+      imageUrl: 'assets/images/cities/casablanca.png',
+      estDisponible: true,
     ),
     Destination(
       idDestination: 'dest_003',
       nom: 'Agadir',
       sousTitre: 'The Beach Paradise',
-      imageUrl: 'assets/images/agadir.png',
+      imageUrl: 'assets/images/cities/agadir.png',
     ),
     Destination(
       idDestination: 'dest_004',
       nom: 'Tangier',
       sousTitre: 'The Gateway to Africa',
-      imageUrl: 'assets/images/tangier.png',
+      imageUrl: 'assets/images/cities/tangier.png',
     ),
   ];
 }

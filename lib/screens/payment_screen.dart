@@ -39,8 +39,10 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _successScale =
-        CurvedAnimation(parent: _successCtrl, curve: Curves.elasticOut);
+    _successScale = CurvedAnimation(
+      parent: _successCtrl,
+      curve: Curves.elasticOut,
+    );
   }
 
   @override
@@ -125,8 +127,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
       // Auto-show feedback after a short delay
       Future.delayed(const Duration(milliseconds: 1800), () {
         if (!mounted) return;
-        final booking =
-            ref.read(bookingProvider.notifier).getBookingById(widget.bookingId);
+        final booking = ref
+            .read(bookingProvider.notifier)
+            .getBookingById(widget.bookingId);
         if (booking != null) {
           showModalBottomSheet(
             context: context,
@@ -142,15 +145,19 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                 // Also save to global reviews so all users can see it
                 final user = ref.read(authProvider).currentUser;
                 if (user != null && booking != null) {
-                  ref.read(reviewProvider.notifier).addReview(Avis(
-                    idAvis: '${booking.itemId}_${user.id}',
-                    itemId: booking.itemId,
-                    userId: user.id,
-                    userName: user.nom,
-                    note: rating,
-                    commentaire: comment,
-                    datePublication: DateTime.now(),
-                  ));
+                  ref
+                      .read(reviewProvider.notifier)
+                      .addReview(
+                        Avis(
+                          idAvis: '${booking.itemId}_${user.id}',
+                          itemId: booking.itemId,
+                          userId: user.id,
+                          userName: user.nom,
+                          note: rating,
+                          commentaire: comment,
+                          datePublication: DateTime.now(),
+                        ),
+                      );
                 }
               },
             ),
@@ -164,8 +171,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
 
   @override
   Widget build(BuildContext context) {
-    final booking =
-        ref.watch(bookingProvider).where((b) => b.idReservation == widget.bookingId);
+    final booking = ref
+        .watch(bookingProvider)
+        .where((b) => b.idReservation == widget.bookingId);
     if (booking.isEmpty) {
       return Scaffold(
         backgroundColor: const Color(0xFF1A1A1A),
@@ -189,8 +197,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
         backgroundColor: const Color(0xFF1A1A1A),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded,
-              color: Colors.white, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Colors.white,
+            size: 20,
+          ),
           onPressed: () => context.pop(),
         ),
         title: const Text(
@@ -207,8 +218,8 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
       body: _success
           ? _buildSuccessState(b)
           : _processing
-              ? _buildProcessingState()
-              : _buildPaymentForm(b),
+          ? _buildProcessingState()
+          : _buildPaymentForm(b),
     );
   }
 
@@ -321,8 +332,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
             width: 180,
             child: LinearProgressIndicator(
               backgroundColor: Colors.white.withValues(alpha: 0.06),
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(Color(0xFFFF8C00)),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                Color(0xFFFF8C00),
+              ),
               minHeight: 3,
               borderRadius: BorderRadius.circular(2),
             ),
@@ -354,8 +366,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                   color: const Color(0xFFFF8C00).withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.credit_card_rounded,
-                    color: Color(0xFFFF8C00), size: 18),
+                child: const Icon(
+                  Icons.credit_card_rounded,
+                  color: Color(0xFFFF8C00),
+                  size: 18,
+                ),
               ),
               const SizedBox(width: 12),
               const Text(
@@ -409,16 +424,26 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                             ? Container(
                                 key: ValueKey(brand),
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 3),
+                                  horizontal: 10,
+                                  vertical: 3,
+                                ),
                                 decoration: BoxDecoration(
                                   color: brand == 'visa'
-                                      ? const Color(0xFF1A1F71).withValues(alpha: 0.25)
-                                      : const Color(0xFFEB001B).withValues(alpha: 0.15),
+                                      ? const Color(
+                                          0xFF1A1F71,
+                                        ).withValues(alpha: 0.25)
+                                      : const Color(
+                                          0xFFEB001B,
+                                        ).withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
                                     color: brand == 'visa'
-                                        ? const Color(0xFF1A1F71).withValues(alpha: 0.4)
-                                        : const Color(0xFFEB001B).withValues(alpha: 0.3),
+                                        ? const Color(
+                                            0xFF1A1F71,
+                                          ).withValues(alpha: 0.4)
+                                        : const Color(
+                                            0xFFEB001B,
+                                          ).withValues(alpha: 0.3),
                                   ),
                                 ),
                                 child: Row(
@@ -441,7 +466,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                                         height: 12,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color: const Color(0xFFEB001B).withValues(alpha: 0.8),
+                                          color: const Color(
+                                            0xFFEB001B,
+                                          ).withValues(alpha: 0.8),
                                         ),
                                       ),
                                       Transform.translate(
@@ -451,7 +478,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                                           height: 12,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: const Color(0xFFF79E1B).withValues(alpha: 0.8),
+                                            color: const Color(
+                                              0xFFF79E1B,
+                                            ).withValues(alpha: 0.8),
                                           ),
                                         ),
                                       ),
@@ -477,7 +506,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.08),
+                      ),
                     ),
                     child: TextField(
                       controller: _cardNumberCtrl,
@@ -495,8 +526,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                         letterSpacing: 1.2,
                       ),
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.credit_card_rounded,
-                            size: 18, color: Colors.white.withValues(alpha: 0.3)),
+                        prefixIcon: Icon(
+                          Icons.credit_card_rounded,
+                          size: 18,
+                          color: Colors.white.withValues(alpha: 0.3),
+                        ),
                         hintText: '0000 0000 0000 0000',
                         hintStyle: TextStyle(
                           fontFamily: 'DarkerGrotesque',
@@ -505,8 +539,10 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                           letterSpacing: 1.2,
                         ),
                         border: InputBorder.none,
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
                       ),
                     ),
                   ),
@@ -544,11 +580,17 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                           duration: const Duration(milliseconds: 200),
                           child: err != null
                               ? Padding(
-                                  padding: const EdgeInsets.only(left: 12, top: 4),
+                                  padding: const EdgeInsets.only(
+                                    left: 12,
+                                    top: 4,
+                                  ),
                                   child: Row(
                                     children: [
-                                      const Icon(Icons.error_outline_rounded,
-                                          size: 12, color: Color(0xFFFF5252)),
+                                      const Icon(
+                                        Icons.error_outline_rounded,
+                                        size: 12,
+                                        color: Color(0xFFFF5252),
+                                      ),
                                       const SizedBox(width: 4),
                                       Text(
                                         err,
@@ -602,8 +644,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
           // Security note
           Row(
             children: [
-              Icon(Icons.shield_rounded,
-                  size: 14, color: Colors.white.withValues(alpha: 0.2)),
+              Icon(
+                Icons.shield_rounded,
+                size: 14,
+                color: Colors.white.withValues(alpha: 0.2),
+              ),
               const SizedBox(width: 6),
               Text(
                 'Paiement sécurisé — Vos données sont chiffrées',
@@ -622,8 +667,12 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
             width: double.infinity,
             height: 56,
             child: AnimatedBuilder(
-              animation: Listenable.merge(
-                  [_cardNumberCtrl, _expiryCtrl, _cvvCtrl, _nameCtrl]),
+              animation: Listenable.merge([
+                _cardNumberCtrl,
+                _expiryCtrl,
+                _cvvCtrl,
+                _nameCtrl,
+              ]),
               builder: (context, _) {
                 final valid = _formValid;
                 return ElevatedButton(
@@ -633,12 +682,15 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                         ? const Color(0xFFFF8C00)
                         : Colors.white.withValues(alpha: 0.06),
                     foregroundColor: Colors.black,
-                    disabledBackgroundColor:
-                        Colors.white.withValues(alpha: 0.06),
-                    disabledForegroundColor:
-                        Colors.white.withValues(alpha: 0.2),
+                    disabledBackgroundColor: Colors.white.withValues(
+                      alpha: 0.06,
+                    ),
+                    disabledForegroundColor: Colors.white.withValues(
+                      alpha: 0.2,
+                    ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18)),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                     elevation: 0,
                   ),
                   child: Row(
@@ -712,8 +764,10 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                 gaplessPlayback: true,
                 errorBuilder: (_, _, _) => Container(
                   color: const Color(0xFF2A2A2A),
-                  child: Icon(Icons.image_rounded,
-                      color: Colors.white.withValues(alpha: 0.15)),
+                  child: Icon(
+                    Icons.image_rounded,
+                    color: Colors.white.withValues(alpha: 0.15),
+                  ),
                 ),
               ),
             ),
@@ -786,8 +840,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(14),
-            border:
-                Border.all(color: Colors.white.withValues(alpha: 0.08)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
           ),
           child: TextField(
             controller: controller,
@@ -802,8 +855,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
               letterSpacing: 1.2,
             ),
             decoration: InputDecoration(
-              prefixIcon: Icon(icon,
-                  size: 18, color: Colors.white.withValues(alpha: 0.3)),
+              prefixIcon: Icon(
+                icon,
+                size: 18,
+                color: Colors.white.withValues(alpha: 0.3),
+              ),
               hintText: hint,
               hintStyle: TextStyle(
                 fontFamily: 'DarkerGrotesque',
@@ -812,8 +868,10 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                 letterSpacing: 1.2,
               ),
               border: InputBorder.none,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
             ),
           ),
         ),
@@ -847,7 +905,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
 class _CardNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final text = newValue.text.replaceAll(' ', '');
     final buffer = StringBuffer();
     for (int i = 0; i < text.length; i++) {
@@ -865,7 +925,9 @@ class _CardNumberFormatter extends TextInputFormatter {
 class _ExpiryFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     var text = newValue.text.replaceAll('/', '');
     if (text.isEmpty) {
       return newValue.copyWith(text: '');

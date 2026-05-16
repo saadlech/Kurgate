@@ -835,15 +835,18 @@ class _BookingCard extends StatelessWidget {
                       size: 14,
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      'Réservé le ${_fmtDate(booking.dateDebut)}',
-                      style: TextStyle(
-                        fontFamily: 'DarkerGrotesque',
-                        color: Colors.white.withValues(alpha: 0.25),
-                        fontSize: 11,
+                    Flexible(
+                      child: Text(
+                        'Réservé le ${_fmtDate(booking.dateDebut)}',
+                        style: TextStyle(
+                          fontFamily: 'DarkerGrotesque',
+                          color: Colors.white.withValues(alpha: 0.25),
+                          fontSize: 11,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 8),
 
                     // Action button based on status
                     if (booking.statut == 'En attente')

@@ -41,12 +41,12 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
       imageUrl:
           'https://images.unsplash.com/photo-1548018560-c7196e4f6bec?w=800&q=80',
       imageAssets: [
-        'assets/images/hotels/la_mamounia/1.png',
-        'assets/images/hotels/la_mamounia/2.png',
-        'assets/images/hotels/la_mamounia/3.png',
-        'assets/images/hotels/la_mamounia/4.png',
-        'assets/images/hotels/la_mamounia/5.png',
-        'assets/images/hotels/la_mamounia/6.png',
+        'assets/images/marrakech/hotels/la_mamounia/1.png',
+        'assets/images/marrakech/hotels/la_mamounia/2.png',
+        'assets/images/marrakech/hotels/la_mamounia/3.png',
+        'assets/images/marrakech/hotels/la_mamounia/4.png',
+        'assets/images/marrakech/hotels/la_mamounia/5.png',
+        'assets/images/marrakech/hotels/la_mamounia/6.png',
       ],
     ),
     'hotel_003': _HotelInfo(
@@ -59,12 +59,12 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
       imageUrl:
           'https://images.unsplash.com/photo-1591378603223-e15b45a81640?w=800&q=80',
       imageAssets: [
-        'assets/images/hotels/riad_yasmine/1.png',
-        'assets/images/hotels/riad_yasmine/2.png',
-        'assets/images/hotels/riad_yasmine/3.png',
-        'assets/images/hotels/riad_yasmine/4.png',
-        'assets/images/hotels/riad_yasmine/5.png',
-        'assets/images/hotels/riad_yasmine/6.png',
+        'assets/images/marrakech/hotels/riad_yasmine/1.png',
+        'assets/images/marrakech/hotels/riad_yasmine/2.png',
+        'assets/images/marrakech/hotels/riad_yasmine/3.png',
+        'assets/images/marrakech/hotels/riad_yasmine/4.png',
+        'assets/images/marrakech/hotels/riad_yasmine/5.png',
+        'assets/images/marrakech/hotels/riad_yasmine/6.png',
       ],
     ),
     'hotel_004': _HotelInfo(
@@ -87,12 +87,12 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
       imageUrl:
           'https://images.unsplash.com/photo-1548018560-c7196e4f6bec?w=800&q=80',
       imageAssets: [
-        'assets/images/hotels/la_sultana/1.png',
-        'assets/images/hotels/la_sultana/2.png',
-        'assets/images/hotels/la_sultana/3.png',
-        'assets/images/hotels/la_sultana/4.png',
-        'assets/images/hotels/la_sultana/5.png',
-        'assets/images/hotels/la_sultana/6.png',
+        'assets/images/marrakech/hotels/la_sultana/1.png',
+        'assets/images/marrakech/hotels/la_sultana/2.png',
+        'assets/images/marrakech/hotels/la_sultana/3.png',
+        'assets/images/marrakech/hotels/la_sultana/4.png',
+        'assets/images/marrakech/hotels/la_sultana/5.png',
+        'assets/images/marrakech/hotels/la_sultana/6.png',
       ],
     ),
     'hotel_006': _HotelInfo(
@@ -105,12 +105,12 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
       imageUrl:
           'https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=800&q=80',
       imageAssets: [
-        'assets/images/hotels/mandarin_oriental/1.png',
-        'assets/images/hotels/mandarin_oriental/2.png',
-        'assets/images/hotels/mandarin_oriental/3.png',
-        'assets/images/hotels/mandarin_oriental/4.png',
-        'assets/images/hotels/mandarin_oriental/5.png',
-        'assets/images/hotels/mandarin_oriental/6.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/1.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/2.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/3.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/4.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/5.png',
+        'assets/images/marrakech/hotels/mandarin_oriental/6.png',
       ],
     ),
     'hotel_007': _HotelInfo(
@@ -123,12 +123,12 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
       imageUrl:
           'https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=800&q=80',
       imageAssets: [
-        'assets/images/hotels/riad_kniza/1.png',
-        'assets/images/hotels/riad_kniza/2.png',
-        'assets/images/hotels/riad_kniza/3.png',
-        'assets/images/hotels/riad_kniza/4.png',
-        'assets/images/hotels/riad_kniza/5.png',
-        'assets/images/hotels/riad_kniza/6.png',
+        'assets/images/marrakech/hotels/riad_kniza/1.png',
+        'assets/images/marrakech/hotels/riad_kniza/2.png',
+        'assets/images/marrakech/hotels/riad_kniza/3.png',
+        'assets/images/marrakech/hotels/riad_kniza/4.png',
+        'assets/images/marrakech/hotels/riad_kniza/5.png',
+        'assets/images/marrakech/hotels/riad_kniza/6.png',
       ],
     ),
     'hotel_008': _HotelInfo(
@@ -141,12 +141,97 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
       imageUrl:
           'https://images.unsplash.com/photo-1548018560-c7196e4f6bec?w=800&q=80',
       imageAssets: [
-        'assets/images/hotels/royal_mansour/1.png',
-        'assets/images/hotels/royal_mansour/2.png',
-        'assets/images/hotels/royal_mansour/3.png',
-        'assets/images/hotels/royal_mansour/4.png',
-        'assets/images/hotels/royal_mansour/5.png',
-        'assets/images/hotels/royal_mansour/6.png',
+        'assets/images/marrakech/hotels/royal_mansour/1.png',
+        'assets/images/marrakech/hotels/royal_mansour/2.png',
+        'assets/images/marrakech/hotels/royal_mansour/3.png',
+        'assets/images/marrakech/hotels/royal_mansour/4.png',
+        'assets/images/marrakech/hotels/royal_mansour/5.png',
+        'assets/images/marrakech/hotels/royal_mansour/6.png',
+      ],
+    ),
+    // Casablanca hotels
+    'hotel_casa_001': _HotelInfo(
+      name: 'Four Seasons Casablanca',
+      location: 'Anfa Place, Casablanca',
+      rating: 4.9,
+      reviews: 412,
+      description:
+          'Un resort urbain d\'exception surplombant l\'Atlantique. Jardins luxuriants, piscine à débordement, spa de classe mondiale et suites avec vue mer. Le summum du luxe à Casablanca.',
+      imageUrl: 'assets/images/casablanca/hotels/four_seasons_casa/1.png',
+      imageAssets: [
+        'assets/images/casablanca/hotels/four_seasons_casa/1.png',
+        'assets/images/casablanca/hotels/four_seasons_casa/2.png',
+        'assets/images/casablanca/hotels/four_seasons_casa/3.png',
+      ],
+    ),
+    'hotel_casa_002': _HotelInfo(
+      name: 'Hôtel & Spa Le Doge',
+      location: 'Quartier Gauthier, Casablanca',
+      rating: 4.8,
+      reviews: 287,
+      description:
+          'Bijou Art Déco des années 1930, cet hôtel boutique allie charme historique et confort moderne. Suites uniques, spa intimiste et restaurant gastronomique au cœur du quartier le plus chic de Casablanca.',
+      imageUrl: 'assets/images/casablanca/hotels/le_doge_casa/1.png',
+      imageAssets: [
+        'assets/images/casablanca/hotels/le_doge_casa/1.png',
+        'assets/images/casablanca/hotels/le_doge_casa/2.png',
+        'assets/images/casablanca/hotels/le_doge_casa/3.png',
+      ],
+    ),
+    'hotel_casa_003': _HotelInfo(
+      name: 'Hyatt Regency Casablanca',
+      location: 'Place des Nations Unies, Casablanca',
+      rating: 4.7,
+      reviews: 534,
+      description:
+          'Au cœur du centre-ville, le Hyatt Regency offre une vue panoramique sur la médina et l\'océan. Chambres élégantes, restaurant rooftop, piscine et centre de fitness pour les voyageurs d\'affaires et de loisirs.',
+      imageUrl: 'assets/images/casablanca/hotels/hyatt_casa/1.png',
+      imageAssets: [
+        'assets/images/casablanca/hotels/hyatt_casa/1.png',
+        'assets/images/casablanca/hotels/hyatt_casa/2.png',
+        'assets/images/casablanca/hotels/hyatt_casa/3.png',
+      ],
+    ),
+    'hotel_casa_004': _HotelInfo(
+      name: 'Kenzi Tower Hotel',
+      location: 'Twin Center, Casablanca',
+      rating: 4.6,
+      reviews: 389,
+      description:
+          'Situé dans l\'une des tours emblématiques du Twin Center, cet hôtel 5 étoiles offre des vues spectaculaires sur la ville. Sky bar au 28e étage, spa luxueux et cuisine internationale raffinée.',
+      imageUrl: 'assets/images/casablanca/hotels/kenzi_tower/1.png',
+      imageAssets: [
+        'assets/images/casablanca/hotels/kenzi_tower/1.png',
+        'assets/images/casablanca/hotels/kenzi_tower/2.png',
+        'assets/images/casablanca/hotels/kenzi_tower/3.png',
+      ],
+    ),
+    'hotel_casa_005': _HotelInfo(
+      name: 'Sofitel Casablanca',
+      location: 'Tour Blanche, Casablanca',
+      rating: 4.8,
+      reviews: 445,
+      description:
+          'L\'élégance française rencontre l\'hospitalité marocaine. Restaurant gastronomique, spa So SPA, piscine et suites avec vue panoramique sur la ville blanche.',
+      imageUrl: 'assets/images/casablanca/hotels/sofitel_casa/1.png',
+      imageAssets: [
+        'assets/images/casablanca/hotels/sofitel_casa/1.png',
+        'assets/images/casablanca/hotels/sofitel_casa/2.png',
+        'assets/images/casablanca/hotels/sofitel_casa/3.png',
+      ],
+    ),
+    'hotel_casa_006': _HotelInfo(
+      name: 'Hôtel Transatlantique',
+      location: 'Rue El Ouahda, Casablanca',
+      rating: 4.3,
+      reviews: 623,
+      description:
+          'Un hôtel chargé d\'histoire au cœur de Casablanca. Construit dans les années 1920, il conserve son charme colonial tout en offrant un confort moderne à prix accessible.',
+      imageUrl: 'assets/images/casablanca/hotels/transatlantique/1.png',
+      imageAssets: [
+        'assets/images/casablanca/hotels/transatlantique/1.png',
+        'assets/images/casablanca/hotels/transatlantique/2.png',
+        'assets/images/casablanca/hotels/transatlantique/3.png',
       ],
     ),
   };

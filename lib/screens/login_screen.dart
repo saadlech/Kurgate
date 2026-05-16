@@ -277,7 +277,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                       ],
                                     ),
                                     child: Image.asset(
-                                      'assets/images/icon_orange.png',
+                                      'assets/images/branding/icon_orange.png',
                                       height: 100,
                                       width: 100,
                                     ),

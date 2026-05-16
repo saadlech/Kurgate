@@ -170,7 +170,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                           ),
                           const Spacer(),
                           Image.asset(
-                            'assets/images/icon_orange.png',
+                            'assets/images/branding/icon_orange.png',
                             height: 40,
                             width: 40,
                           ),

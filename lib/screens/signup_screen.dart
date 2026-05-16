@@ -169,12 +169,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
 
     setState(() => _isLoading = true);
 
-    final success = await ref.read(authProvider.notifier).signup(
-      nom: _nameController.text.trim(),
-      email: _emailController.text.trim(),
-      password: _passwordController.text,
-      numDeTelephone: int.tryParse(_phoneController.text.trim()) ?? 0,
-    );
+    final success = await ref
+        .read(authProvider.notifier)
+        .signup(
+          nom: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          numDeTelephone: int.tryParse(_phoneController.text.trim()) ?? 0,
+        );
 
     if (mounted) {
       if (success) {
@@ -246,7 +248,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                           ),
                           const Spacer(),
                           Image.asset(
-                            'assets/images/icon_orange.png',
+                            'assets/images/branding/icon_orange.png',
                             height: 40,
                             width: 40,
                           ),
@@ -400,10 +402,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                 ShaderMask(
                   shaderCallback: (bounds) {
                     return const LinearGradient(
-                      colors: [
-                        Color(0xFFFF8C00),
-                        Color(0xFFFCA91C),
-                      ],
+                      colors: [Color(0xFFFF8C00), Color(0xFFFCA91C)],
                     ).createShader(bounds);
                   },
                   child: const Text(
@@ -518,9 +517,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                     isPassword: true,
                     obscure: _obscurePassword,
                     action: TextInputAction.next,
-                    onToggle: () => setState(
-                      () => _obscurePassword = !_obscurePassword,
-                    ),
+                    onToggle: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
                     validator: (v) {
                       if (v == null || v.isEmpty) {
                         return 'Please enter a password';
@@ -543,9 +541,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
                               height: 3,
-                              margin: EdgeInsets.only(
-                                right: i < 3 ? 6 : 0,
-                              ),
+                              margin: EdgeInsets.only(right: i < 3 ? 6 : 0),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(2),
                                 color: i < _passwordStrength
@@ -581,9 +577,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                     isPassword: true,
                     obscure: _obscureConfirm,
                     action: TextInputAction.done,
-                    onToggle: () => setState(
-                      () => _obscureConfirm = !_obscureConfirm,
-                    ),
+                    onToggle: () =>
+                        setState(() => _obscureConfirm = !_obscureConfirm),
                     validator: (v) {
                       if (v == null || v.isEmpty) {
                         return 'Please confirm your password';
@@ -600,9 +595,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
 
                   // Terms checkbox
                   GestureDetector(
-                    onTap: () => setState(
-                      () => _agreeTerms = !_agreeTerms,
-                    ),
+                    onTap: () => setState(() => _agreeTerms = !_agreeTerms),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -745,7 +738,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
       ),
     );
   }
-
 
   Widget _field({
     required TextEditingController controller,

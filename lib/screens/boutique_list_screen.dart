@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../providers/destination_provider.dart';
 
-class BoutiqueListScreen extends StatefulWidget {
+class BoutiqueListScreen extends ConsumerStatefulWidget {
   const BoutiqueListScreen({super.key});
   @override
-  State<BoutiqueListScreen> createState() => _BoutiqueListScreenState();
+  ConsumerState<BoutiqueListScreen> createState() => _BoutiqueListScreenState();
 }
 
-class _BoutiqueListScreenState extends State<BoutiqueListScreen>
+class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
     with TickerProviderStateMixin {
   int _selectedFilter = 0;
   final _searchController = TextEditingController();
@@ -34,7 +36,7 @@ class _BoutiqueListScreenState extends State<BoutiqueListScreen>
       location: 'Souk des Tapis, Médina',
       rating: 4.8,
       reviews: 312,
-      imageUrl: 'assets/images/boutiques/tapis_berberes/1.png',
+      imageUrl: 'assets/images/marrakech/boutiques/tapis_berberes/1.png',
       tags: ['Fait main', 'Berbère', 'Laine'],
       category: 'Tapis',
       prixMoyen: '150-2000',
@@ -46,7 +48,7 @@ class _BoutiqueListScreenState extends State<BoutiqueListScreen>
       location: 'Derb Dabachi, Médina',
       rating: 4.7,
       reviews: 198,
-      imageUrl: 'assets/images/boutiques/ceramique_safi/1.png',
+      imageUrl: 'assets/images/marrakech/boutiques/ceramique_safi/1.png',
       tags: ['Zellige', 'Assiettes', 'Vases'],
       category: 'Poterie',
       prixMoyen: '20-300',
@@ -58,7 +60,7 @@ class _BoutiqueListScreenState extends State<BoutiqueListScreen>
       location: 'Souk Cherratine, Médina',
       rating: 4.6,
       reviews: 456,
-      imageUrl: 'assets/images/boutiques/maroquinerie_youssef/1.png',
+      imageUrl: 'assets/images/marrakech/boutiques/maroquinerie_youssef/1.png',
       tags: ['Babouches', 'Sacs', 'Ceintures'],
       category: 'Cuir',
       prixMoyen: '30-500',
@@ -70,7 +72,7 @@ class _BoutiqueListScreenState extends State<BoutiqueListScreen>
       location: 'Place des Ferblantiers',
       rating: 4.9,
       reviews: 167,
-      imageUrl: 'assets/images/boutiques/bijoux_touareg/1.png',
+      imageUrl: 'assets/images/marrakech/boutiques/bijoux_touareg/1.png',
       tags: ['Argent', 'Touareg', 'Pierres'],
       category: 'Bijoux',
       prixMoyen: '50-800',
@@ -82,7 +84,7 @@ class _BoutiqueListScreenState extends State<BoutiqueListScreen>
       location: 'Souk Haddadine, Médina',
       rating: 4.7,
       reviews: 234,
-      imageUrl: 'assets/images/boutiques/tissages_amazigh/1.png',
+      imageUrl: 'assets/images/marrakech/boutiques/tissages_amazigh/1.png',
       tags: ['Caftans', 'Foulards', 'Coussins'],
       category: 'Textile',
       prixMoyen: '40-600',
@@ -94,10 +96,50 @@ class _BoutiqueListScreenState extends State<BoutiqueListScreen>
       location: 'Quartier des Potiers',
       rating: 4.5,
       reviews: 289,
-      imageUrl: 'assets/images/boutiques/poterie_tamegroute/1.png',
+      imageUrl: 'assets/images/marrakech/boutiques/poterie_tamegroute/1.png',
       tags: ['Tamegroute', 'Vert', 'Traditionnel'],
       category: 'Poterie',
       prixMoyen: '15-200',
+    ),
+  ];
+
+  // Casablanca boutiques
+  final _boutiquesCasa = const [
+    _BoutiqueData(
+      id: 'boutique_casa_001', name: 'Derb Ghallef Vintage', artisan: 'Collectif Derb Ghallef',
+      location: 'Derb Ghallef, Casablanca', rating: 4.5, reviews: 234,
+      imageUrl: 'assets/images/casablanca/boutiques/derb_ghallef/1.png',
+      tags: ['Vintage', 'Upcycle', 'Unique'], category: 'Textile', prixMoyen: '20-300',
+    ),
+    _BoutiqueData(
+      id: 'boutique_casa_002', name: 'Quartier Habous Artisanat', artisan: 'Artisans du Habous',
+      location: 'Quartier Habous, Casablanca', rating: 4.8, reviews: 456,
+      imageUrl: 'assets/images/casablanca/boutiques/habous_artisanat/1.png',
+      tags: ['Traditionnel', 'Babouches', 'Théières'], category: 'Cuir', prixMoyen: '30-500',
+    ),
+    _BoutiqueData(
+      id: 'boutique_casa_003', name: 'Trésor des Arts Marocains', artisan: 'Karim El Mansouri',
+      location: 'Rue Mohammed V, Casablanca', rating: 4.7, reviews: 312,
+      imageUrl: 'assets/images/casablanca/boutiques/tresor_arts/1.png',
+      tags: ['Tableaux', 'Sculptures', 'Déco'], category: 'Bijoux', prixMoyen: '50-1500',
+    ),
+    _BoutiqueData(
+      id: 'boutique_casa_004', name: 'Maroquinerie Hassan', artisan: 'Hassan Berrada',
+      location: 'Derb Omar, Casablanca', rating: 4.6, reviews: 378,
+      imageUrl: 'assets/images/casablanca/boutiques/maroquinerie_casa/1.png',
+      tags: ['Cuir', 'Sacs', 'Ceintures'], category: 'Cuir', prixMoyen: '40-600',
+    ),
+    _BoutiqueData(
+      id: 'boutique_casa_005', name: 'Parfumerie Senteurs du Maroc', artisan: 'Fatima El Alami',
+      location: 'Quartier Gauthier, Casablanca', rating: 4.8, reviews: 267,
+      imageUrl: 'assets/images/casablanca/boutiques/parfumerie_casa/1.png',
+      tags: ['Parfums', 'Huiles', 'Encens'], category: 'Bijoux', prixMoyen: '20-400',
+    ),
+    _BoutiqueData(
+      id: 'boutique_casa_006', name: 'Atelier Zellige Casa', artisan: 'Maître Abdellah Zellige',
+      location: 'Aïn Sebaâ, Casablanca', rating: 4.9, reviews: 189,
+      imageUrl: 'assets/images/casablanca/boutiques/atelier_zellige/1.png',
+      tags: ['Zellige', 'Mosaïque', 'Sur mesure'], category: 'Poterie', prixMoyen: '30-800',
     ),
   ];
 
@@ -141,11 +183,15 @@ class _BoutiqueListScreenState extends State<BoutiqueListScreen>
     super.dispose();
   }
 
+  List<_BoutiqueData> get _activeBoutiques {
+    final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
+    return isCasa ? _boutiquesCasa : _boutiques;
+  }
+
   List<_BoutiqueData> get _filtered {
-    if (_selectedFilter == 0) return _boutiques;
-    return _boutiques
-        .where((b) => b.category == _filters[_selectedFilter])
-        .toList();
+    final base = _activeBoutiques;
+    if (_selectedFilter == 0) return base;
+    return base.where((b) => b.category == _filters[_selectedFilter]).toList();
   }
 
   @override
@@ -190,7 +236,7 @@ class _BoutiqueListScreenState extends State<BoutiqueListScreen>
                                 ),
                               ),
                               Text(
-                                'Marrakech · ${_filtered.length} boutiques',
+                                '${ref.watch(selectedDestinationProvider).nom} · ${_filtered.length} boutiques',
                                 style: TextStyle(
                                   fontFamily: 'DarkerGrotesque',
                                   color: Colors.white.withValues(alpha: 0.4),

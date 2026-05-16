@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
+import '../providers/destination_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final VoidCallback? onProfileTap;
@@ -42,7 +43,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Hivernage',
       350,
       4.9,
-      'assets/images/hotels/la_mamounia/1.png',
+      'assets/images/marrakech/hotels/la_mamounia/1.png',
       '/hotel/hotel_002',
       'hotel',
     ),
@@ -51,7 +52,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Medina',
       95,
       4.6,
-      'assets/images/hotels/riad_yasmine/1.png',
+      'assets/images/marrakech/hotels/riad_yasmine/1.png',
       '/hotel/hotel_003',
       'hotel',
     ),
@@ -60,7 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Kasbah',
       280,
       4.8,
-      'assets/images/hotels/la_sultana/1.png',
+      'assets/images/marrakech/hotels/la_sultana/1.png',
       '/hotel/hotel_005',
       'hotel',
     ),
@@ -69,7 +70,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Médina',
       550,
       4.9,
-      'assets/images/hotels/royal_mansour/1.png',
+      'assets/images/marrakech/hotels/royal_mansour/1.png',
       '/hotel/hotel_008',
       'hotel',
     ),
@@ -118,7 +119,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Aventure · 6h',
       85,
       4.8,
-      'assets/images/experiences/safari_agafay/1.png',
+      'assets/images/marrakech/experiences/safari_agafay/1.png',
       '/experience/exp_001',
       'experience',
     ),
@@ -127,7 +128,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Culture · 3h',
       35,
       4.7,
-      'assets/images/experiences/medina_visite/1.png',
+      'assets/images/marrakech/experiences/medina_visite/1.png',
       '/experience/exp_002',
       'experience',
     ),
@@ -136,7 +137,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Nature · 8h',
       60,
       4.9,
-      'assets/images/experiences/randonnee_atlas/1.png',
+      'assets/images/marrakech/experiences/randonnee_atlas/1.png',
       '/experience/exp_003',
       'experience',
     ),
@@ -145,7 +146,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Aventure · 2h',
       180,
       4.9,
-      'assets/images/experiences/vol_montgolfiere/1.png',
+      'assets/images/marrakech/experiences/vol_montgolfiere/1.png',
       '/experience/exp_005',
       'experience',
     ),
@@ -156,7 +157,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Méditerranéen',
       25,
       4.7,
-      'assets/images/restaurants/le_jardin/1.png',
+      'assets/images/marrakech/restaurants/le_jardin/1.png',
       '/restaurant/resto_001',
       'restaurant',
     ),
@@ -165,7 +166,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Marocain Moderne',
       30,
       4.8,
-      'assets/images/restaurants/nomad/1.png',
+      'assets/images/marrakech/restaurants/nomad/1.png',
       '/restaurant/resto_002',
       'restaurant',
     ),
@@ -174,7 +175,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Cuisine Fassi',
       35,
       4.9,
-      'assets/images/restaurants/al_fassia/1.png',
+      'assets/images/marrakech/restaurants/al_fassia/1.png',
       '/restaurant/resto_003',
       'restaurant',
     ),
@@ -183,7 +184,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Français-Marocain',
       120,
       4.9,
-      'assets/images/restaurants/la_table_du_palais/1.png',
+      'assets/images/marrakech/restaurants/la_table_du_palais/1.png',
       '/restaurant/resto_005',
       'restaurant',
     ),
@@ -194,7 +195,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Tapis · Fait main',
       0,
       4.8,
-      'assets/images/boutiques/tapis_berberes/1.png',
+      'assets/images/marrakech/boutiques/tapis_berberes/1.png',
       '/boutique/boutique_001',
       'boutique',
     ),
@@ -203,7 +204,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Poterie · Zellige',
       0,
       4.7,
-      'assets/images/boutiques/ceramique_safi/1.png',
+      'assets/images/marrakech/boutiques/ceramique_safi/1.png',
       '/boutique/boutique_002',
       'boutique',
     ),
@@ -212,7 +213,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Cuir · Babouches',
       0,
       4.6,
-      'assets/images/boutiques/maroquinerie_youssef/1.png',
+      'assets/images/marrakech/boutiques/maroquinerie_youssef/1.png',
       '/boutique/boutique_003',
       'boutique',
     ),
@@ -221,18 +222,49 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Bijoux · Argent',
       0,
       4.9,
-      'assets/images/boutiques/bijoux_touareg/1.png',
+      'assets/images/marrakech/boutiques/bijoux_touareg/1.png',
       '/boutique/boutique_004',
       'boutique',
     ),
   ];
 
+  // ── Casablanca Data ──
+  static const _hotelsCasa = [
+    _Item('Four Seasons Casablanca', 'Anfa Place', 380, 4.9, 'assets/images/casablanca/hotels/four_seasons_casa/1.png', '/hotel/hotel_casa_001', 'hotel'),
+    _Item('Hôtel & Spa Le Doge', 'Quartier Gauthier', 250, 4.8, 'assets/images/casablanca/hotels/le_doge_casa/1.png', '/hotel/hotel_casa_002', 'hotel'),
+    _Item('Hyatt Regency Casablanca', 'Place des Nations Unies', 180, 4.7, 'assets/images/casablanca/hotels/hyatt_casa/1.png', '/hotel/hotel_casa_003', 'hotel'),
+    _Item('Kenzi Tower Hotel', 'Twin Center', 160, 4.6, 'assets/images/casablanca/hotels/kenzi_tower/1.png', '/hotel/hotel_casa_004', 'hotel'),
+  ];
+  static const _vehiculesCasa = [
+    _Item('Dacia Duster 2024', 'SUV · Diesel', 45, 4.6, 'assets/images/vehicules/dacia_duster/1.png', '/vehicule/vehicule_casa_001', 'vehicle'),
+    _Item('Renault Clio 5', 'Citadine · Essence', 22, 4.4, 'assets/images/vehicules/renault_clio/1.png', '/vehicule/vehicule_casa_002', 'vehicle'),
+    _Item('Mercedes Classe E', 'Berline · Luxe', 150, 4.9, 'assets/images/vehicules/mercedes_classe_e/1.png', '/vehicule/vehicule_casa_003', 'vehicle'),
+    _Item('Peugeot 3008', 'SUV · Familial', 65, 4.7, 'assets/images/vehicules/peugeot_3008/1.png', '/vehicule/vehicule_casa_005', 'vehicle'),
+  ];
+  static const _experiencesCasa = [
+    _Item('Mosquée Hassan II', 'Culture · 2h', 12, 4.9, 'assets/images/casablanca/experiences/mosquee_hassan/1.png', '/experience/exp_casa_001', 'experience'),
+    _Item('Corniche Ain Diab', 'Promenade · 3h', 0, 4.6, 'assets/images/casablanca/experiences/corniche_casa/1.png', '/experience/exp_casa_002', 'experience'),
+    _Item('Ancienne Médina Casa', 'Culture · 3h', 25, 4.7, 'assets/images/casablanca/experiences/medina_casa/1.png', '/experience/exp_casa_003', 'experience'),
+    _Item('Coucher de soleil en Yacht', 'Aventure · 3h', 200, 4.9, 'assets/images/casablanca/experiences/yacht_casa/1.png', '/experience/exp_casa_006', 'experience'),
+  ];
+  static const _restaurantsCasa = [
+    _Item('Rick\'s Café', 'Ancienne Médina', 40, 4.7, 'assets/images/casablanca/restaurants/ricks_cafe/1.png', '/restaurant/resto_casa_001', 'restaurant'),
+    _Item('La Sqala', 'Boulevard des Almohades', 25, 4.8, 'assets/images/casablanca/restaurants/la_sqala/1.png', '/restaurant/resto_casa_002', 'restaurant'),
+    _Item('Le Cabestan', 'Corniche, Ain Diab', 50, 4.9, 'assets/images/casablanca/restaurants/le_cabestan/1.png', '/restaurant/resto_casa_003', 'restaurant'),
+    _Item('La Bodega', 'Rue Allal Ben Abdellah', 30, 4.6, 'assets/images/casablanca/restaurants/la_bodega/1.png', '/restaurant/resto_casa_005', 'restaurant'),
+  ];
+  static const _boutiquesCasa = [
+    _Item('Derb Ghallef Vintage', 'Vintage · Upcycle', 0, 4.5, 'assets/images/casablanca/boutiques/derb_ghallef/1.png', '/boutique/boutique_casa_001', 'boutique'),
+    _Item('Quartier Habous Artisanat', 'Artisanat · Tradition', 0, 4.8, 'assets/images/casablanca/boutiques/habous_artisanat/1.png', '/boutique/boutique_casa_002', 'boutique'),
+    _Item('Trésor des Arts Marocains', 'Art · Déco', 0, 4.7, 'assets/images/casablanca/boutiques/tresor_arts/1.png', '/boutique/boutique_casa_003', 'boutique'),
+    _Item('Atelier Zellige Casa', 'Zellige · Mosaïque', 0, 4.9, 'assets/images/casablanca/boutiques/atelier_zellige/1.png', '/boutique/boutique_casa_006', 'boutique'),
+  ];
+
+  bool get _isCasa => ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
+
   late final List<_Item> _allItems = [
-    ..._hotels,
-    ..._vehicles,
-    ..._experiences,
-    ..._restaurants,
-    ..._boutiques,
+    ..._hotels, ..._vehicles, ..._experiences, ..._restaurants, ..._boutiques,
+    ..._hotelsCasa, ..._vehiculesCasa, ..._experiencesCasa, ..._restaurantsCasa, ..._boutiquesCasa,
   ];
 
   List<_Item> get _searchResults {
@@ -375,35 +407,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     _buildSection(
                       '🏨  Popular Hotels',
                       '/hotels',
-                      _hotels,
+                      _isCasa ? _hotelsCasa : _hotels,
                       '/night',
                     ),
                     const SizedBox(height: 24),
                     _buildSection(
                       '🚗  Rent a Car',
                       '/vehicules',
-                      _vehicles,
+                      _isCasa ? _vehiculesCasa : _vehicles,
                       '/day',
                     ),
                     const SizedBox(height: 24),
                     _buildSection(
                       '🌟  Top Experiences',
                       '/experiences',
-                      _experiences,
+                      _isCasa ? _experiencesCasa : _experiences,
                       '/pers',
                     ),
                     const SizedBox(height: 24),
                     _buildSection(
                       '🍽️  Restaurants',
                       '/restaurants',
-                      _restaurants,
+                      _isCasa ? _restaurantsCasa : _restaurants,
                       '/avg',
                     ),
                     const SizedBox(height: 24),
                     _buildSection(
                       '🛍️  Artisan Shops',
                       '/boutiques',
-                      _boutiques,
+                      _isCasa ? _boutiquesCasa : _boutiques,
                       '',
                     ),
                   ],
@@ -591,28 +623,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       color: const Color(0xFFFF8C00).withValues(alpha: 0.3),
                     ),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      DecoratedBox(
+                      const DecoratedBox(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Color(0xFFFF8C00),
                         ),
                         child: SizedBox(width: 6, height: 6),
                       ),
-                      SizedBox(width: 6),
+                      const SizedBox(width: 6),
                       Text(
-                        'Marrakech',
-                        style: TextStyle(
+                        ref.watch(selectedDestinationProvider).nom,
+                        style: const TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           color: Color(0xFFFF8C00),
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      SizedBox(width: 4),
-                      Icon(
+                      const SizedBox(width: 4),
+                      const Icon(
                         Icons.keyboard_arrow_down_rounded,
                         color: Color(0xFFFF8C00),
                         size: 16,

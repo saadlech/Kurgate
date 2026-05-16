@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/destination.dart';
 
-// Selected destination
-final selectedDestinationProvider = StateProvider<Destination?>((ref) => null);
+// Selected destination — defaults to Marrakech
+final selectedDestinationProvider = StateProvider<Destination>((ref) {
+  return Destination.cities.first; // Marrakech
+});
 
 // All destinations
 final destinationsProvider = Provider<List<Destination>>((ref) {
