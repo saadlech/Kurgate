@@ -166,8 +166,10 @@ class ProfileScreen extends ConsumerWidget {
 
   void _showDeleteAccountDialog(BuildContext context, WidgetRef ref) {
     final confirmController = TextEditingController();
+    bool isDeleting = false;
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setState) {
           final isConfirmed = confirmController.text.trim() == 'SUPPRIMER';
@@ -195,6 +197,7 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(height: 8),
                 TextField(
                   controller: confirmController,
+                  enabled: !isDeleting,
                   onChanged: (_) => setState(() {}),
                   style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 15),
                   decoration: InputDecoration(
@@ -208,36 +211,46 @@ class ProfileScreen extends ConsumerWidget {
                     contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   ),
                 ),
+                if (isDeleting) ...[
+                  const SizedBox(height: 16),
+                  const Center(child: CircularProgressIndicator(color: Color(0xFFFF5252), strokeWidth: 2)),
+                  const SizedBox(height: 8),
+                  Center(child: Text('Suppression en cours...', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.5), fontSize: 13))),
+                ],
               ],
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: Text('Annuler', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.5), fontWeight: FontWeight.w700)),
+                onPressed: isDeleting ? null : () => Navigator.pop(ctx),
+                child: Text('Annuler', style: TextStyle(fontFamily: 'DarkerGrotesque', color: isDeleting ? Colors.white.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.5), fontWeight: FontWeight.w700)),
               ),
               TextButton(
-                onPressed: isConfirmed ? () async {
-                  Navigator.pop(ctx);
+                onPressed: (isConfirmed && !isDeleting) ? () async {
+                  setState(() => isDeleting = true);
                   final success = await ref.read(authProvider.notifier).deleteAccount();
-                  if (success && context.mounted) {
-                    context.go('/login');
-                  } else if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        ref.read(authProvider).errorMessage ?? 'Échec de la suppression du compte.',
-                        style: const TextStyle(fontFamily: 'DarkerGrotesque'),
-                      ),
-                      backgroundColor: const Color(0xFFFF5252),
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ));
+                  if (!ctx.mounted) return;
+                  Navigator.pop(ctx);
+                  if (success) {
+                    if (context.mounted) context.go('/login');
+                  } else {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          ref.read(authProvider).errorMessage ?? 'Échec de la suppression du compte.',
+                          style: const TextStyle(fontFamily: 'DarkerGrotesque'),
+                        ),
+                        backgroundColor: const Color(0xFFFF5252),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ));
+                    }
                   }
                 } : null,
                 child: Text(
-                  'Supprimer',
+                  isDeleting ? 'Suppression...' : 'Supprimer',
                   style: TextStyle(
                     fontFamily: 'DarkerGrotesque',
-                    color: isConfirmed ? const Color(0xFFFF5252) : const Color(0xFFFF5252).withValues(alpha: 0.3),
+                    color: (isConfirmed && !isDeleting) ? const Color(0xFFFF5252) : const Color(0xFFFF5252).withValues(alpha: 0.3),
                     fontWeight: FontWeight.w700,
                   ),
                 ),

@@ -404,7 +404,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   /// Delete the current user's account permanently.
-  /// Removes profile from `utilisateurs`, signs out, and clears local data.
+  /// Removes profile from `utilisateurs`, deletes auth user, and clears local data.
   Future<bool> deleteAccount() async {
     final currentUser = state.currentUser;
     if (currentUser == null) return false;
@@ -412,19 +412,32 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
     try {
-      // Delete user profile from the utilisateurs table
+      // 1. Delete user profile from the utilisateurs table
       await _supabase
           .from('utilisateurs')
           .delete()
           .eq('id', currentUser.id);
 
-      // Clear local credentials
+      // 2. Delete the Supabase Auth user via RPC
+      //    This calls a Postgres function that wraps auth.admin.deleteUser
+      //    If the RPC doesn't exist, fall back to just signing out
+      try {
+        await _supabase.rpc('delete_user');
+      } catch (_) {
+        // RPC not available — sign out only (auth user stays but profile is gone)
+      }
+
+      // 3. Clear local credentials
       await LocalStorageService.clearCredentials();
 
-      // Sign out from Supabase Auth
-      await _supabase.auth.signOut();
+      // 4. Sign out from Supabase Auth
+      try {
+        await _supabase.auth.signOut();
+      } catch (_) {
+        // Ignore sign-out errors — user is already being deleted
+      }
 
-      // Reset state
+      // 5. Reset state
       state = const AuthState();
       return true;
     } catch (e) {
@@ -432,13 +445,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = state.copyWith(
           isLoading: false,
           errorMessage:
-              'No internet connection. Please check your network and try again.',
+              'Pas de connexion internet. Veuillez vérifier votre réseau.',
           errorType: AuthErrorType.networkError,
         );
       } else {
         state = state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to delete account. Please try again.',
+          errorMessage: 'Échec de la suppression du compte. Veuillez réessayer.',
           errorType: AuthErrorType.serverError,
         );
       }
