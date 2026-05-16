@@ -119,18 +119,11 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
       specialite: 'Cuisine Marocaine', horaires: '12h-23h',
     ),
     Restaurant(
-      id: 'resto_casa_002', name: 'La Sqala', location: 'Boulevard des Almohades, Casablanca',
-      price: 25, rating: 4.8, reviews: 756,
-      imageUrl: 'assets/images/casablanca/restaurants/la_sqala/1.png',
-      tags: ['Terrasse', 'Brunch', 'Jardin'], category: 'Marocain',
-      specialite: 'Marocain Traditionnel', horaires: '8h-23h',
-    ),
-    Restaurant(
-      id: 'resto_casa_003', name: 'Le Cabestan', location: 'Corniche, Ain Diab',
-      price: 50, rating: 4.9, reviews: 534,
-      imageUrl: 'assets/images/casablanca/restaurants/le_cabestan/1.png',
-      tags: ['Vue Océan', 'Fruits de mer', 'Gastronomique'], category: 'Rooftop',
-      specialite: 'Poissons & Fruits de mer', horaires: '12h-00h',
+      id: 'resto_casa_002', name: 'Riad 1930', location: 'Ancienne Médina, Casablanca',
+      price: 35, rating: 4.8, reviews: 612,
+      imageUrl: 'assets/images/casablanca/restaurants/riad_1930/1.jpg',
+      tags: ['Patio', 'Traditionnel', 'Charme'], category: 'Marocain',
+      specialite: 'Cuisine Marocaine Raffinée', horaires: '12h-23h',
     ),
     Restaurant(
       id: 'resto_casa_004', name: 'Kyoto Sushi Casablanca', location: 'Maarif, Casablanca',

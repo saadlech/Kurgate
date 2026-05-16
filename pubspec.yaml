@@ -122,8 +122,7 @@ flutter:
     - assets/images/casablanca/experiences/yacht_casa/
     # Casablanca Restaurants
     - assets/images/casablanca/restaurants/ricks_cafe/
-    - assets/images/casablanca/restaurants/la_sqala/
-    - assets/images/casablanca/restaurants/le_cabestan/
+    - assets/images/casablanca/restaurants/riad_1930/
     - assets/images/casablanca/restaurants/basmane/
     - assets/images/casablanca/restaurants/la_bodega/
     - assets/images/casablanca/restaurants/blend/

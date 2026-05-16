@@ -249,8 +249,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   ];
   static const _restaurantsCasa = [
     _Item('Dar El Kaid', 'Quartier Habous', 35, 4.8, 'assets/images/casablanca/restaurants/ricks_cafe/1.jpg', '/restaurant/resto_casa_001', 'restaurant'),
-    _Item('La Sqala', 'Boulevard des Almohades', 25, 4.8, 'assets/images/casablanca/restaurants/la_sqala/1.png', '/restaurant/resto_casa_002', 'restaurant'),
-    _Item('Le Cabestan', 'Corniche, Ain Diab', 50, 4.9, 'assets/images/casablanca/restaurants/le_cabestan/1.png', '/restaurant/resto_casa_003', 'restaurant'),
+    _Item('Riad 1930', 'Ancienne Médina', 35, 4.8, 'assets/images/casablanca/restaurants/riad_1930/1.jpg', '/restaurant/resto_casa_002', 'restaurant'),
     _Item('La Pergola', 'Boulevard d\'Anfa', 45, 4.8, 'assets/images/casablanca/restaurants/la_bodega/1.jpg', '/restaurant/resto_casa_005', 'restaurant'),
   ];
   static const _boutiquesCasa = [

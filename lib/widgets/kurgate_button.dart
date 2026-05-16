@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 /// A premium animated button with scale press effect, optional glow,
@@ -34,16 +33,11 @@ class KurgateButton extends StatefulWidget {
 }
 
 class _KurgateButtonState extends State<KurgateButton>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late AnimationController _glowController;
   late Animation<double> _glowAnim;
 
-  late AnimationController _spinController;
-  late AnimationController _flyController;
-
   bool _pressed = false;
-  bool _showLogo = false;
-  bool _flyingAway = false;
 
   @override
   void initState() {
@@ -57,77 +51,22 @@ class _KurgateButtonState extends State<KurgateButton>
     _glowAnim = Tween<double>(begin: 0.2, end: 0.45).animate(
       CurvedAnimation(parent: _glowController, curve: Curves.easeInOut),
     );
-
-    // Spinning logo
-    _spinController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-
-    // Fly-away animation (0→1 progress)
-    _flyController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 800),
-    );
-
-    _flyController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        if (mounted) {
-          setState(() {
-            _showLogo = false;
-            _flyingAway = false;
-          });
-          _spinController.stop();
-          _flyController.reset();
-          widget.onSuccessAnimComplete?.call();
-        }
-      }
-    });
-
-    if (widget.isLoading) _startLoading();
   }
 
   @override
   void didUpdateWidget(covariant KurgateButton oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.isLoading && !oldWidget.isLoading) {
-      _startLoading();
+    if (widget.isSuccess && !oldWidget.isSuccess) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onSuccessAnimComplete?.call();
+      });
     }
-
-    if (widget.isSuccess && !oldWidget.isSuccess && _showLogo) {
-      _startFlyAway();
-    }
-
-    if (!widget.isLoading &&
-        !widget.isSuccess &&
-        oldWidget.isLoading &&
-        !_flyingAway) {
-      _stopLoading();
-    }
-  }
-
-  void _startLoading() {
-    setState(() => _showLogo = true);
-    _spinController.repeat();
-  }
-
-  void _stopLoading() {
-    _spinController.stop();
-    setState(() => _showLogo = false);
-  }
-
-  void _startFlyAway() {
-    setState(() => _flyingAway = true);
-    _spinController.stop();
-    _flyController.forward();
   }
 
   @override
   void dispose() {
     _glowController.dispose();
-    _spinController.dispose();
-    _flyController.dispose();
     super.dispose();
   }
 
@@ -198,7 +137,7 @@ class _KurgateButtonState extends State<KurgateButton>
             ),
             child: const SizedBox.expand(),
           ),
-          _buildContent(Colors.black, constraints.maxWidth),
+          _buildContent(Colors.black),
         ],
       ),
     );
@@ -229,79 +168,22 @@ class _KurgateButtonState extends State<KurgateButton>
             ),
             child: const SizedBox.expand(),
           ),
-          _buildContent(const Color(0xFFFF8C00), constraints.maxWidth),
+          _buildContent(const Color(0xFFFF8C00)),
         ],
       ),
     );
   }
 
-  Widget _buildContent(Color color, double buttonWidth) {
-    // Show spinning logo when loading or flying away
-    if (_showLogo) {
-      // Fly distance: from center to right edge of button
-      final flyDistance = buttonWidth / 2 + 16;
-
-      return AnimatedBuilder(
-        animation: Listenable.merge([_spinController, _flyController]),
-        builder: (context, _) {
-          final flyProgress = _flyController.value;
-          // Use easeIn curve for acceleration feel
-          final easedProgress = Curves.easeIn.transform(flyProgress);
-          final xOffset = _flyingAway ? easedProgress * flyDistance : 0.0;
-
-          return Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.center,
-            children: [
-              // Smoke trail — only during fly
-              if (_flyingAway && flyProgress > 0.0)
-                ...List.generate(6, (i) {
-                  // Each smoke puff trails behind at a fraction of the logo position
-                  final trailFraction = (i + 1) / 7;
-                  final smokeX = xOffset * (1.0 - trailFraction * 0.8);
-                  final smokeOpacity =
-                      (0.5 - i * 0.08).clamp(0.0, 1.0) *
-                      (1.0 - flyProgress).clamp(0.0, 1.0);
-                  final smokeSize = 12.0 + i * 4.0;
-                  // Slight vertical spread for organic feel
-                  final smokeY = math.sin(i * 1.5 + flyProgress * 6) * 3.0;
-
-                  return Transform.translate(
-                    offset: Offset(smokeX - 10 - i * 8, smokeY),
-                    child: Container(
-                      width: smokeSize,
-                      height: smokeSize,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: RadialGradient(
-                          colors: [
-                            Colors.black.withValues(alpha: smokeOpacity * 0.6),
-                            Colors.black.withValues(alpha: smokeOpacity * 0.2),
-                            Colors.transparent,
-                          ],
-                          stops: const [0.0, 0.5, 1.0],
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-
-              // The spinning logo
-              Transform.translate(
-                offset: Offset(xOffset, 0),
-                child: RotationTransition(
-                  turns: _spinController,
-                  child: Image.asset(
-                    'assets/images/branding/icon_orange.png',
-                    height: 32,
-                    width: 32,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
+  Widget _buildContent(Color color) {
+    // Show spinner when loading
+    if (widget.isLoading) {
+      return SizedBox(
+        width: 24,
+        height: 24,
+        child: CircularProgressIndicator(
+          strokeWidth: 2.5,
+          color: color,
+        ),
       );
     }
 
@@ -338,3 +220,4 @@ class _KurgateButtonState extends State<KurgateButton>
     );
   }
 }
+
