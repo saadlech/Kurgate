@@ -14,66 +14,74 @@ class ProfileScreen extends ConsumerWidget {
       backgroundColor: const Color(0xFF1A1A1A),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text('Profil', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -0.3)),
-            const SizedBox(height: 32),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+          child: Column(children: [
+            // Scrollable top content
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  const Text('Profil', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -0.3)),
+                  const SizedBox(height: 32),
 
-            // Avatar + Name
-            Center(child: Column(children: [
-              Container(
-                width: 90, height: 90,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: const LinearGradient(colors: [Color(0xFFFF8C00), Color(0xFFE77728)], begin: Alignment.topLeft, end: Alignment.bottomRight),
-                  boxShadow: [BoxShadow(color: const Color(0xFFFF8C00).withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 8))],
-                ),
-                child: Center(child: Text(
-                  _initials(user?.nom ?? 'U'),
-                  style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.black, fontSize: 32, fontWeight: FontWeight.w800),
-                )),
-              ),
-              const SizedBox(height: 14),
-              Text(user?.nom ?? 'Utilisateur', style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
-              const SizedBox(height: 4),
-              Text(user?.email ?? '', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 14)),
-            ])),
-            const SizedBox(height: 32),
+                  // Avatar + Name
+                  Center(child: Column(children: [
+                    Container(
+                      width: 90, height: 90,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: const LinearGradient(colors: [Color(0xFFFF8C00), Color(0xFFE77728)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                        boxShadow: [BoxShadow(color: const Color(0xFFFF8C00).withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 8))],
+                      ),
+                      child: Center(child: Text(
+                        _initials(user?.nom ?? 'U'),
+                        style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.black, fontSize: 32, fontWeight: FontWeight.w800),
+                      )),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(user?.nom ?? 'Utilisateur', style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
+                    const SizedBox(height: 4),
+                    Text(user?.email ?? '', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 14)),
+                  ])),
+                  const SizedBox(height: 32),
 
-            // Info tiles
-            _infoTile(Icons.person_rounded, 'Nom complet', user?.nom ?? '-'),
-            _infoTile(Icons.email_rounded, 'Email', user?.email ?? '-'),
-            _infoTile(Icons.phone_rounded, 'Téléphone', user != null && user.numDeTelephone > 0 ? '+212 ${user.numDeTelephone}' : '-'),
+                  // Info tiles
+                  _infoTile(Icons.person_rounded, 'Nom complet', user?.nom ?? '-'),
+                  _infoTile(Icons.email_rounded, 'Email', user?.email ?? '-'),
+                  _infoTile(Icons.phone_rounded, 'Téléphone', user != null && user.numDeTelephone > 0 ? '+212 ${user.numDeTelephone}' : '-'),
 
-            const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-            // Edit Profile button
-            GestureDetector(
-              onTap: () => context.push('/edit-profile'),
-              child: Container(
-                height: 52, width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      const Color(0xFFFF8C00).withValues(alpha: 0.12),
-                      const Color(0xFFE77728).withValues(alpha: 0.06),
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
+                  // Edit Profile button
+                  GestureDetector(
+                    onTap: () => context.push('/edit-profile'),
+                    child: Container(
+                      height: 52, width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color(0xFFFF8C00).withValues(alpha: 0.12),
+                            const Color(0xFFE77728).withValues(alpha: 0.06),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0xFFFF8C00).withValues(alpha: 0.2)),
+                      ),
+                      child: const Center(child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Icon(Icons.edit_rounded, color: Color(0xFFFF8C00), size: 20),
+                        SizedBox(width: 8),
+                        Text('Modifier le profil', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Color(0xFFFF8C00), fontSize: 16, fontWeight: FontWeight.w700)),
+                      ])),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFFF8C00).withValues(alpha: 0.2)),
-                ),
-                child: const Center(child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Icon(Icons.edit_rounded, color: Color(0xFFFF8C00), size: 20),
-                  SizedBox(width: 8),
-                  Text('Modifier le profil', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Color(0xFFFF8C00), fontSize: 16, fontWeight: FontWeight.w700)),
-                ])),
+                  const SizedBox(height: 20),
+                ]),
               ),
             ),
 
-            const Spacer(),
-
+            // Fixed bottom buttons
             // Delete Account
             GestureDetector(
               onTap: () => _showDeleteAccountDialog(context, ref),

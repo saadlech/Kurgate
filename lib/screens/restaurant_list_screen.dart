@@ -111,11 +111,11 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
   // Casablanca restaurants
   final _restaurantsCasa = const [
     _RestaurantData(
-      id: 'resto_casa_001', name: 'Rick\'s Café', location: 'Ancienne Médina, Casablanca',
-      price: 40, rating: 4.7, reviews: 1023,
-      imageUrl: 'assets/images/casablanca/restaurants/ricks_cafe/1.png',
-      tags: ['Légendaire', 'Piano Bar', 'Cocktails'], category: 'International',
-      specialite: 'Franco-Marocain', horaires: '12h-01h',
+      id: 'resto_casa_001', name: 'Restaurant Dar El Kaid', location: 'Quartier Habous, Casablanca',
+      price: 35, rating: 4.8, reviews: 567,
+      imageUrl: 'assets/images/casablanca/restaurants/ricks_cafe/1.jpg',
+      tags: ['Traditionnel', 'Cuivre', 'Ambiance'], category: 'Marocain',
+      specialite: 'Cuisine Marocaine', horaires: '12h-23h',
     ),
     _RestaurantData(
       id: 'resto_casa_002', name: 'La Sqala', location: 'Boulevard des Almohades, Casablanca',
@@ -132,31 +132,32 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
       specialite: 'Poissons & Fruits de mer', horaires: '12h-00h',
     ),
     _RestaurantData(
-      id: 'resto_casa_004', name: 'Basmane', location: 'Maarif, Casablanca',
-      price: 35, rating: 4.6, reviews: 412,
-      imageUrl: 'assets/images/casablanca/restaurants/basmane/1.png',
+      id: 'resto_casa_004', name: 'Kyoto Sushi Casablanca', location: 'Maarif, Casablanca',
+      price: 40, rating: 4.7, reviews: 412,
+      imageUrl: 'assets/images/casablanca/restaurants/basmane/1.jpg',
       tags: ['Japonais', 'Sushi', 'Moderne'], category: 'International',
       specialite: 'Cuisine Japonaise', horaires: '12h-23h',
     ),
     _RestaurantData(
-      id: 'resto_casa_005', name: 'La Bodega', location: 'Rue Allal Ben Abdellah',
-      price: 30, rating: 4.6, reviews: 623,
-      imageUrl: 'assets/images/casablanca/restaurants/la_bodega/1.png',
-      tags: ['Tapas', 'Ambiance', 'Convivial'], category: 'International',
-      specialite: 'Tapas & Cuisine Espagnole', horaires: '12h-01h',
+      id: 'resto_casa_005', name: 'La Pergola', location: 'Boulevard d\'Anfa, Casablanca',
+      price: 45, rating: 4.8, reviews: 389,
+      imageUrl: 'assets/images/casablanca/restaurants/la_bodega/1.jpg',
+      tags: ['Art Déco', 'Gastronomique', 'Terrasse'], category: 'International',
+      specialite: 'Français-Marocain', horaires: '12h-00h',
     ),
     _RestaurantData(
-      id: 'resto_casa_006', name: 'Blend Gourmet Burger', location: 'Maarif, Casablanca',
-      price: 15, rating: 4.5, reviews: 845,
-      imageUrl: 'assets/images/casablanca/restaurants/blend/1.png',
-      tags: ['Burgers', 'Street Food', 'Tendance'], category: 'Street Food',
-      specialite: 'Burgers Gourmet', horaires: '11h-23h',
+      id: 'resto_casa_006', name: 'Le Doge Café & Tapas', location: 'Quartier Gauthier, Casablanca',
+      price: 30, rating: 4.6, reviews: 534,
+      imageUrl: 'assets/images/casablanca/restaurants/blend/1.jpg',
+      tags: ['Tapas', 'Cocktails', 'Brunch'], category: 'International',
+      specialite: 'Tapas & Cocktails', horaires: '9h-01h',
     ),
   ];
 
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(() => setState(() {}));
     _entryController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -200,9 +201,13 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
   }
 
   List<_RestaurantData> get _filtered {
-    final base = _activeRestaurants;
-    if (_selectedFilter == 0) return base;
-    return base.where((r) => r.category == _filters[_selectedFilter]).toList();
+    var base = _activeRestaurants;
+    if (_selectedFilter != 0) {
+      base = base.where((r) => r.category == _filters[_selectedFilter]).toList();
+    }
+    final q = _searchController.text.trim().toLowerCase();
+    if (q.isEmpty) return base;
+    return base.where((r) => r.name.toLowerCase().contains(q) || r.location.toLowerCase().contains(q) || r.specialite.toLowerCase().contains(q)).toList();
   }
 
   @override
@@ -308,6 +313,14 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
                               cursorColor: const Color(0xFFFF8C00),
                             ),
                           ),
+                          if (_searchController.text.isNotEmpty)
+                            GestureDetector(
+                              onTap: () => _searchController.clear(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Icon(Icons.close_rounded, color: Colors.white.withValues(alpha: 0.4), size: 18),
+                              ),
+                            ),
                         ],
                       ),
                     ),

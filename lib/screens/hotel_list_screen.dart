@@ -156,50 +156,93 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
     _HotelData(
       id: 'hotel_casa_001', name: 'Four Seasons Casablanca', location: 'Anfa Place, Casablanca',
       price: 380, rating: 4.9, reviews: 412,
-      imageUrl: 'assets/images/casablanca/hotels/four_seasons_casa/1.png',
-      imageAssets: ['assets/images/casablanca/hotels/four_seasons_casa/1.png', 'assets/images/casablanca/hotels/four_seasons_casa/2.png', 'assets/images/casablanca/hotels/four_seasons_casa/3.png'],
+      imageUrl: 'assets/images/casablanca/hotels/four_seasons_casa/1.jpg',
+      imageAssets: [
+        'assets/images/casablanca/hotels/four_seasons_casa/1.jpg',
+        'assets/images/casablanca/hotels/four_seasons_casa/2.jpg',
+        'assets/images/casablanca/hotels/four_seasons_casa/3.jpg',
+        'assets/images/casablanca/hotels/four_seasons_casa/4.jpg',
+        'assets/images/casablanca/hotels/four_seasons_casa/5.jpg',
+        'assets/images/casablanca/hotels/four_seasons_casa/6.jpg',
+      ],
       tags: ['5 étoiles', 'Spa', 'Piscine'], category: 'Luxe',
     ),
     _HotelData(
-      id: 'hotel_casa_002', name: 'Hôtel & Spa Le Doge', location: 'Quartier Gauthier, Casablanca',
-      price: 250, rating: 4.8, reviews: 287,
-      imageUrl: 'assets/images/casablanca/hotels/le_doge_casa/1.png',
-      imageAssets: ['assets/images/casablanca/hotels/le_doge_casa/1.png', 'assets/images/casablanca/hotels/le_doge_casa/2.png', 'assets/images/casablanca/hotels/le_doge_casa/3.png'],
-      tags: ['Art Déco', 'Spa', 'Charme'], category: 'Luxe',
+      id: 'hotel_casa_002', name: 'ONE Hotel Casablanca', location: 'Quartier Gauthier, Casablanca',
+      price: 200, rating: 4.7, reviews: 312,
+      imageUrl: 'assets/images/casablanca/hotels/le_doge_casa/1.jpg',
+      imageAssets: [
+        'assets/images/casablanca/hotels/le_doge_casa/1.jpg',
+        'assets/images/casablanca/hotels/le_doge_casa/2.jpg',
+        'assets/images/casablanca/hotels/le_doge_casa/3.jpg',
+        'assets/images/casablanca/hotels/le_doge_casa/4.jpg',
+        'assets/images/casablanca/hotels/le_doge_casa/5.jpg',
+        'assets/images/casablanca/hotels/le_doge_casa/6.jpg',
+      ],
+      tags: ['Moderne', 'Confort', 'Charme'], category: 'Business',
     ),
     _HotelData(
-      id: 'hotel_casa_003', name: 'Hyatt Regency Casablanca', location: 'Place des Nations Unies, Casablanca',
-      price: 180, rating: 4.7, reviews: 534,
-      imageUrl: 'assets/images/casablanca/hotels/hyatt_casa/1.png',
-      imageAssets: ['assets/images/casablanca/hotels/hyatt_casa/1.png', 'assets/images/casablanca/hotels/hyatt_casa/2.png', 'assets/images/casablanca/hotels/hyatt_casa/3.png'],
+      id: 'hotel_casa_003', name: 'Marriott Casablanca', location: 'Place des Nations Unies, Casablanca',
+      price: 220, rating: 4.7, reviews: 534,
+      imageUrl: 'assets/images/casablanca/hotels/hyatt_casa/1.jpg',
+      imageAssets: [
+        'assets/images/casablanca/hotels/hyatt_casa/1.jpg',
+        'assets/images/casablanca/hotels/hyatt_casa/2.jpg',
+        'assets/images/casablanca/hotels/hyatt_casa/3.jpg',
+        'assets/images/casablanca/hotels/hyatt_casa/4.jpg',
+        'assets/images/casablanca/hotels/hyatt_casa/5.jpg',
+        'assets/images/casablanca/hotels/hyatt_casa/6.jpg',
+      ],
       tags: ['Business', 'Restaurant', 'Centre-ville'], category: 'Business',
     ),
     _HotelData(
       id: 'hotel_casa_004', name: 'Kenzi Tower Hotel', location: 'Twin Center, Casablanca',
       price: 160, rating: 4.6, reviews: 389,
-      imageUrl: 'assets/images/casablanca/hotels/kenzi_tower/1.png',
-      imageAssets: ['assets/images/casablanca/hotels/kenzi_tower/1.png', 'assets/images/casablanca/hotels/kenzi_tower/2.png', 'assets/images/casablanca/hotels/kenzi_tower/3.png'],
+      imageUrl: 'assets/images/casablanca/hotels/kenzi_tower/1.jpg',
+      imageAssets: [
+        'assets/images/casablanca/hotels/kenzi_tower/1.jpg',
+        'assets/images/casablanca/hotels/kenzi_tower/2.jpg',
+        'assets/images/casablanca/hotels/kenzi_tower/3.jpg',
+        'assets/images/casablanca/hotels/kenzi_tower/4.jpg',
+        'assets/images/casablanca/hotels/kenzi_tower/5.jpg',
+        'assets/images/casablanca/hotels/kenzi_tower/6.jpg',
+      ],
       tags: ['Panoramique', 'Business', 'Spa'], category: 'Business',
     ),
     _HotelData(
       id: 'hotel_casa_005', name: 'Sofitel Casablanca', location: 'Tour Blanche, Casablanca',
       price: 300, rating: 4.8, reviews: 445,
-      imageUrl: 'assets/images/casablanca/hotels/sofitel_casa/1.png',
-      imageAssets: ['assets/images/casablanca/hotels/sofitel_casa/1.png', 'assets/images/casablanca/hotels/sofitel_casa/2.png', 'assets/images/casablanca/hotels/sofitel_casa/3.png'],
+      imageUrl: 'assets/images/casablanca/hotels/sofitel_casa/1.jpg',
+      imageAssets: [
+        'assets/images/casablanca/hotels/sofitel_casa/1.jpg',
+        'assets/images/casablanca/hotels/sofitel_casa/2.jpg',
+        'assets/images/casablanca/hotels/sofitel_casa/3.jpg',
+        'assets/images/casablanca/hotels/sofitel_casa/4.jpg',
+        'assets/images/casablanca/hotels/sofitel_casa/5.jpg',
+        'assets/images/casablanca/hotels/sofitel_casa/6.jpg',
+      ],
       tags: ['5 étoiles', 'Gastronomie', 'Luxe'], category: 'Luxe',
     ),
     _HotelData(
-      id: 'hotel_casa_006', name: 'Hôtel Transatlantique', location: 'Rue El Ouahda, Casablanca',
-      price: 75, rating: 4.3, reviews: 623,
-      imageUrl: 'assets/images/casablanca/hotels/transatlantique/1.png',
-      imageAssets: ['assets/images/casablanca/hotels/transatlantique/1.png', 'assets/images/casablanca/hotels/transatlantique/2.png', 'assets/images/casablanca/hotels/transatlantique/3.png'],
-      tags: ['Historique', 'Centre', 'Économique'], category: 'Budget',
+      id: 'hotel_casa_006', name: 'Barceló Anfa Casablanca', location: 'Boulevard de la Corniche, Casablanca',
+      price: 180, rating: 4.5, reviews: 478,
+      imageUrl: 'assets/images/casablanca/hotels/transatlantique/1.jpg',
+      imageAssets: [
+        'assets/images/casablanca/hotels/transatlantique/1.jpg',
+        'assets/images/casablanca/hotels/transatlantique/2.jpg',
+        'assets/images/casablanca/hotels/transatlantique/3.jpg',
+        'assets/images/casablanca/hotels/transatlantique/4.jpg',
+        'assets/images/casablanca/hotels/transatlantique/5.jpg',
+        'assets/images/casablanca/hotels/transatlantique/6.jpg',
+      ],
+      tags: ['Bord de mer', 'Business', 'Moderne'], category: 'Business',
     ),
   ];
 
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(() => setState(() {}));
     _entryController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -249,10 +292,14 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
   }
 
   List<_HotelData> get _filteredHotels {
-    final base = _activeHotels;
-    if (_selectedFilter == 0) return base;
-    final filterName = _filters[_selectedFilter];
-    return base.where((h) => h.category == filterName).toList();
+    var base = _activeHotels;
+    if (_selectedFilter != 0) {
+      final filterName = _filters[_selectedFilter];
+      base = base.where((h) => h.category == filterName).toList();
+    }
+    final q = _searchController.text.trim().toLowerCase();
+    if (q.isEmpty) return base;
+    return base.where((h) => h.name.toLowerCase().contains(q) || h.location.toLowerCase().contains(q)).toList();
   }
 
   @override
@@ -361,6 +408,14 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
                               cursorColor: const Color(0xFFFF8C00),
                             ),
                           ),
+                          if (_searchController.text.isNotEmpty)
+                            GestureDetector(
+                              onTap: () => _searchController.clear(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Icon(Icons.close_rounded, color: Colors.white.withValues(alpha: 0.4), size: 18),
+                              ),
+                            ),
                         ],
                       ),
                     ),

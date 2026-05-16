@@ -115,22 +115,22 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
   // Casablanca experiences
   final _experiencesCasa = const [
     _ExperienceData(
-      id: 'exp_casa_001', name: 'Visite de la Mosquée Hassan II',
-      location: 'Boulevard de la Corniche, Casablanca', price: 12, rating: 4.9, reviews: 1245,
-      imageUrl: 'assets/images/casablanca/experiences/mosquee_hassan/1.png',
-      tags: ['Monument', 'Architecture', 'Spirituel'], category: 'Culture', duree: '2h', capacite: 30,
+      id: 'exp_casa_001', name: 'Visite Privée avec Mosquée Hassan II',
+      location: 'Boulevard de la Corniche, Casablanca', price: 53, rating: 4.9, reviews: 1245,
+      imageUrl: 'assets/images/casablanca/experiences/mosquee_hassan/1.jpg',
+      tags: ['Monument', 'Guide Privé', 'Architecture'], category: 'Culture', duree: '4h', capacite: 15,
     ),
     _ExperienceData(
-      id: 'exp_casa_002', name: 'Promenade Corniche Ain Diab',
-      location: 'Ain Diab, Casablanca', price: 0, rating: 4.6, reviews: 678,
-      imageUrl: 'assets/images/casablanca/experiences/corniche_casa/1.png',
-      tags: ['Bord de mer', 'Plage', 'Sunset'], category: 'Nature', duree: '3h', capacite: 20,
+      id: 'exp_casa_002', name: 'Excursion Casablanca – Tanger en TGV',
+      location: 'Gare Casa Voyageurs, Casablanca', price: 95, rating: 4.7, reviews: 678,
+      imageUrl: 'assets/images/casablanca/experiences/corniche_casa/1.jpg',
+      tags: ['TGV', 'Tanger', 'Chameau'], category: 'Aventure', duree: '12h', capacite: 20,
     ),
     _ExperienceData(
-      id: 'exp_casa_003', name: 'Tour de l\'Ancienne Médina',
-      location: 'Ancienne Médina, Casablanca', price: 25, rating: 4.7, reviews: 423,
-      imageUrl: 'assets/images/casablanca/experiences/medina_casa/1.png',
-      tags: ['Guide local', 'Histoire', 'Marchés'], category: 'Culture', duree: '3h', capacite: 15,
+      id: 'exp_casa_003', name: 'Session Surf sur la Côte Atlantique',
+      location: 'Côte Atlantique, Casablanca', price: 40, rating: 4.8, reviews: 423,
+      imageUrl: 'assets/images/casablanca/experiences/medina_casa/1.jpeg',
+      tags: ['Surf', 'Océan', 'Sport'], category: 'Aventure', duree: '3h', capacite: 10,
     ),
     _ExperienceData(
       id: 'exp_casa_004', name: 'Morocco Mall & Shopping',
@@ -155,6 +155,7 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(() => setState(() {}));
     _entryController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -199,10 +200,14 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
   }
 
   List<_ExperienceData> get _filteredExperiences {
-    final base = _activeExperiences;
-    if (_selectedFilter == 0) return base;
-    final filterName = _filters[_selectedFilter];
-    return base.where((e) => e.category == filterName).toList();
+    var base = _activeExperiences;
+    if (_selectedFilter != 0) {
+      final filterName = _filters[_selectedFilter];
+      base = base.where((e) => e.category == filterName).toList();
+    }
+    final q = _searchController.text.trim().toLowerCase();
+    if (q.isEmpty) return base;
+    return base.where((e) => e.name.toLowerCase().contains(q) || e.location.toLowerCase().contains(q)).toList();
   }
 
   @override
@@ -309,6 +314,14 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
                               cursorColor: const Color(0xFFFF8C00),
                             ),
                           ),
+                          if (_searchController.text.isNotEmpty)
+                            GestureDetector(
+                              onTap: () => _searchController.clear(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Icon(Icons.close_rounded, color: Colors.white.withValues(alpha: 0.4), size: 18),
+                              ),
+                            ),
                         ],
                       ),
                     ),

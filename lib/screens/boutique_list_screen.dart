@@ -103,49 +103,86 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
     ),
   ];
 
-  // Casablanca boutiques
+  // Casablanca boutiques (same artisan items as Marrakech)
   final _boutiquesCasa = const [
     _BoutiqueData(
-      id: 'boutique_casa_001', name: 'Derb Ghallef Vintage', artisan: 'Collectif Derb Ghallef',
-      location: 'Derb Ghallef, Casablanca', rating: 4.5, reviews: 234,
-      imageUrl: 'assets/images/casablanca/boutiques/derb_ghallef/1.png',
-      tags: ['Vintage', 'Upcycle', 'Unique'], category: 'Textile', prixMoyen: '20-300',
+      id: 'boutique_casa_001',
+      name: 'Tapis Berbères El Badi',
+      artisan: 'Maître Hassan El Badi',
+      location: 'Quartier Habous, Casablanca',
+      rating: 4.8,
+      reviews: 312,
+      imageUrl: 'assets/images/marrakech/boutiques/tapis_berberes/1.png',
+      tags: ['Fait main', 'Berbère', 'Laine'],
+      category: 'Tapis',
+      prixMoyen: '150-2000',
     ),
     _BoutiqueData(
-      id: 'boutique_casa_002', name: 'Quartier Habous Artisanat', artisan: 'Artisans du Habous',
-      location: 'Quartier Habous, Casablanca', rating: 4.8, reviews: 456,
-      imageUrl: 'assets/images/casablanca/boutiques/habous_artisanat/1.png',
-      tags: ['Traditionnel', 'Babouches', 'Théières'], category: 'Cuir', prixMoyen: '30-500',
+      id: 'boutique_casa_002',
+      name: 'Atelier Céramique Safi',
+      artisan: 'Fatima Zahra Bennani',
+      location: 'Derb Omar, Casablanca',
+      rating: 4.7,
+      reviews: 198,
+      imageUrl: 'assets/images/marrakech/boutiques/ceramique_safi/1.png',
+      tags: ['Zellige', 'Assiettes', 'Vases'],
+      category: 'Poterie',
+      prixMoyen: '20-300',
     ),
     _BoutiqueData(
-      id: 'boutique_casa_003', name: 'Trésor des Arts Marocains', artisan: 'Karim El Mansouri',
-      location: 'Rue Mohammed V, Casablanca', rating: 4.7, reviews: 312,
-      imageUrl: 'assets/images/casablanca/boutiques/tresor_arts/1.png',
-      tags: ['Tableaux', 'Sculptures', 'Déco'], category: 'Bijoux', prixMoyen: '50-1500',
+      id: 'boutique_casa_003',
+      name: 'Maroquinerie Artisanale Youssef',
+      artisan: 'Youssef Amrani',
+      location: 'Quartier Habous, Casablanca',
+      rating: 4.6,
+      reviews: 456,
+      imageUrl: 'assets/images/marrakech/boutiques/maroquinerie_youssef/1.png',
+      tags: ['Babouches', 'Sacs', 'Ceintures'],
+      category: 'Cuir',
+      prixMoyen: '30-500',
     ),
     _BoutiqueData(
-      id: 'boutique_casa_004', name: 'Maroquinerie Hassan', artisan: 'Hassan Berrada',
-      location: 'Derb Omar, Casablanca', rating: 4.6, reviews: 378,
-      imageUrl: 'assets/images/casablanca/boutiques/maroquinerie_casa/1.png',
-      tags: ['Cuir', 'Sacs', 'Ceintures'], category: 'Cuir', prixMoyen: '40-600',
+      id: 'boutique_casa_004',
+      name: 'Bijoux Touareg Amina',
+      artisan: 'Amina Ait Brahim',
+      location: 'Derb Omar, Casablanca',
+      rating: 4.9,
+      reviews: 167,
+      imageUrl: 'assets/images/marrakech/boutiques/bijoux_touareg/1.png',
+      tags: ['Argent', 'Touareg', 'Pierres'],
+      category: 'Bijoux',
+      prixMoyen: '50-800',
     ),
     _BoutiqueData(
-      id: 'boutique_casa_005', name: 'Parfumerie Senteurs du Maroc', artisan: 'Fatima El Alami',
-      location: 'Quartier Gauthier, Casablanca', rating: 4.8, reviews: 267,
-      imageUrl: 'assets/images/casablanca/boutiques/parfumerie_casa/1.png',
-      tags: ['Parfums', 'Huiles', 'Encens'], category: 'Bijoux', prixMoyen: '20-400',
+      id: 'boutique_casa_005',
+      name: 'Tissages Tradition Amazigh',
+      artisan: 'Khadija Oulhaj',
+      location: 'Aïn Sebaâ, Casablanca',
+      rating: 4.7,
+      reviews: 234,
+      imageUrl: 'assets/images/marrakech/boutiques/tissages_amazigh/1.png',
+      tags: ['Caftans', 'Foulards', 'Coussins'],
+      category: 'Textile',
+      prixMoyen: '40-600',
     ),
     _BoutiqueData(
-      id: 'boutique_casa_006', name: 'Atelier Zellige Casa', artisan: 'Maître Abdellah Zellige',
-      location: 'Aïn Sebaâ, Casablanca', rating: 4.9, reviews: 189,
-      imageUrl: 'assets/images/casablanca/boutiques/atelier_zellige/1.png',
-      tags: ['Zellige', 'Mosaïque', 'Sur mesure'], category: 'Poterie', prixMoyen: '30-800',
+      id: 'boutique_casa_006',
+      name: 'Poterie d\'Art Tamegroute',
+      artisan: 'Ahmed Bel Kacem',
+      location: 'Quartier Gauthier, Casablanca',
+      rating: 4.5,
+      reviews: 289,
+      imageUrl: 'assets/images/marrakech/boutiques/poterie_tamegroute/1.png',
+      tags: ['Tamegroute', 'Vert', 'Traditionnel'],
+      category: 'Poterie',
+      prixMoyen: '15-200',
     ),
   ];
 
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(() => setState(() {}));
     _entryController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -189,9 +226,13 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
   }
 
   List<_BoutiqueData> get _filtered {
-    final base = _activeBoutiques;
-    if (_selectedFilter == 0) return base;
-    return base.where((b) => b.category == _filters[_selectedFilter]).toList();
+    var base = _activeBoutiques;
+    if (_selectedFilter != 0) {
+      base = base.where((b) => b.category == _filters[_selectedFilter]).toList();
+    }
+    final q = _searchController.text.trim().toLowerCase();
+    if (q.isEmpty) return base;
+    return base.where((b) => b.name.toLowerCase().contains(q) || b.artisan.toLowerCase().contains(q) || b.location.toLowerCase().contains(q)).toList();
   }
 
   @override
@@ -295,6 +336,14 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
                               cursorColor: const Color(0xFFFF8C00),
                             ),
                           ),
+                          if (_searchController.text.isNotEmpty)
+                            GestureDetector(
+                              onTap: () => _searchController.clear(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Icon(Icons.close_rounded, color: Colors.white.withValues(alpha: 0.4), size: 18),
+                              ),
+                            ),
                         ],
                       ),
                     ),

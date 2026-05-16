@@ -164,6 +164,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(() => setState(() {}));
     _entryController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -213,10 +214,14 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
   }
 
   List<_VehiculeData> get _filteredVehicules {
-    final base = _activeVehicules;
-    if (_selectedFilter == 0) return base;
-    final filterName = _filters[_selectedFilter];
-    return base.where((v) => v.category == filterName).toList();
+    var base = _activeVehicules;
+    if (_selectedFilter != 0) {
+      final filterName = _filters[_selectedFilter];
+      base = base.where((v) => v.category == filterName).toList();
+    }
+    final q = _searchController.text.trim().toLowerCase();
+    if (q.isEmpty) return base;
+    return base.where((v) => v.name.toLowerCase().contains(q) || v.agence.toLowerCase().contains(q)).toList();
   }
 
   @override
@@ -325,6 +330,14 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
                               cursorColor: const Color(0xFFFF8C00),
                             ),
                           ),
+                          if (_searchController.text.isNotEmpty)
+                            GestureDetector(
+                              onTap: () => _searchController.clear(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Icon(Icons.close_rounded, color: Colors.white.withValues(alpha: 0.4), size: 18),
+                              ),
+                            ),
                         ],
                       ),
                     ),

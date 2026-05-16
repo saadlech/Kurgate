@@ -230,10 +230,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   // ── Casablanca Data ──
   static const _hotelsCasa = [
-    _Item('Four Seasons Casablanca', 'Anfa Place', 380, 4.9, 'assets/images/casablanca/hotels/four_seasons_casa/1.png', '/hotel/hotel_casa_001', 'hotel'),
-    _Item('Hôtel & Spa Le Doge', 'Quartier Gauthier', 250, 4.8, 'assets/images/casablanca/hotels/le_doge_casa/1.png', '/hotel/hotel_casa_002', 'hotel'),
-    _Item('Hyatt Regency Casablanca', 'Place des Nations Unies', 180, 4.7, 'assets/images/casablanca/hotels/hyatt_casa/1.png', '/hotel/hotel_casa_003', 'hotel'),
-    _Item('Kenzi Tower Hotel', 'Twin Center', 160, 4.6, 'assets/images/casablanca/hotels/kenzi_tower/1.png', '/hotel/hotel_casa_004', 'hotel'),
+    _Item('Four Seasons Casablanca', 'Anfa Place', 380, 4.9, 'assets/images/casablanca/hotels/four_seasons_casa/1.jpg', '/hotel/hotel_casa_001', 'hotel'),
+    _Item('ONE Hotel Casablanca', 'Quartier Gauthier', 200, 4.7, 'assets/images/casablanca/hotels/le_doge_casa/1.jpg', '/hotel/hotel_casa_002', 'hotel'),
+    _Item('Marriott Casablanca', 'Place des Nations Unies', 220, 4.7, 'assets/images/casablanca/hotels/hyatt_casa/1.jpg', '/hotel/hotel_casa_003', 'hotel'),
+    _Item('Kenzi Tower Hotel', 'Twin Center', 160, 4.6, 'assets/images/casablanca/hotels/kenzi_tower/1.jpg', '/hotel/hotel_casa_004', 'hotel'),
   ];
   static const _vehiculesCasa = [
     _Item('Dacia Duster 2024', 'SUV · Diesel', 45, 4.6, 'assets/images/vehicules/dacia_duster/1.png', '/vehicule/vehicule_casa_001', 'vehicle'),
@@ -242,35 +242,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item('Peugeot 3008', 'SUV · Familial', 65, 4.7, 'assets/images/vehicules/peugeot_3008/1.png', '/vehicule/vehicule_casa_005', 'vehicle'),
   ];
   static const _experiencesCasa = [
-    _Item('Mosquée Hassan II', 'Culture · 2h', 12, 4.9, 'assets/images/casablanca/experiences/mosquee_hassan/1.png', '/experience/exp_casa_001', 'experience'),
-    _Item('Corniche Ain Diab', 'Promenade · 3h', 0, 4.6, 'assets/images/casablanca/experiences/corniche_casa/1.png', '/experience/exp_casa_002', 'experience'),
-    _Item('Ancienne Médina Casa', 'Culture · 3h', 25, 4.7, 'assets/images/casablanca/experiences/medina_casa/1.png', '/experience/exp_casa_003', 'experience'),
+    _Item('Visite Privée Mosquée Hassan II', 'Culture · 4h', 53, 4.9, 'assets/images/casablanca/experiences/mosquee_hassan/1.jpg', '/experience/exp_casa_001', 'experience'),
+    _Item('Excursion Tanger en TGV', 'Aventure · 12h', 95, 4.7, 'assets/images/casablanca/experiences/corniche_casa/1.jpg', '/experience/exp_casa_002', 'experience'),
+    _Item('Session Surf Atlantique', 'Aventure · 3h', 40, 4.8, 'assets/images/casablanca/experiences/medina_casa/1.jpeg', '/experience/exp_casa_003', 'experience'),
     _Item('Coucher de soleil en Yacht', 'Aventure · 3h', 200, 4.9, 'assets/images/casablanca/experiences/yacht_casa/1.png', '/experience/exp_casa_006', 'experience'),
   ];
   static const _restaurantsCasa = [
-    _Item('Rick\'s Café', 'Ancienne Médina', 40, 4.7, 'assets/images/casablanca/restaurants/ricks_cafe/1.png', '/restaurant/resto_casa_001', 'restaurant'),
+    _Item('Dar El Kaid', 'Quartier Habous', 35, 4.8, 'assets/images/casablanca/restaurants/ricks_cafe/1.jpg', '/restaurant/resto_casa_001', 'restaurant'),
     _Item('La Sqala', 'Boulevard des Almohades', 25, 4.8, 'assets/images/casablanca/restaurants/la_sqala/1.png', '/restaurant/resto_casa_002', 'restaurant'),
     _Item('Le Cabestan', 'Corniche, Ain Diab', 50, 4.9, 'assets/images/casablanca/restaurants/le_cabestan/1.png', '/restaurant/resto_casa_003', 'restaurant'),
-    _Item('La Bodega', 'Rue Allal Ben Abdellah', 30, 4.6, 'assets/images/casablanca/restaurants/la_bodega/1.png', '/restaurant/resto_casa_005', 'restaurant'),
+    _Item('La Pergola', 'Boulevard d\'Anfa', 45, 4.8, 'assets/images/casablanca/restaurants/la_bodega/1.jpg', '/restaurant/resto_casa_005', 'restaurant'),
   ];
   static const _boutiquesCasa = [
-    _Item('Derb Ghallef Vintage', 'Vintage · Upcycle', 0, 4.5, 'assets/images/casablanca/boutiques/derb_ghallef/1.png', '/boutique/boutique_casa_001', 'boutique'),
-    _Item('Quartier Habous Artisanat', 'Artisanat · Tradition', 0, 4.8, 'assets/images/casablanca/boutiques/habous_artisanat/1.png', '/boutique/boutique_casa_002', 'boutique'),
-    _Item('Trésor des Arts Marocains', 'Art · Déco', 0, 4.7, 'assets/images/casablanca/boutiques/tresor_arts/1.png', '/boutique/boutique_casa_003', 'boutique'),
-    _Item('Atelier Zellige Casa', 'Zellige · Mosaïque', 0, 4.9, 'assets/images/casablanca/boutiques/atelier_zellige/1.png', '/boutique/boutique_casa_006', 'boutique'),
+    _Item('Tapis Berbères El Badi', 'Tapis · Fait main', 0, 4.8, 'assets/images/marrakech/boutiques/tapis_berberes/1.png', '/boutique/boutique_casa_001', 'boutique'),
+    _Item('Atelier Céramique Safi', 'Poterie · Zellige', 0, 4.7, 'assets/images/marrakech/boutiques/ceramique_safi/1.png', '/boutique/boutique_casa_002', 'boutique'),
+    _Item('Maroquinerie Youssef', 'Cuir · Babouches', 0, 4.6, 'assets/images/marrakech/boutiques/maroquinerie_youssef/1.png', '/boutique/boutique_casa_003', 'boutique'),
+    _Item('Bijoux Touareg Amina', 'Bijoux · Argent', 0, 4.9, 'assets/images/marrakech/boutiques/bijoux_touareg/1.png', '/boutique/boutique_casa_006', 'boutique'),
   ];
 
   bool get _isCasa => ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
 
-  late final List<_Item> _allItems = [
-    ..._hotels, ..._vehicles, ..._experiences, ..._restaurants, ..._boutiques,
-    ..._hotelsCasa, ..._vehiculesCasa, ..._experiencesCasa, ..._restaurantsCasa, ..._boutiquesCasa,
-  ];
+  List<_Item> get _activeItems {
+    if (_isCasa) {
+      return [..._hotelsCasa, ..._vehiculesCasa, ..._experiencesCasa, ..._restaurantsCasa, ..._boutiquesCasa];
+    }
+    return [..._hotels, ..._vehicles, ..._experiences, ..._restaurants, ..._boutiques];
+  }
 
   List<_Item> get _searchResults {
     if (_searchQuery.isEmpty) return [];
     final q = _searchQuery.toLowerCase();
-    return _allItems
+    return _activeItems
         .where(
           (i) =>
               i.name.toLowerCase().contains(q) ||
