@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/cart_provider.dart';
+import '../models/boutique_artisanale.dart';
 import '../widgets/reviews_section.dart';
 
 class BoutiqueDetailScreen extends ConsumerStatefulWidget {
@@ -18,8 +19,8 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
   int _quantity = 1;
   int _currentPage = 0;
 
-  static const _dataMap = {
-    'boutique_001': _Info(
+  static final _dataMap = {
+    'boutique_001': BoutiqueArtisanale(
       name: 'Tapis Berbères El Badi',
       artisan: 'Maître Hassan El Badi',
       location: 'Souk des Tapis, Médina',
@@ -36,13 +37,13 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       category: 'Tapis',
       horaires: '9h-19h',
       products: [
-        _Product('Tapis Beni Ouarain', 450, 'Laine naturelle, 200×150 cm'),
-        _Product('Tapis Azilal', 320, 'Multicolore, 180×120 cm'),
-        _Product('Tapis Kilim', 180, 'Tissage plat, 150×100 cm'),
-        _Product('Coussin Berbère', 45, 'Laine, motifs géométriques'),
+        Produit('Tapis Beni Ouarain', 450, 'Laine naturelle, 200×150 cm'),
+        Produit('Tapis Azilal', 320, 'Multicolore, 180×120 cm'),
+        Produit('Tapis Kilim', 180, 'Tissage plat, 150×100 cm'),
+        Produit('Coussin Berbère', 45, 'Laine, motifs géométriques'),
       ],
     ),
-    'boutique_002': _Info(
+    'boutique_002': BoutiqueArtisanale(
       name: 'Atelier Céramique Safi',
       artisan: 'Fatima Zahra Bennani',
       location: 'Derb Dabachi, Médina',
@@ -59,13 +60,13 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       category: 'Poterie',
       horaires: '10h-18h',
       products: [
-        _Product('Service à thé zellige', 85, '6 verres + théière'),
-        _Product('Grand plat décoratif', 120, 'Peint main, 40 cm'),
-        _Product('Set d\'assiettes', 65, '4 assiettes, motif fès'),
-        _Product('Vase Tamegroute', 45, 'Émail vert, 30 cm'),
+        Produit('Service à thé zellige', 85, '6 verres + théière'),
+        Produit('Grand plat décoratif', 120, 'Peint main, 40 cm'),
+        Produit('Set d\'assiettes', 65, '4 assiettes, motif fès'),
+        Produit('Vase Tamegroute', 45, 'Émail vert, 30 cm'),
       ],
     ),
-    'boutique_003': _Info(
+    'boutique_003': BoutiqueArtisanale(
       name: 'Maroquinerie Artisanale Youssef',
       artisan: 'Youssef Amrani',
       location: 'Souk Cherratine, Médina',
@@ -82,17 +83,17 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       category: 'Cuir',
       horaires: '9h-20h',
       products: [
-        _Product(
+        Produit(
           'Babouches traditionnelles',
           35,
           'Cuir souple, pointure unique',
         ),
-        _Product('Sac en cuir de chèvre', 120, 'Fait main, bandoulière'),
-        _Product('Pouf marocain', 85, 'Cuir véritable, non rembourré'),
-        _Product('Ceinture artisanale', 30, 'Cuir gravé, boucle laiton'),
+        Produit('Sac en cuir de chèvre', 120, 'Fait main, bandoulière'),
+        Produit('Pouf marocain', 85, 'Cuir véritable, non rembourré'),
+        Produit('Ceinture artisanale', 30, 'Cuir gravé, boucle laiton'),
       ],
     ),
-    'boutique_004': _Info(
+    'boutique_004': BoutiqueArtisanale(
       name: 'Bijoux Touareg Amina',
       artisan: 'Amina Ait Brahim',
       location: 'Place des Ferblantiers',
@@ -109,13 +110,13 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       category: 'Bijoux',
       horaires: '10h-19h',
       products: [
-        _Product('Collier Touareg argent', 180, 'Argent 925, pendentif croix'),
-        _Product('Bracelet Amazigh', 95, 'Argent ciselé, motifs'),
-        _Product('Boucles d\'oreilles', 65, 'Argent et corail'),
-        _Product('Bague Sahara', 50, 'Argent et turquoise'),
+        Produit('Collier Touareg argent', 180, 'Argent 925, pendentif croix'),
+        Produit('Bracelet Amazigh', 95, 'Argent ciselé, motifs'),
+        Produit('Boucles d\'oreilles', 65, 'Argent et corail'),
+        Produit('Bague Sahara', 50, 'Argent et turquoise'),
       ],
     ),
-    'boutique_005': _Info(
+    'boutique_005': BoutiqueArtisanale(
       name: 'Tissages Tradition Amazigh',
       artisan: 'Khadija Oulhaj',
       location: 'Souk Haddadine, Médina',
@@ -132,13 +133,13 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       category: 'Textile',
       horaires: '9h-18h',
       products: [
-        _Product('Caftan brodé', 250, 'Soie et coton, broderie'),
-        _Product('Foulard en soie', 60, 'Teinture naturelle'),
-        _Product('Housse de coussin', 35, 'Coton tissé, motifs'),
-        _Product('Jeté de lit', 180, 'Coton bio, 200×150 cm'),
+        Produit('Caftan brodé', 250, 'Soie et coton, broderie'),
+        Produit('Foulard en soie', 60, 'Teinture naturelle'),
+        Produit('Housse de coussin', 35, 'Coton tissé, motifs'),
+        Produit('Jeté de lit', 180, 'Coton bio, 200×150 cm'),
       ],
     ),
-    'boutique_006': _Info(
+    'boutique_006': BoutiqueArtisanale(
       name: 'Poterie d\'Art Tamegroute',
       artisan: 'Ahmed Bel Kacem',
       location: 'Quartier des Potiers',
@@ -155,14 +156,14 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       category: 'Poterie',
       horaires: '8h-17h',
       products: [
-        _Product('Bol Tamegroute', 25, 'Émail vert, 15 cm'),
-        _Product('Photophore', 35, 'Ajouré, bougie incluse'),
-        _Product('Tajine décoratif', 55, 'Peint main, 25 cm'),
-        _Product('Set de 6 tasses', 40, 'Émail vert traditionnel'),
+        Produit('Bol Tamegroute', 25, 'Émail vert, 15 cm'),
+        Produit('Photophore', 35, 'Ajouré, bougie incluse'),
+        Produit('Tajine décoratif', 55, 'Peint main, 25 cm'),
+        Produit('Set de 6 tasses', 40, 'Émail vert traditionnel'),
       ],
     ),
     // Casablanca boutiques (same artisan items as Marrakech)
-    'boutique_casa_001': _Info(
+    'boutique_casa_001': BoutiqueArtisanale(
       name: 'Tapis Berbères El Badi', artisan: 'Maître Hassan El Badi',
       location: 'Quartier Habous, Casablanca', rating: 4.8, reviews: 312,
       description: 'Depuis trois générations, la famille El Badi perpétue l\'art ancestral du tissage berbère. Chaque tapis est une œuvre unique, tissé à la main par des artisanes des villages de l\'Atlas, utilisant de la laine naturelle teinte avec des pigments végétaux traditionnels.',
@@ -170,13 +171,13 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       images: ['assets/images/marrakech/boutiques/tapis_berberes/1.png', 'assets/images/marrakech/boutiques/tapis_berberes/2.png', 'assets/images/marrakech/boutiques/tapis_berberes/3.png'],
       category: 'Tapis', horaires: '9h-19h',
       products: [
-        _Product('Tapis Beni Ouarain', 450, 'Laine naturelle, 200×150 cm'),
-        _Product('Tapis Azilal', 320, 'Multicolore, 180×120 cm'),
-        _Product('Tapis Kilim', 180, 'Tissage plat, 150×100 cm'),
-        _Product('Coussin Berbère', 45, 'Laine, motifs géométriques'),
+        Produit('Tapis Beni Ouarain', 450, 'Laine naturelle, 200×150 cm'),
+        Produit('Tapis Azilal', 320, 'Multicolore, 180×120 cm'),
+        Produit('Tapis Kilim', 180, 'Tissage plat, 150×100 cm'),
+        Produit('Coussin Berbère', 45, 'Laine, motifs géométriques'),
       ],
     ),
-    'boutique_casa_002': _Info(
+    'boutique_casa_002': BoutiqueArtisanale(
       name: 'Atelier Céramique Safi', artisan: 'Fatima Zahra Bennani',
       location: 'Derb Omar, Casablanca', rating: 4.7, reviews: 198,
       description: 'Fatima Zahra a appris la céramique auprès des maîtres potiers de Safi. Son atelier propose des pièces uniques mêlant techniques ancestrales et designs contemporains. Chaque pièce est tournée, peinte et émaillée à la main avec des motifs géométriques traditionnels.',
@@ -184,13 +185,13 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       images: ['assets/images/marrakech/boutiques/ceramique_safi/1.png', 'assets/images/marrakech/boutiques/ceramique_safi/2.png', 'assets/images/marrakech/boutiques/ceramique_safi/3.png'],
       category: 'Poterie', horaires: '10h-18h',
       products: [
-        _Product('Service à thé zellige', 85, '6 verres + théière'),
-        _Product('Grand plat décoratif', 120, 'Peint main, 40 cm'),
-        _Product('Set d\'assiettes', 65, '4 assiettes, motif fès'),
-        _Product('Vase Tamegroute', 45, 'Émail vert, 30 cm'),
+        Produit('Service à thé zellige', 85, '6 verres + théière'),
+        Produit('Grand plat décoratif', 120, 'Peint main, 40 cm'),
+        Produit('Set d\'assiettes', 65, '4 assiettes, motif fès'),
+        Produit('Vase Tamegroute', 45, 'Émail vert, 30 cm'),
       ],
     ),
-    'boutique_casa_003': _Info(
+    'boutique_casa_003': BoutiqueArtisanale(
       name: 'Maroquinerie Artisanale Youssef', artisan: 'Youssef Amrani',
       location: 'Quartier Habous, Casablanca', rating: 4.6, reviews: 456,
       description: 'Youssef travaille le cuir depuis l\'âge de 14 ans dans la tradition des maroquiniers de Marrakech. Cuir tanné naturellement dans les tanneries historiques de la Médina, chaque pièce est découpée, cousue et finissée entièrement à la main.',
@@ -198,13 +199,13 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       images: ['assets/images/marrakech/boutiques/maroquinerie_youssef/1.png', 'assets/images/marrakech/boutiques/maroquinerie_youssef/2.png', 'assets/images/marrakech/boutiques/maroquinerie_youssef/3.png'],
       category: 'Cuir', horaires: '9h-20h',
       products: [
-        _Product('Babouches traditionnelles', 35, 'Cuir souple, pointure unique'),
-        _Product('Sac en cuir de chèvre', 120, 'Fait main, bandoulière'),
-        _Product('Pouf marocain', 85, 'Cuir véritable, non rembourré'),
-        _Product('Ceinture artisanale', 30, 'Cuir gravé, boucle laiton'),
+        Produit('Babouches traditionnelles', 35, 'Cuir souple, pointure unique'),
+        Produit('Sac en cuir de chèvre', 120, 'Fait main, bandoulière'),
+        Produit('Pouf marocain', 85, 'Cuir véritable, non rembourré'),
+        Produit('Ceinture artisanale', 30, 'Cuir gravé, boucle laiton'),
       ],
     ),
-    'boutique_casa_004': _Info(
+    'boutique_casa_004': BoutiqueArtisanale(
       name: 'Bijoux Touareg Amina', artisan: 'Amina Ait Brahim',
       location: 'Derb Omar, Casablanca', rating: 4.9, reviews: 167,
       description: 'Amina crée des bijoux inspirés de l\'héritage touareg et amazigh. Chaque pièce en argent 925 est forgée et gravée à la main, ornée de pierres semi-précieuses du Sahara. Des créations uniques qui racontent l\'histoire du peuple nomade du désert.',
@@ -212,13 +213,13 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       images: ['assets/images/marrakech/boutiques/bijoux_touareg/1.png', 'assets/images/marrakech/boutiques/bijoux_touareg/2.png', 'assets/images/marrakech/boutiques/bijoux_touareg/3.png'],
       category: 'Bijoux', horaires: '10h-19h',
       products: [
-        _Product('Collier Touareg argent', 180, 'Argent 925, pendentif croix'),
-        _Product('Bracelet Amazigh', 95, 'Argent ciselé, motifs'),
-        _Product('Boucles d\'oreilles', 65, 'Argent et corail'),
-        _Product('Bague Sahara', 50, 'Argent et turquoise'),
+        Produit('Collier Touareg argent', 180, 'Argent 925, pendentif croix'),
+        Produit('Bracelet Amazigh', 95, 'Argent ciselé, motifs'),
+        Produit('Boucles d\'oreilles', 65, 'Argent et corail'),
+        Produit('Bague Sahara', 50, 'Argent et turquoise'),
       ],
     ),
-    'boutique_casa_005': _Info(
+    'boutique_casa_005': BoutiqueArtisanale(
       name: 'Tissages Tradition Amazigh', artisan: 'Khadija Oulhaj',
       location: 'Aïn Sebaâ, Casablanca', rating: 4.7, reviews: 234,
       description: 'Khadija dirige une coopérative de femmes tisseuses des montagnes de l\'Atlas. Chaque pièce textile est réalisée sur des métiers à tisser traditionnels avec des fils de coton, soie et laine teints naturellement. Un savoir-faire transmis de mère en fille.',
@@ -226,13 +227,13 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       images: ['assets/images/marrakech/boutiques/tissages_amazigh/1.png', 'assets/images/marrakech/boutiques/tissages_amazigh/2.png', 'assets/images/marrakech/boutiques/tissages_amazigh/3.png'],
       category: 'Textile', horaires: '9h-18h',
       products: [
-        _Product('Caftan brodé', 250, 'Soie et coton, broderie'),
-        _Product('Foulard en soie', 60, 'Teinture naturelle'),
-        _Product('Housse de coussin', 35, 'Coton tissé, motifs'),
-        _Product('Jeté de lit', 180, 'Coton bio, 200×150 cm'),
+        Produit('Caftan brodé', 250, 'Soie et coton, broderie'),
+        Produit('Foulard en soie', 60, 'Teinture naturelle'),
+        Produit('Housse de coussin', 35, 'Coton tissé, motifs'),
+        Produit('Jeté de lit', 180, 'Coton bio, 200×150 cm'),
       ],
     ),
-    'boutique_casa_006': _Info(
+    'boutique_casa_006': BoutiqueArtisanale(
       name: 'Poterie d\'Art Tamegroute', artisan: 'Ahmed Bel Kacem',
       location: 'Quartier Gauthier, Casablanca', rating: 4.5, reviews: 289,
       description: 'Ahmed perpétue la tradition séculaire de la poterie de Tamegroute, reconnaissable à son émail vert unique obtenu grâce à un mélange secret de manganèse, cuivre et silice. Chaque pièce est façonnée au tour et cuite dans un four à bois traditionnel.',
@@ -240,17 +241,17 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
       images: ['assets/images/marrakech/boutiques/poterie_tamegroute/1.png', 'assets/images/marrakech/boutiques/poterie_tamegroute/2.png', 'assets/images/marrakech/boutiques/poterie_tamegroute/3.png'],
       category: 'Poterie', horaires: '8h-17h',
       products: [
-        _Product('Bol Tamegroute', 25, 'Émail vert, 15 cm'),
-        _Product('Photophore', 35, 'Ajouré, bougie incluse'),
-        _Product('Tajine décoratif', 55, 'Peint main, 25 cm'),
-        _Product('Set de 6 tasses', 40, 'Émail vert traditionnel'),
+        Produit('Bol Tamegroute', 25, 'Émail vert, 15 cm'),
+        Produit('Photophore', 35, 'Ajouré, bougie incluse'),
+        Produit('Tajine décoratif', 55, 'Peint main, 25 cm'),
+        Produit('Set de 6 tasses', 40, 'Émail vert traditionnel'),
       ],
     ),
   };
 
-  _Info get _boutique =>
+  BoutiqueArtisanale get _boutique =>
       _dataMap[widget.boutiqueId] ?? _dataMap['boutique_001']!;
-  _Product get _currentProduct => _boutique.products[_selectedProduct];
+  Produit get _currentProduct => _boutique.products[_selectedProduct];
   int get _totalPrice => _currentProduct.price * _quantity;
 
   void _showOrderConfirmation() {
@@ -317,7 +318,7 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
                         itemBuilder: (context, i) => Image.asset(
                           _boutique.images[i],
                           fit: BoxFit.cover,
-                          cacheWidth: 800,
+                          cacheWidth: 500,
                           gaplessPlayback: true,
                           errorBuilder: (_, _, _) =>
                               Container(color: const Color(0xFF2A2A2A)),
@@ -1196,37 +1197,4 @@ class _OrderSheetState extends State<_OrderSheet>
       ],
     ),
   );
-}
-
-class _Product {
-  final String name, desc;
-  final int price;
-  const _Product(this.name, this.price, this.desc);
-}
-
-class _Info {
-  final String name,
-      artisan,
-      location,
-      description,
-      imageUrl,
-      category,
-      horaires;
-  final double rating;
-  final int reviews;
-  final List<_Product> products;
-  final List<String> images;
-  const _Info({
-    required this.name,
-    required this.artisan,
-    required this.location,
-    required this.rating,
-    required this.reviews,
-    required this.description,
-    required this.imageUrl,
-    required this.images,
-    required this.category,
-    required this.horaires,
-    required this.products,
-  });
 }

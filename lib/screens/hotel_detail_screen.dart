@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
+import '../models/hotel.dart';
 import '../providers/booking_provider.dart';
 import '../widgets/reviews_section.dart';
 
@@ -30,8 +31,8 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
   final PageController _galleryController = PageController();
 
   // Hotel data lookup
-  static const _hotelDataMap = {
-    'hotel_002': _HotelInfo(
+  static final _hotelDataMap = {
+    'hotel_002': Hotel(
       name: 'La Mamounia',
       location: 'Hivernage, Marrakech',
       rating: 4.9,
@@ -49,7 +50,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/marrakech/hotels/la_mamounia/6.png',
       ],
     ),
-    'hotel_003': _HotelInfo(
+    'hotel_003': Hotel(
       name: 'Riad Yasmine',
       location: 'Medina, Marrakech',
       rating: 4.6,
@@ -67,7 +68,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/marrakech/hotels/riad_yasmine/6.png',
       ],
     ),
-    'hotel_004': _HotelInfo(
+    'hotel_004': Hotel(
       name: 'Atlas Medina & Spa',
       location: 'Guéliz, Marrakech',
       rating: 4.5,
@@ -77,7 +78,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
       imageUrl:
           'https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=800&q=80',
     ),
-    'hotel_005': _HotelInfo(
+    'hotel_005': Hotel(
       name: 'La Sultana',
       location: 'Kasbah, Marrakech',
       rating: 4.8,
@@ -95,7 +96,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/marrakech/hotels/la_sultana/6.png',
       ],
     ),
-    'hotel_006': _HotelInfo(
+    'hotel_006': Hotel(
       name: 'Mandarin Oriental',
       location: 'Route de la Palmeraie, Marrakech',
       rating: 4.9,
@@ -113,7 +114,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/marrakech/hotels/mandarin_oriental/6.png',
       ],
     ),
-    'hotel_007': _HotelInfo(
+    'hotel_007': Hotel(
       name: 'Riad Kniza',
       location: 'Medina, Marrakech',
       rating: 4.7,
@@ -131,7 +132,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/marrakech/hotels/riad_kniza/6.png',
       ],
     ),
-    'hotel_008': _HotelInfo(
+    'hotel_008': Hotel(
       name: 'Royal Mansour',
       location: 'Médina, Marrakech',
       rating: 4.9,
@@ -150,7 +151,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
       ],
     ),
     // Casablanca hotels
-    'hotel_casa_001': _HotelInfo(
+    'hotel_casa_001': Hotel(
       name: 'Four Seasons Casablanca',
       location: 'Anfa Place, Casablanca',
       rating: 4.9,
@@ -167,7 +168,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/casablanca/hotels/four_seasons_casa/6.jpg',
       ],
     ),
-    'hotel_casa_002': _HotelInfo(
+    'hotel_casa_002': Hotel(
       name: 'ONE Hotel Casablanca',
       location: 'Quartier Gauthier, Casablanca',
       rating: 4.7,
@@ -184,7 +185,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/casablanca/hotels/le_doge_casa/6.jpg',
       ],
     ),
-    'hotel_casa_003': _HotelInfo(
+    'hotel_casa_003': Hotel(
       name: 'Marriott Casablanca',
       location: 'Place des Nations Unies, Casablanca',
       rating: 4.7,
@@ -201,7 +202,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/casablanca/hotels/hyatt_casa/6.jpg',
       ],
     ),
-    'hotel_casa_004': _HotelInfo(
+    'hotel_casa_004': Hotel(
       name: 'Kenzi Tower Hotel',
       location: 'Twin Center, Casablanca',
       rating: 4.6,
@@ -218,7 +219,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/casablanca/hotels/kenzi_tower/6.jpg',
       ],
     ),
-    'hotel_casa_005': _HotelInfo(
+    'hotel_casa_005': Hotel(
       name: 'Sofitel Casablanca',
       location: 'Tour Blanche, Casablanca',
       rating: 4.8,
@@ -235,7 +236,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/casablanca/hotels/sofitel_casa/6.jpg',
       ],
     ),
-    'hotel_casa_006': _HotelInfo(
+    'hotel_casa_006': Hotel(
       name: 'Barceló Anfa Casablanca',
       location: 'Boulevard de la Corniche, Casablanca',
       rating: 4.5,
@@ -254,7 +255,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
     ),
   };
 
-  _HotelInfo get _hotel =>
+  Hotel get _hotel =>
       _hotelDataMap[widget.hotelId] ?? _hotelDataMap['hotel_002']!;
   bool get _hasGallery => _hotel.imageAssets.isNotEmpty;
   int get _imageCount => _hasGallery ? _hotel.imageAssets.length : 1;
@@ -452,7 +453,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
                               itemBuilder: (ctx, i) => Image.asset(
                                 _hotel.imageAssets[i],
                                 fit: BoxFit.cover,
-                                cacheWidth: 800,
+                                cacheWidth: 500,
                                 gaplessPlayback: true,
                                 errorBuilder: (_, _, _) =>
                                     Container(color: const Color(0xFF2A2A2A)),
@@ -461,7 +462,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
                           : Image.network(
                               _hotel.imageUrl,
                               fit: BoxFit.cover,
-                              cacheWidth: 800,
+                              cacheWidth: 500,
                               errorBuilder: (_, _, _) =>
                                   Container(color: const Color(0xFF2A2A2A)),
                             ),
@@ -1733,24 +1734,4 @@ class _Amenity {
   final IconData icon;
   final String label;
   const _Amenity(this.icon, this.label);
-}
-
-class _HotelInfo {
-  final String name;
-  final String location;
-  final double rating;
-  final int reviews;
-  final String description;
-  final String imageUrl;
-  final List<String> imageAssets;
-
-  const _HotelInfo({
-    required this.name,
-    required this.location,
-    required this.rating,
-    required this.reviews,
-    required this.description,
-    required this.imageUrl,
-    this.imageAssets = const [],
-  });
 }

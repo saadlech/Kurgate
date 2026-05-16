@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
+import '../models/restaurant.dart';
 import '../providers/booking_provider.dart';
 import '../widgets/reviews_section.dart';
 
@@ -23,8 +24,8 @@ class _RestaurantDetailScreenState
   bool _isConfirming = false;
   int _currentPage = 0;
 
-  static const _dataMap = {
-    'resto_001': _Info(
+  static final _dataMap = {
+    'resto_001': Restaurant(
       name: 'Le Jardin',
       location: 'Souk Sidi Abdelaziz, Médina',
       rating: 4.7,
@@ -42,7 +43,7 @@ class _RestaurantDetailScreenState
       horaires: '12h-23h',
       capacite: 60,
     ),
-    'resto_002': _Info(
+    'resto_002': Restaurant(
       name: 'Nomad',
       location: 'Derb Aarjan, Médina',
       rating: 4.8,
@@ -60,7 +61,7 @@ class _RestaurantDetailScreenState
       horaires: '10h-23h',
       capacite: 80,
     ),
-    'resto_003': _Info(
+    'resto_003': Restaurant(
       name: 'Al Fassia',
       location: 'Guéliz, Marrakech',
       rating: 4.9,
@@ -78,7 +79,7 @@ class _RestaurantDetailScreenState
       horaires: '12h-14h30 · 19h-23h',
       capacite: 100,
     ),
-    'resto_004': _Info(
+    'resto_004': Restaurant(
       name: 'CAFE CLOCK',
       location: 'Derb Chtouka, Kasbah',
       rating: 4.5,
@@ -96,7 +97,7 @@ class _RestaurantDetailScreenState
       horaires: '9h-22h',
       capacite: 120,
     ),
-    'resto_005': _Info(
+    'resto_005': Restaurant(
       name: 'La Table du Palais',
       location: 'Royal Mansour, Médina',
       rating: 4.9,
@@ -114,7 +115,7 @@ class _RestaurantDetailScreenState
       horaires: '19h-23h',
       capacite: 40,
     ),
-    'resto_006': _Info(
+    'resto_006': Restaurant(
       name: 'Chez Lamine Hadj Mustapha',
       location: 'Place Jemaa el-Fna',
       rating: 4.6,
@@ -133,7 +134,7 @@ class _RestaurantDetailScreenState
       capacite: 50,
     ),
     // Casablanca restaurants
-    'resto_casa_001': _Info(
+    'resto_casa_001': Restaurant(
       name: 'Restaurant Dar El Kaid', location: 'Quartier Habous, Casablanca',
       rating: 4.8, reviews: 567,
       description: 'Restaurant traditionnel marocain niché dans le quartier Habous. Cuisine authentique servie dans un décor de cuivre et boiseries. Tajines mijotés, couscous royal et pâtisseries maison dans une ambiance chaleureuse.',
@@ -141,7 +142,7 @@ class _RestaurantDetailScreenState
       images: ['assets/images/casablanca/restaurants/ricks_cafe/1.jpg', 'assets/images/casablanca/restaurants/ricks_cafe/2.jpg', 'assets/images/casablanca/restaurants/ricks_cafe/3.jpg', 'assets/images/casablanca/restaurants/ricks_cafe/4.jpg', 'assets/images/casablanca/restaurants/ricks_cafe/5.jpg', 'assets/images/casablanca/restaurants/ricks_cafe/6.jpg'],
       price: 35, specialite: 'Cuisine Marocaine', horaires: '12h-23h', capacite: 80,
     ),
-    'resto_casa_002': _Info(
+    'resto_casa_002': Restaurant(
       name: 'La Sqala', location: 'Boulevard des Almohades, Casablanca',
       rating: 4.8, reviews: 756,
       description: 'Restaurant jardin niché dans les remparts d\'une ancienne forteresse portugaise. Brunchs légendaires, cuisine marocaine traditionnelle et cadre enchanteur avec orangers et fontaines.',
@@ -149,7 +150,7 @@ class _RestaurantDetailScreenState
       images: ['assets/images/casablanca/restaurants/la_sqala/1.png', 'assets/images/casablanca/restaurants/la_sqala/2.png', 'assets/images/casablanca/restaurants/la_sqala/3.png'],
       price: 25, specialite: 'Marocain Traditionnel', horaires: '8h-23h', capacite: 120,
     ),
-    'resto_casa_003': _Info(
+    'resto_casa_003': Restaurant(
       name: 'Le Cabestan', location: 'Corniche, Ain Diab',
       rating: 4.9, reviews: 534,
       description: 'Restaurant gastronomique perché sur les rochers de la Corniche avec vue panoramique sur l\'Atlantique. Poissons et fruits de mer frais, coucher de soleil spectaculaire et cuisine méditerranéenne d\'exception.',
@@ -157,7 +158,7 @@ class _RestaurantDetailScreenState
       images: ['assets/images/casablanca/restaurants/le_cabestan/1.png', 'assets/images/casablanca/restaurants/le_cabestan/2.png', 'assets/images/casablanca/restaurants/le_cabestan/3.png'],
       price: 50, specialite: 'Poissons & Fruits de mer', horaires: '12h-00h', capacite: 90,
     ),
-    'resto_casa_004': _Info(
+    'resto_casa_004': Restaurant(
       name: 'Kyoto Sushi Casablanca', location: 'Maarif, Casablanca',
       rating: 4.7, reviews: 412,
       description: 'Restaurant japonais contemporain au cœur du quartier Maarif. Sushis, sashimis et tempuras préparés avec des produits frais. Ambiance zen et design minimaliste.',
@@ -165,7 +166,7 @@ class _RestaurantDetailScreenState
       images: ['assets/images/casablanca/restaurants/basmane/1.jpg', 'assets/images/casablanca/restaurants/basmane/2.jpg', 'assets/images/casablanca/restaurants/basmane/3.jpg', 'assets/images/casablanca/restaurants/basmane/4.jpg', 'assets/images/casablanca/restaurants/basmane/5.jpg', 'assets/images/casablanca/restaurants/basmane/6.jpg'],
       price: 40, specialite: 'Cuisine Japonaise', horaires: '12h-23h', capacite: 60,
     ),
-    'resto_casa_005': _Info(
+    'resto_casa_005': Restaurant(
       name: 'La Pergola', location: 'Boulevard d\'Anfa, Casablanca',
       rating: 4.8, reviews: 389,
       description: 'Restaurant gastronomique Art Déco sur le boulevard d\'Anfa. Cuisine franco-marocaine raffinée, terrasse élégante et ambiance feutrée digne des grandes brasseries parisiennes.',
@@ -173,7 +174,7 @@ class _RestaurantDetailScreenState
       images: ['assets/images/casablanca/restaurants/la_bodega/1.jpg', 'assets/images/casablanca/restaurants/la_bodega/2.jpg', 'assets/images/casablanca/restaurants/la_bodega/3.jpg', 'assets/images/casablanca/restaurants/la_bodega/4.jpg', 'assets/images/casablanca/restaurants/la_bodega/5.jpg', 'assets/images/casablanca/restaurants/la_bodega/6.jpg'],
       price: 45, specialite: 'Français-Marocain', horaires: '12h-00h', capacite: 100,
     ),
-    'resto_casa_006': _Info(
+    'resto_casa_006': Restaurant(
       name: 'Le Doge Café & Tapas', location: 'Quartier Gauthier, Casablanca',
       rating: 4.6, reviews: 534,
       description: 'Café-restaurant branché au cœur du quartier Gauthier. Brunchs, tapas créatives et cocktails signature dans un cadre chic et décontracté. Terrasse ensoleillée idéale pour un déjeuner entre amis.',
@@ -195,7 +196,7 @@ class _RestaurantDetailScreenState
     '21:00',
   ];
 
-  _Info get _resto => _dataMap[widget.restaurantId] ?? _dataMap['resto_001']!;
+  Restaurant get _resto => _dataMap[widget.restaurantId] ?? _dataMap['resto_001']!;
 
   @override
   void initState() {
@@ -305,7 +306,7 @@ class _RestaurantDetailScreenState
                         itemBuilder: (context, i) => Image.asset(
                           _resto.images[i],
                           fit: BoxFit.cover,
-                          cacheWidth: 800,
+                          cacheWidth: 500,
                           gaplessPlayback: true,
                           errorBuilder: (_, _, _) =>
                               Container(color: const Color(0xFF2A2A2A)),
@@ -1249,24 +1250,4 @@ class _ReservationSheetState extends State<_ReservationSheet>
       ],
     ),
   );
-}
-
-class _Info {
-  final String name, location, description, imageUrl, specialite, horaires;
-  final List<String> images;
-  final double rating;
-  final int reviews, price, capacite;
-  const _Info({
-    required this.name,
-    required this.location,
-    required this.rating,
-    required this.reviews,
-    required this.description,
-    required this.imageUrl,
-    required this.images,
-    required this.price,
-    required this.specialite,
-    required this.horaires,
-    required this.capacite,
-  });
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/destination_provider.dart';
+import '../models/restaurant.dart';
 
 class RestaurantListScreen extends ConsumerStatefulWidget {
   const RestaurantListScreen({super.key});
@@ -28,7 +29,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
   ];
 
   final _restaurants = const [
-    _RestaurantData(
+    Restaurant(
       id: 'resto_001',
       name: 'Le Jardin',
       location: 'Souk Sidi Abdelaziz, Médina',
@@ -41,7 +42,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
       specialite: 'Méditerranéen',
       horaires: '12h-23h',
     ),
-    _RestaurantData(
+    Restaurant(
       id: 'resto_002',
       name: 'Nomad',
       location: 'Derb Aarjan, Médina',
@@ -54,7 +55,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
       specialite: 'Marocain Moderne',
       horaires: '10h-23h',
     ),
-    _RestaurantData(
+    Restaurant(
       id: 'resto_003',
       name: 'Al Fassia',
       location: 'Guéliz, Marrakech',
@@ -67,7 +68,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
       specialite: 'Cuisine Fassi',
       horaires: '12h-14h30 · 19h-23h',
     ),
-    _RestaurantData(
+    Restaurant(
       id: 'resto_004',
       name: 'CAFE CLOCK',
       location: 'Derb Chtouka, Kasbah',
@@ -80,7 +81,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
       specialite: 'Fusion',
       horaires: '9h-22h',
     ),
-    _RestaurantData(
+    Restaurant(
       id: 'resto_005',
       name: 'La Table du Palais',
       location: 'Royal Mansour, Médina',
@@ -93,7 +94,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
       specialite: 'Français-Marocain',
       horaires: '19h-23h',
     ),
-    _RestaurantData(
+    Restaurant(
       id: 'resto_006',
       name: 'Chez Lamine Hadj Mustapha',
       location: 'Place Jemaa el-Fna',
@@ -110,42 +111,42 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
 
   // Casablanca restaurants
   final _restaurantsCasa = const [
-    _RestaurantData(
+    Restaurant(
       id: 'resto_casa_001', name: 'Restaurant Dar El Kaid', location: 'Quartier Habous, Casablanca',
       price: 35, rating: 4.8, reviews: 567,
       imageUrl: 'assets/images/casablanca/restaurants/ricks_cafe/1.jpg',
       tags: ['Traditionnel', 'Cuivre', 'Ambiance'], category: 'Marocain',
       specialite: 'Cuisine Marocaine', horaires: '12h-23h',
     ),
-    _RestaurantData(
+    Restaurant(
       id: 'resto_casa_002', name: 'La Sqala', location: 'Boulevard des Almohades, Casablanca',
       price: 25, rating: 4.8, reviews: 756,
       imageUrl: 'assets/images/casablanca/restaurants/la_sqala/1.png',
       tags: ['Terrasse', 'Brunch', 'Jardin'], category: 'Marocain',
       specialite: 'Marocain Traditionnel', horaires: '8h-23h',
     ),
-    _RestaurantData(
+    Restaurant(
       id: 'resto_casa_003', name: 'Le Cabestan', location: 'Corniche, Ain Diab',
       price: 50, rating: 4.9, reviews: 534,
       imageUrl: 'assets/images/casablanca/restaurants/le_cabestan/1.png',
       tags: ['Vue Océan', 'Fruits de mer', 'Gastronomique'], category: 'Rooftop',
       specialite: 'Poissons & Fruits de mer', horaires: '12h-00h',
     ),
-    _RestaurantData(
+    Restaurant(
       id: 'resto_casa_004', name: 'Kyoto Sushi Casablanca', location: 'Maarif, Casablanca',
       price: 40, rating: 4.7, reviews: 412,
       imageUrl: 'assets/images/casablanca/restaurants/basmane/1.jpg',
       tags: ['Japonais', 'Sushi', 'Moderne'], category: 'International',
       specialite: 'Cuisine Japonaise', horaires: '12h-23h',
     ),
-    _RestaurantData(
+    Restaurant(
       id: 'resto_casa_005', name: 'La Pergola', location: 'Boulevard d\'Anfa, Casablanca',
       price: 45, rating: 4.8, reviews: 389,
       imageUrl: 'assets/images/casablanca/restaurants/la_bodega/1.jpg',
       tags: ['Art Déco', 'Gastronomique', 'Terrasse'], category: 'International',
       specialite: 'Français-Marocain', horaires: '12h-00h',
     ),
-    _RestaurantData(
+    Restaurant(
       id: 'resto_casa_006', name: 'Le Doge Café & Tapas', location: 'Quartier Gauthier, Casablanca',
       price: 30, rating: 4.6, reviews: 534,
       imageUrl: 'assets/images/casablanca/restaurants/blend/1.jpg',
@@ -195,12 +196,12 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
     super.dispose();
   }
 
-  List<_RestaurantData> get _activeRestaurants {
+  List<Restaurant> get _activeRestaurants {
     final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
     return isCasa ? _restaurantsCasa : _restaurants;
   }
 
-  List<_RestaurantData> get _filtered {
+  List<Restaurant> get _filtered {
     var base = _activeRestaurants;
     if (_selectedFilter != 0) {
       base = base.where((r) => r.category == _filters[_selectedFilter]).toList();
@@ -386,6 +387,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                     itemCount: _filtered.length,
+                    addAutomaticKeepAlives: false,
                     separatorBuilder: (_, _) => const SizedBox(height: 20),
                     itemBuilder: (context, index) {
                       final r = _filtered[index];
@@ -414,7 +416,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
 
 class _RestaurantCard extends StatelessWidget {
   const _RestaurantCard({required this.restaurant, required this.onTap});
-  final _RestaurantData restaurant;
+  final Restaurant restaurant;
   final VoidCallback onTap;
 
   @override
@@ -441,7 +443,7 @@ class _RestaurantCard extends StatelessWidget {
                     child: Image.asset(
                       restaurant.imageUrl,
                       fit: BoxFit.cover,
-                      cacheWidth: 600,
+                      cacheWidth: 400,
                       gaplessPlayback: true,
                       errorBuilder: (_, _, _) => Container(
                         color: const Color(0xFF2A2A2A),
@@ -692,22 +694,3 @@ class _RestaurantCard extends StatelessWidget {
   );
 }
 
-class _RestaurantData {
-  final String id, name, location, imageUrl, category, specialite, horaires;
-  final int price, reviews;
-  final double rating;
-  final List<String> tags;
-  const _RestaurantData({
-    required this.id,
-    required this.name,
-    required this.location,
-    required this.price,
-    required this.rating,
-    required this.reviews,
-    required this.imageUrl,
-    required this.tags,
-    required this.category,
-    required this.specialite,
-    required this.horaires,
-  });
-}

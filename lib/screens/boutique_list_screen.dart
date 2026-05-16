@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/destination_provider.dart';
+import '../models/boutique_artisanale.dart';
 
 class BoutiqueListScreen extends ConsumerStatefulWidget {
   const BoutiqueListScreen({super.key});
@@ -29,7 +30,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
   ];
 
   final _boutiques = const [
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_001',
       name: 'Tapis Berbères El Badi',
       artisan: 'Maître Hassan El Badi',
@@ -41,7 +42,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
       category: 'Tapis',
       prixMoyen: '150-2000',
     ),
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_002',
       name: 'Atelier Céramique Safi',
       artisan: 'Fatima Zahra Bennani',
@@ -53,7 +54,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
       category: 'Poterie',
       prixMoyen: '20-300',
     ),
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_003',
       name: 'Maroquinerie Artisanale Youssef',
       artisan: 'Youssef Amrani',
@@ -65,7 +66,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
       category: 'Cuir',
       prixMoyen: '30-500',
     ),
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_004',
       name: 'Bijoux Touareg Amina',
       artisan: 'Amina Ait Brahim',
@@ -77,7 +78,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
       category: 'Bijoux',
       prixMoyen: '50-800',
     ),
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_005',
       name: 'Tissages Tradition Amazigh',
       artisan: 'Khadija Oulhaj',
@@ -89,7 +90,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
       category: 'Textile',
       prixMoyen: '40-600',
     ),
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_006',
       name: 'Poterie d\'Art Tamegroute',
       artisan: 'Ahmed Bel Kacem',
@@ -105,7 +106,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
 
   // Casablanca boutiques (same artisan items as Marrakech)
   final _boutiquesCasa = const [
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_casa_001',
       name: 'Tapis Berbères El Badi',
       artisan: 'Maître Hassan El Badi',
@@ -117,7 +118,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
       category: 'Tapis',
       prixMoyen: '150-2000',
     ),
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_casa_002',
       name: 'Atelier Céramique Safi',
       artisan: 'Fatima Zahra Bennani',
@@ -129,7 +130,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
       category: 'Poterie',
       prixMoyen: '20-300',
     ),
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_casa_003',
       name: 'Maroquinerie Artisanale Youssef',
       artisan: 'Youssef Amrani',
@@ -141,7 +142,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
       category: 'Cuir',
       prixMoyen: '30-500',
     ),
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_casa_004',
       name: 'Bijoux Touareg Amina',
       artisan: 'Amina Ait Brahim',
@@ -153,7 +154,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
       category: 'Bijoux',
       prixMoyen: '50-800',
     ),
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_casa_005',
       name: 'Tissages Tradition Amazigh',
       artisan: 'Khadija Oulhaj',
@@ -165,7 +166,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
       category: 'Textile',
       prixMoyen: '40-600',
     ),
-    _BoutiqueData(
+    BoutiqueArtisanale(
       id: 'boutique_casa_006',
       name: 'Poterie d\'Art Tamegroute',
       artisan: 'Ahmed Bel Kacem',
@@ -220,12 +221,12 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
     super.dispose();
   }
 
-  List<_BoutiqueData> get _activeBoutiques {
+  List<BoutiqueArtisanale> get _activeBoutiques {
     final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
     return isCasa ? _boutiquesCasa : _boutiques;
   }
 
-  List<_BoutiqueData> get _filtered {
+  List<BoutiqueArtisanale> get _filtered {
     var base = _activeBoutiques;
     if (_selectedFilter != 0) {
       base = base.where((b) => b.category == _filters[_selectedFilter]).toList();
@@ -407,6 +408,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                     itemCount: _filtered.length,
+                    addAutomaticKeepAlives: false,
                     separatorBuilder: (_, _) => const SizedBox(height: 20),
                     itemBuilder: (context, index) {
                       final b = _filtered[index];
@@ -435,7 +437,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
 
 class _BoutiqueCard extends StatelessWidget {
   const _BoutiqueCard({required this.boutique, required this.onTap});
-  final _BoutiqueData boutique;
+  final BoutiqueArtisanale boutique;
   final VoidCallback onTap;
 
   @override
@@ -462,7 +464,7 @@ class _BoutiqueCard extends StatelessWidget {
                     child: Image.asset(
                       boutique.imageUrl,
                       fit: BoxFit.cover,
-                      cacheWidth: 600,
+                      cacheWidth: 400,
                       gaplessPlayback: true,
                       errorBuilder: (_, _, _) => Container(
                         color: const Color(0xFF2A2A2A),
@@ -674,21 +676,3 @@ class _BoutiqueCard extends StatelessWidget {
   }
 }
 
-class _BoutiqueData {
-  final String id, name, artisan, location, imageUrl, category, prixMoyen;
-  final int reviews;
-  final double rating;
-  final List<String> tags;
-  const _BoutiqueData({
-    required this.id,
-    required this.name,
-    required this.artisan,
-    required this.location,
-    required this.rating,
-    required this.reviews,
-    required this.imageUrl,
-    required this.tags,
-    required this.category,
-    required this.prixMoyen,
-  });
-}

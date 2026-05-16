@@ -168,6 +168,7 @@ class _DestinationScreenState extends State<DestinationScreen>
                           child: Image.asset(
                             'assets/images/branding/logo_full.png',
                             height: 40,
+                            cacheHeight: 80,
                           ),
                         ),
                       ),
@@ -294,6 +295,7 @@ class _FeaturedCardState extends ConsumerState<_FeaturedCard> {
                 Image.asset(
                   widget.destination.imageUrl,
                   fit: BoxFit.cover,
+                  cacheWidth: 400,
                 ),
 
                 // Dark gradient overlay
@@ -452,6 +454,7 @@ class _ComingSoonCard extends StatelessWidget {
             Image.asset(
               destination.imageUrl,
               fit: BoxFit.cover,
+              cacheWidth: 400,
               color: Colors.black.withValues(alpha: 0.55),
               colorBlendMode: BlendMode.darken,
             ),

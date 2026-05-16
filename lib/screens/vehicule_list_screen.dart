@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/destination_provider.dart';
+import '../models/vehicule.dart';
 
 class VehiculeListScreen extends ConsumerStatefulWidget {
   const VehiculeListScreen({super.key});
@@ -29,7 +30,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
 
   // Real vehicle data — popular rental cars in Morocco
   final _vehicules = const [
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_001',
       name: 'Dacia Duster 2024',
       agence: 'Marrakech Auto Location',
@@ -43,7 +44,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
       carburant: 'Diesel',
       places: 5,
     ),
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_002',
       name: 'Renault Clio 5',
       agence: 'Eco Rent Marrakech',
@@ -57,7 +58,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
       carburant: 'Essence',
       places: 5,
     ),
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_003',
       name: 'Mercedes Classe E',
       agence: 'Premium Cars Marrakech',
@@ -71,7 +72,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
       carburant: 'Essence',
       places: 5,
     ),
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_004',
       name: 'Toyota Hilux 4x4',
       agence: 'Desert Drive Location',
@@ -85,7 +86,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
       carburant: 'Diesel',
       places: 5,
     ),
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_005',
       name: 'Peugeot 3008',
       agence: 'City Cars Marrakech',
@@ -99,7 +100,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
       carburant: 'Diesel',
       places: 5,
     ),
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_006',
       name: 'Citroën Berlingo',
       agence: 'Marrakech Van Rental',
@@ -117,42 +118,42 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
 
   // Casablanca vehicles — same cars, local agencies
   final _vehiculesCasa = const [
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_casa_001', name: 'Dacia Duster 2024', agence: 'Casablanca Auto Location',
       price: 45, rating: 4.6, reviews: 198,
       imageUrl: 'assets/images/vehicules/dacia_duster/1.png',
       tags: ['SUV', 'Diesel', 'Populaire'], category: 'SUV',
       transmission: 'Manuelle', carburant: 'Diesel', places: 5,
     ),
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_casa_002', name: 'Renault Clio 5', agence: 'Eco Rent Casablanca',
       price: 22, rating: 4.4, reviews: 445,
       imageUrl: 'assets/images/vehicules/renault_clio/1.png',
       tags: ['Citadine', 'Essence', 'Économique'], category: 'Citadine',
       transmission: 'Manuelle', carburant: 'Essence', places: 5,
     ),
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_casa_003', name: 'Mercedes Classe E', agence: 'Premium Cars Casablanca',
       price: 150, rating: 4.9, reviews: 134,
       imageUrl: 'assets/images/vehicules/mercedes_classe_e/1.png',
       tags: ['Berline', 'Automatique', 'Luxe'], category: 'Berline',
       transmission: 'Automatique', carburant: 'Essence', places: 5,
     ),
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_casa_004', name: 'Toyota Hilux 4x4', agence: 'Casa 4x4 Rental',
       price: 120, rating: 4.8, reviews: 156,
       imageUrl: 'assets/images/vehicules/toyota_hilux/1.png',
       tags: ['SUV', '4x4', 'Tout-terrain'], category: 'SUV',
       transmission: 'Automatique', carburant: 'Diesel', places: 5,
     ),
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_casa_005', name: 'Peugeot 3008', agence: 'City Cars Casablanca',
       price: 65, rating: 4.7, reviews: 267,
       imageUrl: 'assets/images/vehicules/peugeot_3008/1.png',
       tags: ['SUV', 'Diesel', 'Familial'], category: 'SUV',
       transmission: 'Automatique', carburant: 'Diesel', places: 5,
     ),
-    _VehiculeData(
+    Vehicule(
       id: 'vehicule_casa_006', name: 'Citroën Berlingo', agence: 'Casablanca Van Rental',
       price: 40, rating: 4.3, reviews: 145,
       imageUrl: 'assets/images/vehicules/citroen_berlingo/1.png',
@@ -208,12 +209,12 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
     super.dispose();
   }
 
-  List<_VehiculeData> get _activeVehicules {
+  List<Vehicule> get _activeVehicules {
     final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
     return isCasa ? _vehiculesCasa : _vehicules;
   }
 
-  List<_VehiculeData> get _filteredVehicules {
+  List<Vehicule> get _filteredVehicules {
     var base = _activeVehicules;
     if (_selectedFilter != 0) {
       final filterName = _filters[_selectedFilter];
@@ -407,6 +408,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                     itemCount: _filteredVehicules.length,
+                    addAutomaticKeepAlives: false,
                     separatorBuilder: (_, _) => const SizedBox(height: 20),
                     itemBuilder: (context, index) {
                       final vehicule = _filteredVehicules[index];
@@ -438,7 +440,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
 // ── Vehicle Card ──
 class _VehiculeCard extends StatelessWidget {
   const _VehiculeCard({required this.vehicule, required this.onTap});
-  final _VehiculeData vehicule;
+  final Vehicule vehicule;
   final VoidCallback onTap;
 
   @override
@@ -466,7 +468,7 @@ class _VehiculeCard extends StatelessWidget {
                     child: Image.asset(
                       vehicule.imageUrl,
                       fit: BoxFit.cover,
-                      cacheWidth: 600,
+                      cacheWidth: 400,
                       gaplessPlayback: true,
                       errorBuilder: (ctx, e, s) => Container(
                         color: const Color(0xFF2A2A2A),
@@ -723,35 +725,4 @@ class _VehiculeCard extends StatelessWidget {
       ),
     );
   }
-}
-
-// ── Vehicle data ──
-class _VehiculeData {
-  final String id;
-  final String name;
-  final String agence;
-  final int price;
-  final double rating;
-  final int reviews;
-  final String imageUrl;
-  final List<String> tags;
-  final String category;
-  final String transmission;
-  final String carburant;
-  final int places;
-
-  const _VehiculeData({
-    required this.id,
-    required this.name,
-    required this.agence,
-    required this.price,
-    required this.rating,
-    required this.reviews,
-    required this.imageUrl,
-    required this.tags,
-    required this.category,
-    required this.transmission,
-    required this.carburant,
-    required this.places,
-  });
 }

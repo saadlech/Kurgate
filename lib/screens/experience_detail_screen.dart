@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/kurgate_button.dart';
 import '../widgets/reviews_section.dart';
+import '../models/experience.dart';
 
 class ExperienceDetailScreen extends StatefulWidget {
   final String experienceId;
@@ -18,8 +19,8 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
   bool _isConfirming = false;
   int _currentPage = 0;
 
-  static const _expDataMap = {
-    'exp_001': _ExpInfo(
+  static final _expDataMap = {
+    'exp_001': Experience(
       name: 'Safari dans le Désert d\'Agafay',
       location: 'Désert d\'Agafay, Marrakech',
       rating: 4.8,
@@ -37,7 +38,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       capacite: 12,
       category: 'Aventure',
     ),
-    'exp_002': _ExpInfo(
+    'exp_002': Experience(
       name: 'Visite Guidée de la Médina',
       location: 'Médina, Marrakech',
       rating: 4.7,
@@ -55,7 +56,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       capacite: 15,
       category: 'Culture',
     ),
-    'exp_003': _ExpInfo(
+    'exp_003': Experience(
       name: 'Randonnée dans l\'Atlas',
       location: 'Vallée de l\'Ourika',
       rating: 4.9,
@@ -73,7 +74,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       capacite: 10,
       category: 'Nature',
     ),
-    'exp_004': _ExpInfo(
+    'exp_004': Experience(
       name: 'Cours de Cuisine Marocaine',
       location: 'Riad Cooking, Médina',
       rating: 4.8,
@@ -91,7 +92,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       capacite: 8,
       category: 'Gastronomie',
     ),
-    'exp_005': _ExpInfo(
+    'exp_005': Experience(
       name: 'Vol en Montgolfière',
       location: 'Palmeraie, Marrakech',
       rating: 4.9,
@@ -109,7 +110,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       capacite: 6,
       category: 'Aventure',
     ),
-    'exp_006': _ExpInfo(
+    'exp_006': Experience(
       name: 'Jardin Majorelle & YSL',
       location: 'Guéliz, Marrakech',
       rating: 4.7,
@@ -128,7 +129,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       category: 'Culture',
     ),
     // Casablanca experiences
-    'exp_casa_001': _ExpInfo(
+    'exp_casa_001': Experience(
       name: 'Visite Privée avec Mosquée Hassan II', location: 'Boulevard de la Corniche, Casablanca',
       rating: 4.9, reviews: 1245,
       description: 'Découvrez la plus grande mosquée d\'Afrique et la 3e au monde avec un guide privé. Chef-d\'œuvre architectural avec son minaret de 210m, son toit ouvrant et ses sols en marbre. Visite guidée personnalisée à travers les salles de prière, les hammams et les jardins.',
@@ -136,7 +137,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       images: ['assets/images/casablanca/experiences/mosquee_hassan/1.jpg', 'assets/images/casablanca/experiences/mosquee_hassan/2.jpg', 'assets/images/casablanca/experiences/mosquee_hassan/3.jpg', 'assets/images/casablanca/experiences/mosquee_hassan/4.jpg', 'assets/images/casablanca/experiences/mosquee_hassan/5.jpg', 'assets/images/casablanca/experiences/mosquee_hassan/6.jpg'],
       price: 53, duree: '4h', capacite: 15, category: 'Culture',
     ),
-    'exp_casa_002': _ExpInfo(
+    'exp_casa_002': Experience(
       name: 'Excursion Casablanca – Tanger en TGV', location: 'Gare Casa Voyageurs, Casablanca',
       rating: 4.7, reviews: 678,
       description: 'Voyagez en TGV Al Boraq vers Tanger et découvrez la perle du détroit. Visite de la Kasbah, balade en chameau sur la plage et exploration de la médina. Déjeuner traditionnel inclus avec vue sur le détroit de Gibraltar.',
@@ -144,7 +145,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       images: ['assets/images/casablanca/experiences/corniche_casa/1.jpg', 'assets/images/casablanca/experiences/corniche_casa/2.jpg', 'assets/images/casablanca/experiences/corniche_casa/3.jpg', 'assets/images/casablanca/experiences/corniche_casa/4.jpg', 'assets/images/casablanca/experiences/corniche_casa/5.jpg', 'assets/images/casablanca/experiences/corniche_casa/6.jpg'],
       price: 95, duree: '12h', capacite: 20, category: 'Aventure',
     ),
-    'exp_casa_003': _ExpInfo(
+    'exp_casa_003': Experience(
       name: 'Session Surf sur la Côte Atlantique', location: 'Côte Atlantique, Casablanca',
       rating: 4.8, reviews: 423,
       description: 'Domptez les vagues de l\'Atlantique avec des instructeurs certifiés. Session de surf adaptée à tous les niveaux sur les meilleurs spots de la côte casablancaise. Équipement fourni et photos souvenir incluses.',
@@ -152,7 +153,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       images: ['assets/images/casablanca/experiences/medina_casa/1.jpeg', 'assets/images/casablanca/experiences/medina_casa/2.jpg', 'assets/images/casablanca/experiences/medina_casa/3.jpg', 'assets/images/casablanca/experiences/medina_casa/4.jpeg'],
       price: 40, duree: '3h', capacite: 10, category: 'Aventure',
     ),
-    'exp_casa_004': _ExpInfo(
+    'exp_casa_004': Experience(
       name: 'Morocco Mall & Shopping', location: 'Morocco Mall, Casablanca',
       rating: 4.5, reviews: 892,
       description: 'Découvrez le plus grand mall d\'Afrique avec son aquarium géant, ses 600 boutiques et sa fontaine musicale. Shopping, loisirs et gastronomie dans un seul lieu.',
@@ -160,7 +161,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       images: ['assets/images/casablanca/experiences/morocco_mall/1.png', 'assets/images/casablanca/experiences/morocco_mall/2.png', 'assets/images/casablanca/experiences/morocco_mall/3.png'],
       price: 0, duree: '4h', capacite: 20, category: 'Aventure',
     ),
-    'exp_casa_005': _ExpInfo(
+    'exp_casa_005': Experience(
       name: 'Quartier Art Déco & Habous', location: 'Quartier Habous, Casablanca',
       rating: 4.8, reviews: 312,
       description: 'Découvrez le patrimoine Art Déco unique de Casablanca et le charmant quartier Habous, la "nouvelle médina" avec ses pâtisseries, ses olives et son artisanat traditionnel.',
@@ -168,7 +169,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
       images: ['assets/images/casablanca/experiences/art_deco_tour/1.png', 'assets/images/casablanca/experiences/art_deco_tour/2.png', 'assets/images/casablanca/experiences/art_deco_tour/3.png'],
       price: 20, duree: '3h', capacite: 12, category: 'Culture',
     ),
-    'exp_casa_006': _ExpInfo(
+    'exp_casa_006': Experience(
       name: 'Coucher de soleil en Yacht', location: 'Marina, Casablanca',
       rating: 4.9, reviews: 156,
       description: 'Embarquez pour une croisière au coucher du soleil sur l\'Atlantique. Champagne, canapés et musique d\'ambiance à bord d\'un yacht privatisé. Vue imprenable sur la skyline de Casablanca.',
@@ -178,7 +179,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
     ),
   };
 
-  _ExpInfo get _exp =>
+  Experience get _exp =>
       _expDataMap[widget.experienceId] ?? _expDataMap['exp_001']!;
   int get _totalPrice => _exp.price * _participants;
 
@@ -267,7 +268,7 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
                         itemBuilder: (context, i) => Image.asset(
                           _exp.images[i],
                           fit: BoxFit.cover,
-                          cacheWidth: 800,
+                          cacheWidth: 500,
                           gaplessPlayback: true,
                           errorBuilder: (_, _, _) =>
                               Container(color: const Color(0xFF2A2A2A)),
@@ -1213,24 +1214,4 @@ class _ReservationSheetState extends State<_ReservationSheet>
       ],
     ),
   );
-}
-
-class _ExpInfo {
-  final String name, location, description, imageUrl, duree, category;
-  final List<String> images;
-  final double rating;
-  final int reviews, price, capacite;
-  const _ExpInfo({
-    required this.name,
-    required this.location,
-    required this.rating,
-    required this.reviews,
-    required this.description,
-    required this.imageUrl,
-    required this.images,
-    required this.price,
-    required this.duree,
-    required this.capacite,
-    required this.category,
-  });
 }

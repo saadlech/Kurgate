@@ -21,7 +21,7 @@
 
 ## 📖 À Propos
 
-**Kurgate** est une application mobile de tourisme intelligente conçue comme Projet de Fin d'Études (PFE). Elle offre une expérience complète de découverte et de réservation touristique à Marrakech, avec une interface premium sombre et des interactions fluides.
+**Kurgate** est une application mobile de tourisme intelligente conçue comme Projet de Fin d'Études (PFE). Elle offre une expérience complète de découverte et de réservation touristique à Marrakech, avec une interface premium sombre et des interactions fluides..
 
 L'application permet aux utilisateurs d'explorer des hôtels, louer des véhicules, découvrir des expériences locales, trouver des restaurants authentiques et acheter des produits artisanaux — le tout depuis une interface unifiée et élégante.
 

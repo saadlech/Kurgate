@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/destination_provider.dart';
+import '../models/hotel.dart';
 
 class HotelListScreen extends ConsumerStatefulWidget {
   const HotelListScreen({super.key});
@@ -29,7 +30,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
 
   // Sample hotel data
   final _hotels = const [
-    _HotelData(
+    Hotel(
       id: 'hotel_002',
       name: 'La Mamounia',
       location: 'Hivernage, Marrakech',
@@ -49,7 +50,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       tags: ['5 étoiles', 'Spa', 'Restaurant'],
       category: 'Luxe',
     ),
-    _HotelData(
+    Hotel(
       id: 'hotel_003',
       name: 'Riad Yasmine',
       location: 'Medina, Marrakech',
@@ -69,7 +70,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       tags: ['Riad', 'Jardin', 'Terrasse'],
       category: 'Riad',
     ),
-    _HotelData(
+    Hotel(
       id: 'hotel_005',
       name: 'La Sultana',
       location: 'Kasbah, Marrakech',
@@ -89,7 +90,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       tags: ['5 étoiles', 'Spa', 'Terrasse'],
       category: 'Luxe',
     ),
-    _HotelData(
+    Hotel(
       id: 'hotel_006',
       name: 'Mandarin Oriental',
       location: 'Route de la Palmeraie, Marrakech',
@@ -109,7 +110,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       tags: ['5 étoiles', 'Villas', 'Piscine'],
       category: 'Luxe',
     ),
-    _HotelData(
+    Hotel(
       id: 'hotel_007',
       name: 'Riad Kniza',
       location: 'Medina, Marrakech',
@@ -129,7 +130,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       tags: ['Riad', 'Spa', 'Restaurant'],
       category: 'Riad',
     ),
-    _HotelData(
+    Hotel(
       id: 'hotel_008',
       name: 'Royal Mansour',
       location: 'Médina, Marrakech',
@@ -153,7 +154,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
 
   // Casablanca hotels
   final _hotelsCasa = const [
-    _HotelData(
+    Hotel(
       id: 'hotel_casa_001', name: 'Four Seasons Casablanca', location: 'Anfa Place, Casablanca',
       price: 380, rating: 4.9, reviews: 412,
       imageUrl: 'assets/images/casablanca/hotels/four_seasons_casa/1.jpg',
@@ -167,7 +168,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       ],
       tags: ['5 étoiles', 'Spa', 'Piscine'], category: 'Luxe',
     ),
-    _HotelData(
+    Hotel(
       id: 'hotel_casa_002', name: 'ONE Hotel Casablanca', location: 'Quartier Gauthier, Casablanca',
       price: 200, rating: 4.7, reviews: 312,
       imageUrl: 'assets/images/casablanca/hotels/le_doge_casa/1.jpg',
@@ -181,7 +182,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       ],
       tags: ['Moderne', 'Confort', 'Charme'], category: 'Business',
     ),
-    _HotelData(
+    Hotel(
       id: 'hotel_casa_003', name: 'Marriott Casablanca', location: 'Place des Nations Unies, Casablanca',
       price: 220, rating: 4.7, reviews: 534,
       imageUrl: 'assets/images/casablanca/hotels/hyatt_casa/1.jpg',
@@ -195,7 +196,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       ],
       tags: ['Business', 'Restaurant', 'Centre-ville'], category: 'Business',
     ),
-    _HotelData(
+    Hotel(
       id: 'hotel_casa_004', name: 'Kenzi Tower Hotel', location: 'Twin Center, Casablanca',
       price: 160, rating: 4.6, reviews: 389,
       imageUrl: 'assets/images/casablanca/hotels/kenzi_tower/1.jpg',
@@ -209,7 +210,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       ],
       tags: ['Panoramique', 'Business', 'Spa'], category: 'Business',
     ),
-    _HotelData(
+    Hotel(
       id: 'hotel_casa_005', name: 'Sofitel Casablanca', location: 'Tour Blanche, Casablanca',
       price: 300, rating: 4.8, reviews: 445,
       imageUrl: 'assets/images/casablanca/hotels/sofitel_casa/1.jpg',
@@ -223,7 +224,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       ],
       tags: ['5 étoiles', 'Gastronomie', 'Luxe'], category: 'Luxe',
     ),
-    _HotelData(
+    Hotel(
       id: 'hotel_casa_006', name: 'Barceló Anfa Casablanca', location: 'Boulevard de la Corniche, Casablanca',
       price: 180, rating: 4.5, reviews: 478,
       imageUrl: 'assets/images/casablanca/hotels/transatlantique/1.jpg',
@@ -286,12 +287,12 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
     super.dispose();
   }
 
-  List<_HotelData> get _activeHotels {
+  List<Hotel> get _activeHotels {
     final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
     return isCasa ? _hotelsCasa : _hotels;
   }
 
-  List<_HotelData> get _filteredHotels {
+  List<Hotel> get _filteredHotels {
     var base = _activeHotels;
     if (_selectedFilter != 0) {
       final filterName = _filters[_selectedFilter];
@@ -516,7 +517,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
 // ── Hotel Card ──
 class _HotelCard extends StatefulWidget {
   const _HotelCard({required this.hotel, required this.onTap});
-  final _HotelData hotel;
+  final Hotel hotel;
   final VoidCallback onTap;
 
   @override
@@ -568,7 +569,7 @@ class _HotelCardState extends State<_HotelCard> {
                             itemBuilder: (ctx, i) => Image.asset(
                               widget.hotel.imageAssets[i],
                               fit: BoxFit.cover,
-                              cacheWidth: 600,
+                              cacheWidth: 400,
                               gaplessPlayback: true,
                               errorBuilder: (ctx, e, s) => Container(
                                 color: const Color(0xFF2A2A2A),
@@ -585,7 +586,7 @@ class _HotelCardState extends State<_HotelCard> {
                         : Image.network(
                             widget.hotel.imageUrl,
                             fit: BoxFit.cover,
-                            cacheWidth: 600,
+                            cacheWidth: 400,
                             loadingBuilder: (ctx, child, progress) {
                               if (progress == null) return child;
                               return Container(
@@ -842,29 +843,3 @@ class _HotelCardState extends State<_HotelCard> {
   }
 }
 
-// ── Hotel data ──
-class _HotelData {
-  final String id;
-  final String name;
-  final String location;
-  final int price;
-  final double rating;
-  final int reviews;
-  final String imageUrl;
-  final List<String> imageAssets;
-  final List<String> tags;
-  final String category;
-
-  const _HotelData({
-    required this.id,
-    required this.name,
-    required this.location,
-    required this.price,
-    required this.rating,
-    required this.reviews,
-    required this.imageUrl,
-    this.imageAssets = const [],
-    required this.tags,
-    required this.category,
-  });
-}

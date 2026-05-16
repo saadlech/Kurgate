@@ -144,7 +144,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                     .addFeedback(widget.bookingId, rating, comment);
                 // Also save to global reviews so all users can see it
                 final user = ref.read(authProvider).currentUser;
-                if (user != null && booking != null) {
+                if (user != null) {
                   ref
                       .read(reviewProvider.notifier)
                       .addReview(
@@ -934,7 +934,7 @@ class _ExpiryFormatter extends TextInputFormatter {
     }
 
     // Validate & auto-correct month
-    if (text.length >= 1) {
+    if (text.isNotEmpty) {
       final firstDigit = int.parse(text[0]);
       // If first digit > 1, it can't start a valid month → prefix with 0
       if (firstDigit > 1) {

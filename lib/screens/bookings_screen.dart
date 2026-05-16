@@ -569,7 +569,7 @@ class _BookingCard extends StatelessWidget {
                   child: Image.asset(
                     booking.imageUrl,
                     fit: BoxFit.cover,
-                    cacheWidth: 600,
+                    cacheWidth: 400,
                     gaplessPlayback: true,
                     errorBuilder: (_, _, _) => Container(
                       color: const Color(0xFF2A2A2A),

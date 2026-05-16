@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
 import '../providers/booking_provider.dart';
+import '../models/vehicule.dart';
 import '../widgets/reviews_section.dart';
 
 class VehiculeDetailScreen extends ConsumerStatefulWidget {
@@ -25,8 +26,8 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
   final PageController _pageController = PageController();
   final _addressController = TextEditingController();
 
-  static const _vehiculeDataMap = {
-    'vehicule_001': _VehiculeInfo(
+  static final _vehiculeDataMap = {
+    'vehicule_001': Vehicule(
       name: 'Dacia Duster 2024',
       agence: 'Marrakech Auto Location',
       rating: 4.6,
@@ -46,7 +47,7 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
         'assets/images/vehicules/dacia_duster/4.png',
       ],
     ),
-    'vehicule_002': _VehiculeInfo(
+    'vehicule_002': Vehicule(
       name: 'Renault Clio 5',
       agence: 'Eco Rent Marrakech',
       rating: 4.4,
@@ -66,7 +67,7 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
         'assets/images/vehicules/renault_clio/4.png',
       ],
     ),
-    'vehicule_003': _VehiculeInfo(
+    'vehicule_003': Vehicule(
       name: 'Mercedes Classe E',
       agence: 'Premium Cars Marrakech',
       rating: 4.9,
@@ -86,7 +87,7 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
         'assets/images/vehicules/mercedes_classe_e/4.png',
       ],
     ),
-    'vehicule_004': _VehiculeInfo(
+    'vehicule_004': Vehicule(
       name: 'Toyota Hilux 4x4',
       agence: 'Desert Drive Location',
       rating: 4.8,
@@ -106,7 +107,7 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
         'assets/images/vehicules/toyota_hilux/4.png',
       ],
     ),
-    'vehicule_005': _VehiculeInfo(
+    'vehicule_005': Vehicule(
       name: 'Peugeot 3008',
       agence: 'City Cars Marrakech',
       rating: 4.7,
@@ -126,7 +127,7 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
         'assets/images/vehicules/peugeot_3008/4.png',
       ],
     ),
-    'vehicule_006': _VehiculeInfo(
+    'vehicule_006': Vehicule(
       name: 'Citroën Berlingo',
       agence: 'Marrakech Van Rental',
       rating: 4.3,
@@ -147,57 +148,129 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
       ],
     ),
     // Casablanca vehicles
-    'vehicule_casa_001': _VehiculeInfo(
-      name: 'Dacia Duster 2024', agence: 'Casablanca Auto Location',
-      rating: 4.6, reviews: 198,
-      description: 'Le SUV le plus populaire au Maroc. Parfait pour explorer Casablanca et sa région côtière. Robuste, confortable et économique.',
-      imageUrl: 'assets/images/vehicules/dacia_duster/1.png', price: 45,
-      transmission: 'Manuelle', carburant: 'Diesel', places: 5, category: 'SUV',
-      images: ['assets/images/vehicules/dacia_duster/1.png', 'assets/images/vehicules/dacia_duster/2.png', 'assets/images/vehicules/dacia_duster/3.png', 'assets/images/vehicules/dacia_duster/4.png'],
+    'vehicule_casa_001': Vehicule(
+      name: 'Dacia Duster 2024',
+      agence: 'Casablanca Auto Location',
+      rating: 4.6,
+      reviews: 198,
+      description:
+          'Le SUV le plus populaire au Maroc. Parfait pour explorer Casablanca et sa région côtière. Robuste, confortable et économique.',
+      imageUrl: 'assets/images/vehicules/dacia_duster/1.png',
+      price: 45,
+      transmission: 'Manuelle',
+      carburant: 'Diesel',
+      places: 5,
+      category: 'SUV',
+      images: [
+        'assets/images/vehicules/dacia_duster/1.png',
+        'assets/images/vehicules/dacia_duster/2.png',
+        'assets/images/vehicules/dacia_duster/3.png',
+        'assets/images/vehicules/dacia_duster/4.png',
+      ],
     ),
-    'vehicule_casa_002': _VehiculeInfo(
-      name: 'Renault Clio 5', agence: 'Eco Rent Casablanca',
-      rating: 4.4, reviews: 445,
-      description: 'La citadine idéale pour naviguer dans le trafic casablancais. Économique et agile, parfaite pour la ville.',
-      imageUrl: 'assets/images/vehicules/renault_clio/1.png', price: 22,
-      transmission: 'Manuelle', carburant: 'Essence', places: 5, category: 'Citadine',
-      images: ['assets/images/vehicules/renault_clio/1.png', 'assets/images/vehicules/renault_clio/2.png', 'assets/images/vehicules/renault_clio/3.png', 'assets/images/vehicules/renault_clio/4.png'],
+    'vehicule_casa_002': Vehicule(
+      name: 'Renault Clio 5',
+      agence: 'Eco Rent Casablanca',
+      rating: 4.4,
+      reviews: 445,
+      description:
+          'La citadine idéale pour naviguer dans le trafic casablancais. Économique et agile, parfaite pour la ville.',
+      imageUrl: 'assets/images/vehicules/renault_clio/1.png',
+      price: 22,
+      transmission: 'Manuelle',
+      carburant: 'Essence',
+      places: 5,
+      category: 'Citadine',
+      images: [
+        'assets/images/vehicules/renault_clio/1.png',
+        'assets/images/vehicules/renault_clio/2.png',
+        'assets/images/vehicules/renault_clio/3.png',
+        'assets/images/vehicules/renault_clio/4.png',
+      ],
     ),
-    'vehicule_casa_003': _VehiculeInfo(
-      name: 'Mercedes Classe E', agence: 'Premium Cars Casablanca',
-      rating: 4.9, reviews: 134,
-      description: 'L\'excellence pour les déplacements d\'affaires à Casablanca. Confort, prestige et technologie de pointe.',
-      imageUrl: 'assets/images/vehicules/mercedes_classe_e/1.png', price: 150,
-      transmission: 'Automatique', carburant: 'Essence', places: 5, category: 'Berline',
-      images: ['assets/images/vehicules/mercedes_classe_e/1.png', 'assets/images/vehicules/mercedes_classe_e/2.png', 'assets/images/vehicules/mercedes_classe_e/3.png', 'assets/images/vehicules/mercedes_classe_e/4.png'],
+    'vehicule_casa_003': Vehicule(
+      name: 'Mercedes Classe E',
+      agence: 'Premium Cars Casablanca',
+      rating: 4.9,
+      reviews: 134,
+      description:
+          'L\'excellence pour les déplacements d\'affaires à Casablanca. Confort, prestige et technologie de pointe.',
+      imageUrl: 'assets/images/vehicules/mercedes_classe_e/1.png',
+      price: 150,
+      transmission: 'Automatique',
+      carburant: 'Essence',
+      places: 5,
+      category: 'Berline',
+      images: [
+        'assets/images/vehicules/mercedes_classe_e/1.png',
+        'assets/images/vehicules/mercedes_classe_e/2.png',
+        'assets/images/vehicules/mercedes_classe_e/3.png',
+        'assets/images/vehicules/mercedes_classe_e/4.png',
+      ],
     ),
-    'vehicule_casa_004': _VehiculeInfo(
-      name: 'Toyota Hilux 4x4', agence: 'Casa 4x4 Rental',
-      rating: 4.8, reviews: 156,
-      description: 'Le pick-up tout-terrain par excellence. Idéal pour les excursions vers les plages sauvages et l\'arrière-pays casablancais.',
-      imageUrl: 'assets/images/vehicules/toyota_hilux/1.png', price: 120,
-      transmission: 'Automatique', carburant: 'Diesel', places: 5, category: 'SUV',
-      images: ['assets/images/vehicules/toyota_hilux/1.png', 'assets/images/vehicules/toyota_hilux/2.png', 'assets/images/vehicules/toyota_hilux/3.png', 'assets/images/vehicules/toyota_hilux/4.png'],
+    'vehicule_casa_004': Vehicule(
+      name: 'Toyota Hilux 4x4',
+      agence: 'Casa 4x4 Rental',
+      rating: 4.8,
+      reviews: 156,
+      description:
+          'Le pick-up tout-terrain par excellence. Idéal pour les excursions vers les plages sauvages et l\'arrière-pays casablancais.',
+      imageUrl: 'assets/images/vehicules/toyota_hilux/1.png',
+      price: 120,
+      transmission: 'Automatique',
+      carburant: 'Diesel',
+      places: 5,
+      category: 'SUV',
+      images: [
+        'assets/images/vehicules/toyota_hilux/1.png',
+        'assets/images/vehicules/toyota_hilux/2.png',
+        'assets/images/vehicules/toyota_hilux/3.png',
+        'assets/images/vehicules/toyota_hilux/4.png',
+      ],
     ),
-    'vehicule_casa_005': _VehiculeInfo(
-      name: 'Peugeot 3008', agence: 'City Cars Casablanca',
-      rating: 4.7, reviews: 267,
-      description: 'Le SUV familial parfait pour découvrir Casablanca et ses environs. i-Cockpit futuriste et confort exceptionnel.',
-      imageUrl: 'assets/images/vehicules/peugeot_3008/1.png', price: 65,
-      transmission: 'Automatique', carburant: 'Diesel', places: 5, category: 'SUV',
-      images: ['assets/images/vehicules/peugeot_3008/1.png', 'assets/images/vehicules/peugeot_3008/2.png', 'assets/images/vehicules/peugeot_3008/3.png', 'assets/images/vehicules/peugeot_3008/4.png'],
+    'vehicule_casa_005': Vehicule(
+      name: 'Peugeot 3008',
+      agence: 'City Cars Casablanca',
+      rating: 4.7,
+      reviews: 267,
+      description:
+          'Le SUV familial parfait pour découvrir Casablanca et ses environs. i-Cockpit futuriste et confort exceptionnel.',
+      imageUrl: 'assets/images/vehicules/peugeot_3008/1.png',
+      price: 65,
+      transmission: 'Automatique',
+      carburant: 'Diesel',
+      places: 5,
+      category: 'SUV',
+      images: [
+        'assets/images/vehicules/peugeot_3008/1.png',
+        'assets/images/vehicules/peugeot_3008/2.png',
+        'assets/images/vehicules/peugeot_3008/3.png',
+        'assets/images/vehicules/peugeot_3008/4.png',
+      ],
     ),
-    'vehicule_casa_006': _VehiculeInfo(
-      name: 'Citroën Berlingo', agence: 'Casablanca Van Rental',
-      rating: 4.3, reviews: 145,
-      description: 'Le véhicule utilitaire idéal pour les groupes visitant Casablanca. 7 places et coffre généreux.',
-      imageUrl: 'assets/images/vehicules/citroen_berlingo/1.png', price: 40,
-      transmission: 'Manuelle', carburant: 'Diesel', places: 7, category: 'Utilitaire',
-      images: ['assets/images/vehicules/citroen_berlingo/1.png', 'assets/images/vehicules/citroen_berlingo/2.png', 'assets/images/vehicules/citroen_berlingo/3.png', 'assets/images/vehicules/citroen_berlingo/4.png'],
+    'vehicule_casa_006': Vehicule(
+      name: 'Citroën Berlingo',
+      agence: 'Casablanca Van Rental',
+      rating: 4.3,
+      reviews: 145,
+      description:
+          'Le véhicule utilitaire idéal pour les groupes visitant Casablanca. 7 places et coffre généreux.',
+      imageUrl: 'assets/images/vehicules/citroen_berlingo/1.png',
+      price: 40,
+      transmission: 'Manuelle',
+      carburant: 'Diesel',
+      places: 7,
+      category: 'Utilitaire',
+      images: [
+        'assets/images/vehicules/citroen_berlingo/1.png',
+        'assets/images/vehicules/citroen_berlingo/2.png',
+        'assets/images/vehicules/citroen_berlingo/3.png',
+        'assets/images/vehicules/citroen_berlingo/4.png',
+      ],
     ),
   };
 
-  _VehiculeInfo get _vehicule =>
+  Vehicule get _vehicule =>
       _vehiculeDataMap[widget.vehiculeId] ?? _vehiculeDataMap['vehicule_001']!;
 
   int get _days => _returnDate.difference(_pickupDate).inDays;
@@ -256,8 +329,9 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
       setState(() {
         if (isPickup) {
           _pickupDate = picked;
-          if (_returnDate.isBefore(_pickupDate.add(const Duration(days: 1))))
+          if (_returnDate.isBefore(_pickupDate.add(const Duration(days: 1)))) {
             _returnDate = _pickupDate.add(const Duration(days: 1));
+          }
         } else {
           _returnDate = picked;
         }
@@ -270,12 +344,19 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
     setState(() => _isConfirming = true);
     final address = _addressController.text.trim();
     if (address.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Veuillez saisir une adresse de livraison.', style: TextStyle(fontFamily: 'DarkerGrotesque')),
-        backgroundColor: const Color(0xFFFF5252),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Veuillez saisir une adresse de livraison.',
+            style: TextStyle(fontFamily: 'DarkerGrotesque'),
+          ),
+          backgroundColor: const Color(0xFFFF5252),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
       setState(() => _isConfirming = false);
       return;
     }
@@ -297,7 +378,8 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
               .read(bookingProvider.notifier)
               .addBooking(
                 Reservation(
-                  idReservation: 'vehicule_${DateTime.now().millisecondsSinceEpoch}',
+                  idReservation:
+                      'vehicule_${DateTime.now().millisecondsSinceEpoch}',
                   itemId: widget.vehiculeId,
                   typeOffre: 'vehicule',
                   nom: _vehicule.name,
@@ -795,19 +877,37 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.08),
+                    ),
                   ),
                   child: TextField(
                     controller: _addressController,
-                    style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontFamily: 'DarkerGrotesque',
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
                     maxLines: 2,
                     minLines: 1,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.location_on_rounded, color: const Color(0xFFFF8C00).withValues(alpha: 0.6), size: 18),
+                      prefixIcon: Icon(
+                        Icons.location_on_rounded,
+                        color: const Color(0xFFFF8C00).withValues(alpha: 0.6),
+                        size: 18,
+                      ),
                       hintText: 'Ex: 123 Rue Mohamed V, Guéliz, Marrakech',
-                      hintStyle: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.15), fontSize: 13),
+                      hintStyle: TextStyle(
+                        fontFamily: 'DarkerGrotesque',
+                        color: Colors.white.withValues(alpha: 0.15),
+                        fontSize: 13,
+                      ),
                       border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
                     ),
                   ),
                 ),
@@ -1265,31 +1365,4 @@ class _ReservationSheetState extends State<_ReservationSheet>
       ],
     ),
   );
-}
-
-class _VehiculeInfo {
-  final String name,
-      agence,
-      description,
-      imageUrl,
-      transmission,
-      carburant,
-      category;
-  final double rating;
-  final int reviews, price, places;
-  final List<String> images;
-  const _VehiculeInfo({
-    required this.name,
-    required this.agence,
-    required this.rating,
-    required this.reviews,
-    required this.description,
-    required this.imageUrl,
-    required this.price,
-    required this.transmission,
-    required this.carburant,
-    required this.places,
-    required this.category,
-    required this.images,
-  });
 }

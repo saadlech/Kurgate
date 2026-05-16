@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/destination_provider.dart';
+import '../models/experience.dart';
 
 class ExperienceListScreen extends ConsumerStatefulWidget {
   const ExperienceListScreen({super.key});
@@ -32,7 +33,7 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
   ];
 
   final _experiences = const [
-    _ExperienceData(
+    Experience(
       id: 'exp_001',
       name: 'Safari dans le Désert d\'Agafay',
       location: 'Désert d\'Agafay, Marrakech',
@@ -45,7 +46,7 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
       duree: '6h',
       capacite: 12,
     ),
-    _ExperienceData(
+    Experience(
       id: 'exp_002',
       name: 'Visite Guidée de la Médina',
       location: 'Médina, Marrakech',
@@ -58,7 +59,7 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
       duree: '3h',
       capacite: 15,
     ),
-    _ExperienceData(
+    Experience(
       id: 'exp_003',
       name: 'Randonnée dans l\'Atlas',
       location: 'Vallée de l\'Ourika',
@@ -71,7 +72,7 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
       duree: '8h',
       capacite: 10,
     ),
-    _ExperienceData(
+    Experience(
       id: 'exp_004',
       name: 'Cours de Cuisine Marocaine',
       location: 'Riad Cooking, Médina',
@@ -84,7 +85,7 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
       duree: '4h',
       capacite: 8,
     ),
-    _ExperienceData(
+    Experience(
       id: 'exp_005',
       name: 'Vol en Montgolfière',
       location: 'Palmeraie, Marrakech',
@@ -97,7 +98,7 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
       duree: '2h',
       capacite: 6,
     ),
-    _ExperienceData(
+    Experience(
       id: 'exp_006',
       name: 'Jardin Majorelle & YSL',
       location: 'Guéliz, Marrakech',
@@ -114,37 +115,37 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
 
   // Casablanca experiences
   final _experiencesCasa = const [
-    _ExperienceData(
+    Experience(
       id: 'exp_casa_001', name: 'Visite Privée avec Mosquée Hassan II',
       location: 'Boulevard de la Corniche, Casablanca', price: 53, rating: 4.9, reviews: 1245,
       imageUrl: 'assets/images/casablanca/experiences/mosquee_hassan/1.jpg',
       tags: ['Monument', 'Guide Privé', 'Architecture'], category: 'Culture', duree: '4h', capacite: 15,
     ),
-    _ExperienceData(
+    Experience(
       id: 'exp_casa_002', name: 'Excursion Casablanca – Tanger en TGV',
       location: 'Gare Casa Voyageurs, Casablanca', price: 95, rating: 4.7, reviews: 678,
       imageUrl: 'assets/images/casablanca/experiences/corniche_casa/1.jpg',
       tags: ['TGV', 'Tanger', 'Chameau'], category: 'Aventure', duree: '12h', capacite: 20,
     ),
-    _ExperienceData(
+    Experience(
       id: 'exp_casa_003', name: 'Session Surf sur la Côte Atlantique',
       location: 'Côte Atlantique, Casablanca', price: 40, rating: 4.8, reviews: 423,
       imageUrl: 'assets/images/casablanca/experiences/medina_casa/1.jpeg',
       tags: ['Surf', 'Océan', 'Sport'], category: 'Aventure', duree: '3h', capacite: 10,
     ),
-    _ExperienceData(
+    Experience(
       id: 'exp_casa_004', name: 'Morocco Mall & Shopping',
       location: 'Morocco Mall, Casablanca', price: 0, rating: 4.5, reviews: 892,
       imageUrl: 'assets/images/casablanca/experiences/morocco_mall/1.png',
       tags: ['Shopping', 'Aquarium', 'Loisirs'], category: 'Aventure', duree: '4h', capacite: 20,
     ),
-    _ExperienceData(
+    Experience(
       id: 'exp_casa_005', name: 'Quartier Art Déco & Habous',
       location: 'Quartier Habous, Casablanca', price: 20, rating: 4.8, reviews: 312,
       imageUrl: 'assets/images/casablanca/experiences/art_deco_tour/1.png',
       tags: ['Architecture', 'Pâtisseries', 'Artisanat'], category: 'Culture', duree: '3h', capacite: 12,
     ),
-    _ExperienceData(
+    Experience(
       id: 'exp_casa_006', name: 'Coucher de soleil en Yacht',
       location: 'Marina, Casablanca', price: 200, rating: 4.9, reviews: 156,
       imageUrl: 'assets/images/casablanca/experiences/yacht_casa/1.png',
@@ -194,12 +195,12 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
     super.dispose();
   }
 
-  List<_ExperienceData> get _activeExperiences {
+  List<Experience> get _activeExperiences {
     final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
     return isCasa ? _experiencesCasa : _experiences;
   }
 
-  List<_ExperienceData> get _filteredExperiences {
+  List<Experience> get _filteredExperiences {
     var base = _activeExperiences;
     if (_selectedFilter != 0) {
       final filterName = _filters[_selectedFilter];
@@ -387,6 +388,7 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                     itemCount: _filteredExperiences.length,
+                    addAutomaticKeepAlives: false,
                     separatorBuilder: (_, _) => const SizedBox(height: 20),
                     itemBuilder: (context, index) {
                       final exp = _filteredExperiences[index];
@@ -415,7 +417,7 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
 
 class _ExperienceCard extends StatelessWidget {
   const _ExperienceCard({required this.experience, required this.onTap});
-  final _ExperienceData experience;
+  final Experience experience;
   final VoidCallback onTap;
 
   @override
@@ -442,7 +444,7 @@ class _ExperienceCard extends StatelessWidget {
                     child: Image.asset(
                       experience.imageUrl,
                       fit: BoxFit.cover,
-                      cacheWidth: 600,
+                      cacheWidth: 400,
                       gaplessPlayback: true,
                       errorBuilder: (ctx, e, s) => Container(
                         color: const Color(0xFF2A2A2A),
@@ -691,22 +693,3 @@ class _ExperienceCard extends StatelessWidget {
   );
 }
 
-class _ExperienceData {
-  final String id, name, location, imageUrl, category, duree;
-  final int price, reviews, capacite;
-  final double rating;
-  final List<String> tags;
-  const _ExperienceData({
-    required this.id,
-    required this.name,
-    required this.location,
-    required this.price,
-    required this.rating,
-    required this.reviews,
-    required this.imageUrl,
-    required this.tags,
-    required this.category,
-    required this.duree,
-    required this.capacite,
-  });
-}

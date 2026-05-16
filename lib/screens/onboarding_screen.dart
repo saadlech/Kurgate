@@ -72,6 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Image.asset(
                   'assets/images/branding/logo_full.png',
                   height: 60,
+                  cacheHeight: 120,
                 ),
               ),
             ),
@@ -187,6 +188,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ? Image.asset(
                             data.imageUrl,
                             fit: BoxFit.cover,
+                            cacheWidth: 400,
                           )
                         : Image.network(
                             data.imageUrl,
