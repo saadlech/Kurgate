@@ -78,18 +78,19 @@ class Reservation {
     }
   }
 
+  /// Convert to Map (for Supabase database)
   Map<String, dynamic> toMap() {
     return {
-      'idReservation': idReservation,
-      'itemId': itemId,
-      'typeOffre': typeOffre,
+      'id': idReservation,
+      'item_id': itemId,
+      'type_offre': typeOffre,
       'nom': nom,
-      'sousTitre': sousTitre,
-      'imageUrl': imageUrl,
-      'nbPersonnes': nbPersonnes,
-      'dateDebut': dateDebut.toIso8601String(),
-      'dateFin': dateFin.toIso8601String(),
-      'prixTotal': prixTotal,
+      'sous_titre': sousTitre,
+      'image_url': imageUrl,
+      'nb_personnes': nbPersonnes,
+      'date_debut': dateDebut.toIso8601String(),
+      'date_fin': dateFin.toIso8601String(),
+      'prix_total': prixTotal,
       'details': details,
       'statut': statut,
       'note': note,
@@ -97,23 +98,24 @@ class Reservation {
     };
   }
 
+  /// Create from Map (from Supabase database)
   factory Reservation.fromMap(Map<String, dynamic> map) {
     return Reservation(
-      idReservation: map['idReservation'] as String,
-      itemId: map['itemId'] as String? ?? '',
-      typeOffre: map['typeOffre'] as String? ?? '',
+      idReservation: map['id'] as String,
+      itemId: map['item_id'] as String? ?? '',
+      typeOffre: map['type_offre'] as String? ?? '',
       nom: map['nom'] as String? ?? '',
-      sousTitre: map['sousTitre'] as String? ?? '',
-      imageUrl: map['imageUrl'] as String? ?? '',
-      nbPersonnes: map['nbPersonnes'] as int? ?? 1,
-      dateDebut: DateTime.parse(map['dateDebut'] as String),
-      dateFin: DateTime.parse(map['dateFin'] as String),
-      prixTotal: map['prixTotal'] as int? ?? 0,
+      sousTitre: map['sous_titre'] as String? ?? '',
+      imageUrl: map['image_url'] as String? ?? '',
+      nbPersonnes: (map['nb_personnes'] as num?)?.toInt() ?? 1,
+      dateDebut: DateTime.parse(map['date_debut'] as String),
+      dateFin: DateTime.parse(map['date_fin'] as String),
+      prixTotal: (map['prix_total'] as num?)?.toInt() ?? 0,
       details: (map['details'] as Map<String, dynamic>?)
               ?.map((k, v) => MapEntry(k, v.toString())) ??
           {},
       statut: map['statut'] as String? ?? 'En attente',
-      note: map['note'] as int?,
+      note: (map['note'] as num?)?.toInt(),
       commentaire: map['commentaire'] as String?,
     );
   }

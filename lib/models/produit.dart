@@ -13,9 +13,10 @@ class Produit {
     required this.stock,
   });
 
+  /// Convert to Map (for Supabase database)
   Map<String, dynamic> toMap() {
     return {
-      'idProduit': idProduit,
+      'id': idProduit,
       'nom': nom,
       'prix': prix,
       'description': description,
@@ -23,13 +24,14 @@ class Produit {
     };
   }
 
+  /// Create from Map (from Supabase database)
   factory Produit.fromMap(Map<String, dynamic> map) {
     return Produit(
-      idProduit: map['idProduit'] as String,
+      idProduit: map['id'] as String,
       nom: map['nom'] as String,
-      prix: map['prix'] as int,
-      description: map['description'] as String,
-      stock: map['stock'] as int,
+      prix: (map['prix'] as num).toInt(),
+      description: map['description'] as String? ?? '',
+      stock: (map['stock'] as num?)?.toInt() ?? 0,
     );
   }
 

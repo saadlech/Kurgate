@@ -19,29 +19,31 @@ class Chambre {
     this.estDisponible = true,
   });
 
+  /// Convert to Map (for Supabase database)
   Map<String, dynamic> toMap() {
     return {
-      'idChambre': idChambre,
+      'id': idChambre,
       'numero': numero,
-      'typeChambre': typeChambre,
+      'type_chambre': typeChambre,
       'description': description,
       'capacite': capacite,
-      'prixParNuit': prixParNuit,
-      'imageUrl': imageUrl,
-      'estDisponible': estDisponible,
+      'prix_par_nuit': prixParNuit,
+      'image_url': imageUrl,
+      'est_disponible': estDisponible,
     };
   }
 
+  /// Create from Map (from Supabase database)
   factory Chambre.fromMap(Map<String, dynamic> map) {
     return Chambre(
-      idChambre: map['idChambre'] as String,
+      idChambre: map['id'] as String,
       numero: map['numero'] as String,
-      typeChambre: map['typeChambre'] as String,
+      typeChambre: map['type_chambre'] as String? ?? '',
       description: map['description'] as String? ?? '',
-      capacite: map['capacite'] as int,
-      prixParNuit: map['prixParNuit'] as int? ?? 0,
-      imageUrl: map['imageUrl'] as String,
-      estDisponible: map['estDisponible'] as bool? ?? true,
+      capacite: (map['capacite'] as num?)?.toInt() ?? 0,
+      prixParNuit: (map['prix_par_nuit'] as num?)?.toInt() ?? 0,
+      imageUrl: map['image_url'] as String? ?? '',
+      estDisponible: map['est_disponible'] as bool? ?? true,
     );
   }
 

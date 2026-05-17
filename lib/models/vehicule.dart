@@ -30,4 +30,44 @@ class Vehicule {
     this.description = '',
     this.images = const [],
   });
+
+  /// Convert to Map (for Supabase database)
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'agence': agence,
+      'price': price,
+      'rating': rating,
+      'reviews': reviews,
+      'image_url': imageUrl,
+      'tags': tags,
+      'category': category,
+      'transmission': transmission,
+      'carburant': carburant,
+      'places': places,
+      'description': description,
+      'images': images,
+    };
+  }
+
+  /// Create from Map (from Supabase database)
+  factory Vehicule.fromMap(Map<String, dynamic> map) {
+    return Vehicule(
+      id: map['id'] as String? ?? '',
+      name: map['name'] as String? ?? '',
+      agence: map['agence'] as String? ?? '',
+      price: (map['price'] as num?)?.toInt() ?? 0,
+      rating: (map['rating'] as num?)?.toDouble() ?? 0,
+      reviews: (map['reviews'] as num?)?.toInt() ?? 0,
+      imageUrl: map['image_url'] as String? ?? '',
+      tags: (map['tags'] as List<dynamic>?)?.cast<String>() ?? [],
+      category: map['category'] as String? ?? '',
+      transmission: map['transmission'] as String? ?? '',
+      carburant: map['carburant'] as String? ?? '',
+      places: (map['places'] as num?)?.toInt() ?? 0,
+      description: map['description'] as String? ?? '',
+      images: (map['images'] as List<dynamic>?)?.cast<String>() ?? [],
+    );
+  }
 }

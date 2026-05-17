@@ -17,27 +17,29 @@ class Avis {
     required this.datePublication,
   });
 
+  /// Convert to Map (for Supabase database)
   Map<String, dynamic> toMap() {
     return {
-      'idAvis': idAvis,
-      'itemId': itemId,
-      'userId': userId,
-      'userName': userName,
+      'id': idAvis,
+      'item_id': itemId,
+      'user_id': userId,
+      'user_name': userName,
       'note': note,
       'commentaire': commentaire,
-      'datePublication': datePublication.toIso8601String(),
+      'date_publication': datePublication.toIso8601String(),
     };
   }
 
+  /// Create from Map (from Supabase database)
   factory Avis.fromMap(Map<String, dynamic> map) {
     return Avis(
-      idAvis: map['idAvis'] as String,
-      itemId: map['itemId'] as String? ?? '',
-      userId: map['userId'] as String? ?? '',
-      userName: map['userName'] as String? ?? '',
-      note: map['note'] as int,
-      commentaire: map['commentaire'] as String,
-      datePublication: DateTime.parse(map['datePublication'] as String),
+      idAvis: map['id'] as String,
+      itemId: map['item_id'] as String? ?? '',
+      userId: map['user_id'] as String? ?? '',
+      userName: map['user_name'] as String? ?? '',
+      note: (map['note'] as num).toInt(),
+      commentaire: map['commentaire'] as String? ?? '',
+      datePublication: DateTime.parse(map['date_publication'] as String),
     );
   }
 

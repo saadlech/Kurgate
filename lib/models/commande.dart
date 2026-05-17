@@ -21,20 +21,22 @@ class Commande {
     statut = 'Annulée';
   }
 
+  /// Convert to Map (for Supabase database)
   Map<String, dynamic> toMap() {
     return {
-      'idCommande': idCommande,
-      'dateCommande': dateCommande.toIso8601String(),
-      'montantTotal': montantTotal,
+      'id': idCommande,
+      'date_commande': dateCommande.toIso8601String(),
+      'montant_total': montantTotal,
       'statut': statut,
     };
   }
 
+  /// Create from Map (from Supabase database)
   factory Commande.fromMap(Map<String, dynamic> map) {
     return Commande(
-      idCommande: map['idCommande'] as String,
-      dateCommande: DateTime.parse(map['dateCommande'] as String),
-      montantTotal: (map['montantTotal'] as num).toDouble(),
+      idCommande: map['id'] as String,
+      dateCommande: DateTime.parse(map['date_commande'] as String),
+      montantTotal: (map['montant_total'] as num).toDouble(),
       statut: map['statut'] as String? ?? 'En attente',
     );
   }

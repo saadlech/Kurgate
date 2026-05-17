@@ -13,23 +13,25 @@ class Destination {
     this.estDisponible = false,
   });
 
+  /// Convert to Map (for Supabase database)
   Map<String, dynamic> toMap() {
     return {
-      'idDestination': idDestination,
+      'id': idDestination,
       'nom': nom,
-      'sousTitre': sousTitre,
-      'imageUrl': imageUrl,
-      'estDisponible': estDisponible,
+      'sous_titre': sousTitre,
+      'image_url': imageUrl,
+      'est_disponible': estDisponible,
     };
   }
 
+  /// Create from Map (from Supabase database)
   factory Destination.fromMap(Map<String, dynamic> map) {
     return Destination(
-      idDestination: map['idDestination'] as String,
+      idDestination: map['id'] as String,
       nom: map['nom'] as String,
-      sousTitre: map['sousTitre'] as String,
-      imageUrl: map['imageUrl'] as String,
-      estDisponible: map['estDisponible'] as bool? ?? false,
+      sousTitre: map['sous_titre'] as String? ?? '',
+      imageUrl: map['image_url'] as String? ?? '',
+      estDisponible: map['est_disponible'] as bool? ?? false,
     );
   }
 

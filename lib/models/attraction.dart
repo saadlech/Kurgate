@@ -21,13 +21,14 @@ class Attraction {
     required this.lon,
   });
 
+  /// Convert to Map (for Supabase database)
   Map<String, dynamic> toMap() {
     return {
-      'idAttraction': idAttraction,
+      'id': idAttraction,
       'nom': nom,
       'type': type,
       'description': description,
-      'imageUrl': imageUrl,
+      'image_url': imageUrl,
       'note': note,
       'location': location,
       'lat': lat,
@@ -35,15 +36,16 @@ class Attraction {
     };
   }
 
+  /// Create from Map (from Supabase database)
   factory Attraction.fromMap(Map<String, dynamic> map) {
     return Attraction(
-      idAttraction: map['idAttraction'] as String,
+      idAttraction: map['id'] as String,
       nom: map['nom'] as String,
-      type: map['type'] as String,
-      description: map['description'] as String,
-      imageUrl: map['imageUrl'] as String,
+      type: map['type'] as String? ?? '',
+      description: map['description'] as String? ?? '',
+      imageUrl: map['image_url'] as String? ?? '',
       note: (map['note'] as num?)?.toDouble() ?? 0.0,
-      location: map['location'] as String,
+      location: map['location'] as String? ?? '',
       lat: (map['lat'] as num).toDouble(),
       lon: (map['lon'] as num).toDouble(),
     );
