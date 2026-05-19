@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/destination_provider.dart';
+import '../providers/catalog_providers.dart';
 import '../models/hotel.dart';
 
 class HotelListScreen extends ConsumerStatefulWidget {
@@ -26,219 +27,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
   final List<Animation<double>> _cardFades = [];
   final List<Animation<Offset>> _cardSlides = [];
 
-  final _filters = const ['Tous', 'Riad', 'Luxe', 'Resort', 'Budget'];
-
-  // Sample hotel data
-  final _hotels = const [
-    Hotel(
-      id: 'hotel_002',
-      name: 'La Mamounia',
-      location: 'Hivernage, Marrakech',
-      price: 350,
-      rating: 4.9,
-      reviews: 512,
-      imageUrl:
-          'https://images.unsplash.com/photo-1548018560-c7196e4f6bec?w=600&q=80',
-      imageAssets: [
-        'assets/images/marrakech/hotels/la_mamounia/1.png',
-        'assets/images/marrakech/hotels/la_mamounia/2.png',
-        'assets/images/marrakech/hotels/la_mamounia/3.png',
-        'assets/images/marrakech/hotels/la_mamounia/4.png',
-        'assets/images/marrakech/hotels/la_mamounia/5.png',
-        'assets/images/marrakech/hotels/la_mamounia/6.png',
-      ],
-      tags: ['5 étoiles', 'Spa', 'Restaurant'],
-      category: 'Luxe',
-    ),
-    Hotel(
-      id: 'hotel_003',
-      name: 'Riad Yasmine',
-      location: 'Medina, Marrakech',
-      price: 95,
-      rating: 4.6,
-      reviews: 187,
-      imageUrl:
-          'https://images.unsplash.com/photo-1591378603223-e15b45a81640?w=600&q=80',
-      imageAssets: [
-        'assets/images/marrakech/hotels/riad_yasmine/1.png',
-        'assets/images/marrakech/hotels/riad_yasmine/2.png',
-        'assets/images/marrakech/hotels/riad_yasmine/3.png',
-        'assets/images/marrakech/hotels/riad_yasmine/4.png',
-        'assets/images/marrakech/hotels/riad_yasmine/5.png',
-        'assets/images/marrakech/hotels/riad_yasmine/6.png',
-      ],
-      tags: ['Riad', 'Jardin', 'Terrasse'],
-      category: 'Riad',
-    ),
-    Hotel(
-      id: 'hotel_005',
-      name: 'La Sultana',
-      location: 'Kasbah, Marrakech',
-      price: 280,
-      rating: 4.8,
-      reviews: 389,
-      imageUrl:
-          'https://images.unsplash.com/photo-1548018560-c7196e4f6bec?w=600&q=80',
-      imageAssets: [
-        'assets/images/marrakech/hotels/la_sultana/1.png',
-        'assets/images/marrakech/hotels/la_sultana/2.png',
-        'assets/images/marrakech/hotels/la_sultana/3.png',
-        'assets/images/marrakech/hotels/la_sultana/4.png',
-        'assets/images/marrakech/hotels/la_sultana/5.png',
-        'assets/images/marrakech/hotels/la_sultana/6.png',
-      ],
-      tags: ['5 étoiles', 'Spa', 'Terrasse'],
-      category: 'Luxe',
-    ),
-    Hotel(
-      id: 'hotel_006',
-      name: 'Mandarin Oriental',
-      location: 'Route de la Palmeraie, Marrakech',
-      price: 420,
-      rating: 4.9,
-      reviews: 456,
-      imageUrl:
-          'https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=600&q=80',
-      imageAssets: [
-        'assets/images/marrakech/hotels/mandarin_oriental/1.png',
-        'assets/images/marrakech/hotels/mandarin_oriental/2.png',
-        'assets/images/marrakech/hotels/mandarin_oriental/3.png',
-        'assets/images/marrakech/hotels/mandarin_oriental/4.png',
-        'assets/images/marrakech/hotels/mandarin_oriental/5.png',
-        'assets/images/marrakech/hotels/mandarin_oriental/6.png',
-      ],
-      tags: ['5 étoiles', 'Villas', 'Piscine'],
-      category: 'Luxe',
-    ),
-    Hotel(
-      id: 'hotel_007',
-      name: 'Riad Kniza',
-      location: 'Medina, Marrakech',
-      price: 200,
-      rating: 4.7,
-      reviews: 278,
-      imageUrl:
-          'https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=600&q=80',
-      imageAssets: [
-        'assets/images/marrakech/hotels/riad_kniza/1.png',
-        'assets/images/marrakech/hotels/riad_kniza/2.png',
-        'assets/images/marrakech/hotels/riad_kniza/3.png',
-        'assets/images/marrakech/hotels/riad_kniza/4.png',
-        'assets/images/marrakech/hotels/riad_kniza/5.png',
-        'assets/images/marrakech/hotels/riad_kniza/6.png',
-      ],
-      tags: ['Riad', 'Spa', 'Restaurant'],
-      category: 'Riad',
-    ),
-    Hotel(
-      id: 'hotel_008',
-      name: 'Royal Mansour',
-      location: 'Médina, Marrakech',
-      price: 550,
-      rating: 4.9,
-      reviews: 623,
-      imageUrl:
-          'https://images.unsplash.com/photo-1548018560-c7196e4f6bec?w=600&q=80',
-      imageAssets: [
-        'assets/images/marrakech/hotels/royal_mansour/1.png',
-        'assets/images/marrakech/hotels/royal_mansour/2.png',
-        'assets/images/marrakech/hotels/royal_mansour/3.png',
-        'assets/images/marrakech/hotels/royal_mansour/4.png',
-        'assets/images/marrakech/hotels/royal_mansour/5.png',
-        'assets/images/marrakech/hotels/royal_mansour/6.png',
-      ],
-      tags: ['5 étoiles', 'Palace', 'Spa'],
-      category: 'Luxe',
-    ),
-  ];
-
-  // Casablanca hotels
-  final _hotelsCasa = const [
-    Hotel(
-      id: 'hotel_casa_001', name: 'Four Seasons Casablanca', location: 'Anfa Place, Casablanca',
-      price: 380, rating: 4.9, reviews: 412,
-      imageUrl: 'assets/images/casablanca/hotels/four_seasons_casa/1.jpg',
-      imageAssets: [
-        'assets/images/casablanca/hotels/four_seasons_casa/1.jpg',
-        'assets/images/casablanca/hotels/four_seasons_casa/2.jpg',
-        'assets/images/casablanca/hotels/four_seasons_casa/3.jpg',
-        'assets/images/casablanca/hotels/four_seasons_casa/4.jpg',
-        'assets/images/casablanca/hotels/four_seasons_casa/5.jpg',
-        'assets/images/casablanca/hotels/four_seasons_casa/6.jpg',
-      ],
-      tags: ['5 étoiles', 'Spa', 'Piscine'], category: 'Luxe',
-    ),
-    Hotel(
-      id: 'hotel_casa_002', name: 'ONE Hotel Casablanca', location: 'Quartier Gauthier, Casablanca',
-      price: 200, rating: 4.7, reviews: 312,
-      imageUrl: 'assets/images/casablanca/hotels/le_doge_casa/1.jpg',
-      imageAssets: [
-        'assets/images/casablanca/hotels/le_doge_casa/1.jpg',
-        'assets/images/casablanca/hotels/le_doge_casa/2.jpg',
-        'assets/images/casablanca/hotels/le_doge_casa/3.jpg',
-        'assets/images/casablanca/hotels/le_doge_casa/4.jpg',
-        'assets/images/casablanca/hotels/le_doge_casa/5.jpg',
-        'assets/images/casablanca/hotels/le_doge_casa/6.jpg',
-      ],
-      tags: ['Moderne', 'Confort', 'Charme'], category: 'Business',
-    ),
-    Hotel(
-      id: 'hotel_casa_003', name: 'Marriott Casablanca', location: 'Place des Nations Unies, Casablanca',
-      price: 220, rating: 4.7, reviews: 534,
-      imageUrl: 'assets/images/casablanca/hotels/hyatt_casa/1.jpg',
-      imageAssets: [
-        'assets/images/casablanca/hotels/hyatt_casa/1.jpg',
-        'assets/images/casablanca/hotels/hyatt_casa/2.jpg',
-        'assets/images/casablanca/hotels/hyatt_casa/3.jpg',
-        'assets/images/casablanca/hotels/hyatt_casa/4.jpg',
-        'assets/images/casablanca/hotels/hyatt_casa/5.jpg',
-        'assets/images/casablanca/hotels/hyatt_casa/6.jpg',
-      ],
-      tags: ['Business', 'Restaurant', 'Centre-ville'], category: 'Business',
-    ),
-    Hotel(
-      id: 'hotel_casa_004', name: 'Kenzi Tower Hotel', location: 'Twin Center, Casablanca',
-      price: 160, rating: 4.6, reviews: 389,
-      imageUrl: 'assets/images/casablanca/hotels/kenzi_tower/1.jpg',
-      imageAssets: [
-        'assets/images/casablanca/hotels/kenzi_tower/1.jpg',
-        'assets/images/casablanca/hotels/kenzi_tower/2.jpg',
-        'assets/images/casablanca/hotels/kenzi_tower/3.jpg',
-        'assets/images/casablanca/hotels/kenzi_tower/4.jpg',
-        'assets/images/casablanca/hotels/kenzi_tower/5.jpg',
-        'assets/images/casablanca/hotels/kenzi_tower/6.jpg',
-      ],
-      tags: ['Panoramique', 'Business', 'Spa'], category: 'Business',
-    ),
-    Hotel(
-      id: 'hotel_casa_005', name: 'Sofitel Casablanca', location: 'Tour Blanche, Casablanca',
-      price: 300, rating: 4.8, reviews: 445,
-      imageUrl: 'assets/images/casablanca/hotels/sofitel_casa/1.jpg',
-      imageAssets: [
-        'assets/images/casablanca/hotels/sofitel_casa/1.jpg',
-        'assets/images/casablanca/hotels/sofitel_casa/2.jpg',
-        'assets/images/casablanca/hotels/sofitel_casa/3.jpg',
-        'assets/images/casablanca/hotels/sofitel_casa/4.jpg',
-        'assets/images/casablanca/hotels/sofitel_casa/5.jpg',
-        'assets/images/casablanca/hotels/sofitel_casa/6.jpg',
-      ],
-      tags: ['5 étoiles', 'Gastronomie', 'Luxe'], category: 'Luxe',
-    ),
-    Hotel(
-      id: 'hotel_casa_006', name: 'Barceló Anfa Casablanca', location: 'Boulevard de la Corniche, Casablanca',
-      price: 180, rating: 4.5, reviews: 478,
-      imageUrl: 'assets/images/casablanca/hotels/transatlantique/1.jpg',
-      imageAssets: [
-        'assets/images/casablanca/hotels/transatlantique/1.jpg',
-        'assets/images/casablanca/hotels/transatlantique/2.jpg',
-        'assets/images/casablanca/hotels/transatlantique/3.jpg',
-        'assets/images/casablanca/hotels/transatlantique/4.jpg',
-        'assets/images/casablanca/hotels/transatlantique/5.jpg',
-        'assets/images/casablanca/hotels/transatlantique/6.jpg',
-      ],
-      tags: ['Bord de mer', 'Business', 'Moderne'], category: 'Business',
-    ),
-  ];
+  final _filters = const ['Tous', 'Riad', 'Luxe', 'Resort', 'Budget', 'Business'];
 
   @override
   void initState() {
@@ -249,15 +38,13 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
       duration: const Duration(milliseconds: 1000),
     )..forward();
 
-    // Pre-compute all animations once
     _headerFade = _makeFade(0.0, 0.3);
     _headerSlide = _makeSlide(0.0, 0.3);
     _searchFade = _makeFade(0.1, 0.4);
     _filterFade = _makeFade(0.15, 0.5);
 
-    // Pre-compute card animations for all hotels
-    for (int i = 0; i < _hotels.length; i++) {
-      final delay = 0.2 + (i * 0.12);
+    for (int i = 0; i < 12; i++) {
+      final delay = 0.2 + (i * 0.08);
       final end = (delay + 0.3).clamp(0.0, 1.0);
       _cardFades.add(_makeFade(delay, end));
       _cardSlides.add(_makeSlide(delay, end));
@@ -287,13 +74,8 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
     super.dispose();
   }
 
-  List<Hotel> get _activeHotels {
-    final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
-    return isCasa ? _hotelsCasa : _hotels;
-  }
-
-  List<Hotel> get _filteredHotels {
-    var base = _activeHotels;
+  List<Hotel> _filterHotels(List<Hotel> allHotels) {
+    var base = allHotels;
     if (_selectedFilter != 0) {
       final filterName = _filters[_selectedFilter];
       base = base.where((h) => h.category == filterName).toList();
@@ -305,6 +87,9 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
 
   @override
   Widget build(BuildContext context) {
+    final destId = ref.watch(selectedDestinationProvider).idDestination;
+    final hotelsAsync = ref.watch(hotelsProvider(destId));
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: AnimatedBuilder(
@@ -346,7 +131,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
                                 ),
                               ),
                               Text(
-                                '${ref.watch(selectedDestinationProvider).nom} · ${_filteredHotels.length} établissements',
+                                '${ref.watch(selectedDestinationProvider).nom}',
                                 style: TextStyle(
                                   fontFamily: 'DarkerGrotesque',
                                   color: Colors.white.withValues(alpha: 0.4),
@@ -480,27 +265,42 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
 
                 const SizedBox(height: 16),
 
-                // Hotel list
+                // Hotel list — from Supabase
                 Expanded(
-                  child: ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                    itemCount: _filteredHotels.length,
-                    addAutomaticKeepAlives: false,
-                    separatorBuilder: (_, _) => const SizedBox(height: 20),
-                    itemBuilder: (context, index) {
-                      final hotel = _filteredHotels[index];
-                      final fadeIdx = index.clamp(0, _cardFades.length - 1);
-
-                      return FadeTransition(
-                        opacity: _cardFades[fadeIdx],
-                        child: SlideTransition(
-                          position: _cardSlides[fadeIdx],
-                          child: _HotelCard(
-                            hotel: hotel,
-                            onTap: () => context.push('/hotel/${hotel.id}'),
-                          ),
-                        ),
+                  child: hotelsAsync.when(
+                    loading: () => const Center(
+                      child: CircularProgressIndicator(color: Color(0xFFFF8C00)),
+                    ),
+                    error: (e, _) => Center(
+                      child: Text('Erreur: $e', style: TextStyle(color: Colors.white.withValues(alpha: 0.5))),
+                    ),
+                    data: (allHotels) {
+                      final filtered = _filterHotels(allHotels);
+                      if (filtered.isEmpty) {
+                        return Center(
+                          child: Text('Aucun hôtel trouvé', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 16)),
+                        );
+                      }
+                      return ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                        itemCount: filtered.length,
+                        addAutomaticKeepAlives: false,
+                        separatorBuilder: (_, _) => const SizedBox(height: 20),
+                        itemBuilder: (context, index) {
+                          final hotel = filtered[index];
+                          final fadeIdx = index.clamp(0, _cardFades.length - 1);
+                          return FadeTransition(
+                            opacity: _cardFades[fadeIdx],
+                            child: SlideTransition(
+                              position: _cardSlides[fadeIdx],
+                              child: _HotelCard(
+                                hotel: hotel,
+                                onTap: () => context.push('/hotel/${hotel.id}'),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
@@ -528,9 +328,9 @@ class _HotelCardState extends State<_HotelCard> {
   int _currentPage = 0;
   final PageController _pageController = PageController();
 
-  bool get _hasGallery => widget.hotel.imageAssets.isNotEmpty;
+  bool get _hasGallery => widget.hotel.images.isNotEmpty;
   int get _imageCount =>
-      _hasGallery ? widget.hotel.imageAssets.length : 1;
+      _hasGallery ? widget.hotel.images.length : 1;
 
   @override
   void dispose() {
@@ -567,7 +367,7 @@ class _HotelCardState extends State<_HotelCard> {
                             onPageChanged: (i) =>
                                 setState(() => _currentPage = i),
                             itemBuilder: (ctx, i) => Image.asset(
-                              widget.hotel.imageAssets[i],
+                              widget.hotel.images[i],
                               fit: BoxFit.cover,
                               cacheWidth: 400,
                               gaplessPlayback: true,

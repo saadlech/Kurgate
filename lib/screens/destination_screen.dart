@@ -4,14 +4,14 @@ import 'package:go_router/go_router.dart';
 import '../models/destination.dart';
 import '../providers/destination_provider.dart';
 
-class DestinationScreen extends StatefulWidget {
+class DestinationScreen extends ConsumerStatefulWidget {
   const DestinationScreen({super.key});
 
   @override
-  State<DestinationScreen> createState() => _DestinationScreenState();
+  ConsumerState<DestinationScreen> createState() => _DestinationScreenState();
 }
 
-class _DestinationScreenState extends State<DestinationScreen>
+class _DestinationScreenState extends ConsumerState<DestinationScreen>
     with TickerProviderStateMixin {
   late AnimationController _entryController;
   late AnimationController _pulseController;
@@ -23,7 +23,8 @@ class _DestinationScreenState extends State<DestinationScreen>
   final List<Animation<double>> _cardFades = [];
   final List<Animation<Offset>> _cardSlides = [];
 
-  final _destinations = Destination.cities;
+  // Use static list for animation count (always 4 cities)
+  final _animationCount = Destination.cities.length;
 
   @override
   void initState() {
@@ -61,7 +62,7 @@ class _DestinationScreenState extends State<DestinationScreen>
     );
 
     // Staggered card animations — computed once in initState
-    for (int i = 0; i < _destinations.length; i++) {
+    for (int i = 0; i < _animationCount; i++) {
       final start = 0.15 + (i * 0.12);
       final end = (start + 0.30).clamp(0.0, 1.0);
 
@@ -98,6 +99,9 @@ class _DestinationScreenState extends State<DestinationScreen>
 
   @override
   Widget build(BuildContext context) {
+    final destinationsAsync = ref.watch(destinationsProvider);
+    final destinations = destinationsAsync.valueOrNull ?? Destination.cities;
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: Stack(
@@ -220,11 +224,11 @@ class _DestinationScreenState extends State<DestinationScreen>
                       child: ListView.separated(
                         physics: const BouncingScrollPhysics(),
                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-                        itemCount: _destinations.length,
+                        itemCount: destinations.length,
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 16),
                         itemBuilder: (context, index) {
-                          final dest = _destinations[index];
+                          final dest = destinations[index];
                           return FadeTransition(
                             opacity: _cardFades[index],
                             child: SlideTransition(

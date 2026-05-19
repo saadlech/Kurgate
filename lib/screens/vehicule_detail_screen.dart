@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
 import '../providers/booking_provider.dart';
+import '../providers/catalog_providers.dart';
 import '../models/vehicule.dart';
 import '../widgets/reviews_section.dart';
 
@@ -270,8 +271,10 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
     ),
   };
 
+  Vehicule? _vehiculeOverride;
+
   Vehicule get _vehicule =>
-      _vehiculeDataMap[widget.vehiculeId] ?? _vehiculeDataMap['vehicule_001']!;
+      _vehiculeOverride ?? _vehiculeDataMap[widget.vehiculeId] ?? _vehiculeDataMap['vehicule_001']!;
 
   int get _days => _returnDate.difference(_pickupDate).inDays;
   int get _basePrice => _vehicule.price * _days;
@@ -409,6 +412,11 @@ class _VehiculeDetailScreenState extends ConsumerState<VehiculeDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final vehiculeAsync = ref.watch(vehiculeByIdProvider(widget.vehiculeId));
+    if (vehiculeAsync.valueOrNull != null) {
+      _vehiculeOverride = vehiculeAsync.valueOrNull;
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: Stack(

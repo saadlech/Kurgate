@@ -1,8 +1,24 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/avis.dart';
+import '../services/supabase_service.dart';
 
 class ReviewNotifier extends StateNotifier<List<Avis>> {
   ReviewNotifier() : super(_seedReviews);
+
+  /// Load reviews for a specific item from Supabase
+  /// Called by ReviewsSection when it mounts
+  Future<void> loadForItem(String itemId) async {
+    try {
+      final remote = await SupabaseService.fetchAvisForItem(itemId);
+      if (remote.isNotEmpty) {
+        // Merge: remove local seeds for this item, replace with remote
+        final others = state.where((r) => r.itemId != itemId).toList();
+        state = [...remote, ...others];
+      }
+    } catch (_) {
+      // Keep seed/local data on failure
+    }
+  }
 
   /// Add a review (one per user per item)
   bool addReview(Avis avis) {
@@ -11,6 +27,8 @@ class ReviewNotifier extends StateNotifier<List<Avis>> {
     );
     if (exists) return false;
     state = [avis, ...state];
+    // Persist to Supabase in the background
+    _createRemote(avis);
     return true;
   }
 
@@ -27,6 +45,16 @@ class ReviewNotifier extends StateNotifier<List<Avis>> {
     final reviews = reviewsFor(itemId);
     if (reviews.isEmpty) return 0;
     return reviews.map((r) => r.note).reduce((a, b) => a + b) / reviews.length;
+  }
+
+  // ── Supabase persistence (fire-and-forget) ──
+
+  Future<void> _createRemote(Avis avis) async {
+    try {
+      await SupabaseService.createAvis(avis);
+    } catch (_) {
+      // Local state is source of truth during session
+    }
   }
 }
 

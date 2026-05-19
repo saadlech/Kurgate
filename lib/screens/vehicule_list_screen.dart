@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/destination_provider.dart';
+import '../providers/catalog_providers.dart';
 import '../models/vehicule.dart';
 
 class VehiculeListScreen extends ConsumerStatefulWidget {
@@ -28,139 +29,6 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
 
   final _filters = const ['Tous', 'SUV', 'Berline', 'Citadine', 'Utilitaire'];
 
-  // Real vehicle data — popular rental cars in Morocco
-  final _vehicules = const [
-    Vehicule(
-      id: 'vehicule_001',
-      name: 'Dacia Duster 2024',
-      agence: 'Marrakech Auto Location',
-      price: 45,
-      rating: 4.6,
-      reviews: 234,
-      imageUrl: 'assets/images/vehicules/dacia_duster/1.png',
-      tags: ['SUV', 'Diesel', 'Populaire'],
-      category: 'SUV',
-      transmission: 'Manuelle',
-      carburant: 'Diesel',
-      places: 5,
-    ),
-    Vehicule(
-      id: 'vehicule_002',
-      name: 'Renault Clio 5',
-      agence: 'Eco Rent Marrakech',
-      price: 22,
-      rating: 4.4,
-      reviews: 512,
-      imageUrl: 'assets/images/vehicules/renault_clio/1.png',
-      tags: ['Citadine', 'Essence', 'Économique'],
-      category: 'Citadine',
-      transmission: 'Manuelle',
-      carburant: 'Essence',
-      places: 5,
-    ),
-    Vehicule(
-      id: 'vehicule_003',
-      name: 'Mercedes Classe E',
-      agence: 'Premium Cars Marrakech',
-      price: 150,
-      rating: 4.9,
-      reviews: 156,
-      imageUrl: 'assets/images/vehicules/mercedes_classe_e/1.png',
-      tags: ['Berline', 'Automatique', 'Luxe'],
-      category: 'Berline',
-      transmission: 'Automatique',
-      carburant: 'Essence',
-      places: 5,
-    ),
-    Vehicule(
-      id: 'vehicule_004',
-      name: 'Toyota Hilux 4x4',
-      agence: 'Desert Drive Location',
-      price: 120,
-      rating: 4.8,
-      reviews: 189,
-      imageUrl: 'assets/images/vehicules/toyota_hilux/1.png',
-      tags: ['SUV', '4x4', 'Tout-terrain'],
-      category: 'SUV',
-      transmission: 'Automatique',
-      carburant: 'Diesel',
-      places: 5,
-    ),
-    Vehicule(
-      id: 'vehicule_005',
-      name: 'Peugeot 3008',
-      agence: 'City Cars Marrakech',
-      price: 65,
-      rating: 4.7,
-      reviews: 298,
-      imageUrl: 'assets/images/vehicules/peugeot_3008/1.png',
-      tags: ['SUV', 'Diesel', 'Familial'],
-      category: 'SUV',
-      transmission: 'Automatique',
-      carburant: 'Diesel',
-      places: 5,
-    ),
-    Vehicule(
-      id: 'vehicule_006',
-      name: 'Citroën Berlingo',
-      agence: 'Marrakech Van Rental',
-      price: 40,
-      rating: 4.3,
-      reviews: 167,
-      imageUrl: 'assets/images/vehicules/citroen_berlingo/1.png',
-      tags: ['Utilitaire', 'Diesel', '7 places'],
-      category: 'Utilitaire',
-      transmission: 'Manuelle',
-      carburant: 'Diesel',
-      places: 7,
-    ),
-  ];
-
-  // Casablanca vehicles — same cars, local agencies
-  final _vehiculesCasa = const [
-    Vehicule(
-      id: 'vehicule_casa_001', name: 'Dacia Duster 2024', agence: 'Casablanca Auto Location',
-      price: 45, rating: 4.6, reviews: 198,
-      imageUrl: 'assets/images/vehicules/dacia_duster/1.png',
-      tags: ['SUV', 'Diesel', 'Populaire'], category: 'SUV',
-      transmission: 'Manuelle', carburant: 'Diesel', places: 5,
-    ),
-    Vehicule(
-      id: 'vehicule_casa_002', name: 'Renault Clio 5', agence: 'Eco Rent Casablanca',
-      price: 22, rating: 4.4, reviews: 445,
-      imageUrl: 'assets/images/vehicules/renault_clio/1.png',
-      tags: ['Citadine', 'Essence', 'Économique'], category: 'Citadine',
-      transmission: 'Manuelle', carburant: 'Essence', places: 5,
-    ),
-    Vehicule(
-      id: 'vehicule_casa_003', name: 'Mercedes Classe E', agence: 'Premium Cars Casablanca',
-      price: 150, rating: 4.9, reviews: 134,
-      imageUrl: 'assets/images/vehicules/mercedes_classe_e/1.png',
-      tags: ['Berline', 'Automatique', 'Luxe'], category: 'Berline',
-      transmission: 'Automatique', carburant: 'Essence', places: 5,
-    ),
-    Vehicule(
-      id: 'vehicule_casa_004', name: 'Toyota Hilux 4x4', agence: 'Casa 4x4 Rental',
-      price: 120, rating: 4.8, reviews: 156,
-      imageUrl: 'assets/images/vehicules/toyota_hilux/1.png',
-      tags: ['SUV', '4x4', 'Tout-terrain'], category: 'SUV',
-      transmission: 'Automatique', carburant: 'Diesel', places: 5,
-    ),
-    Vehicule(
-      id: 'vehicule_casa_005', name: 'Peugeot 3008', agence: 'City Cars Casablanca',
-      price: 65, rating: 4.7, reviews: 267,
-      imageUrl: 'assets/images/vehicules/peugeot_3008/1.png',
-      tags: ['SUV', 'Diesel', 'Familial'], category: 'SUV',
-      transmission: 'Automatique', carburant: 'Diesel', places: 5,
-    ),
-    Vehicule(
-      id: 'vehicule_casa_006', name: 'Citroën Berlingo', agence: 'Casablanca Van Rental',
-      price: 40, rating: 4.3, reviews: 145,
-      imageUrl: 'assets/images/vehicules/citroen_berlingo/1.png',
-      tags: ['Utilitaire', 'Diesel', '7 places'], category: 'Utilitaire',
-      transmission: 'Manuelle', carburant: 'Diesel', places: 7,
-    ),
-  ];
 
   @override
   void initState() {
@@ -178,8 +46,8 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
     _filterFade = _makeFade(0.15, 0.5);
 
     // Pre-compute card animations for all vehicles
-    for (int i = 0; i < _vehicules.length; i++) {
-      final delay = 0.2 + (i * 0.12);
+    for (int i = 0; i < 12; i++) {
+      final delay = 0.2 + (i * 0.08);
       final end = (delay + 0.3).clamp(0.0, 1.0);
       _cardFades.add(_makeFade(delay, end));
       _cardSlides.add(_makeSlide(delay, end));
@@ -209,13 +77,8 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
     super.dispose();
   }
 
-  List<Vehicule> get _activeVehicules {
-    final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
-    return isCasa ? _vehiculesCasa : _vehicules;
-  }
-
-  List<Vehicule> get _filteredVehicules {
-    var base = _activeVehicules;
+  List<Vehicule> _filterVehicules(List<Vehicule> all) {
+    var base = all;
     if (_selectedFilter != 0) {
       final filterName = _filters[_selectedFilter];
       base = base.where((v) => v.category == filterName).toList();
@@ -227,6 +90,9 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
 
   @override
   Widget build(BuildContext context) {
+    final destId = ref.watch(selectedDestinationProvider).idDestination;
+    final asyncData = ref.watch(vehiculesProvider(destId));
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: AnimatedBuilder(
@@ -268,7 +134,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
                                 ),
                               ),
                               Text(
-                                '${ref.watch(selectedDestinationProvider).nom} · ${_filteredVehicules.length} véhicules',
+                                ref.watch(selectedDestinationProvider).nom,
                                 style: TextStyle(
                                   fontFamily: 'DarkerGrotesque',
                                   color: Colors.white.withValues(alpha: 0.4),
@@ -401,29 +267,36 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
                 ),
 
                 const SizedBox(height: 16),
-
-                // Vehicle list
+                // Vehicule list — from Supabase
                 Expanded(
-                  child: ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                    itemCount: _filteredVehicules.length,
-                    addAutomaticKeepAlives: false,
-                    separatorBuilder: (_, _) => const SizedBox(height: 20),
-                    itemBuilder: (context, index) {
-                      final vehicule = _filteredVehicules[index];
-                      final fadeIdx = index.clamp(0, _cardFades.length - 1);
-
-                      return FadeTransition(
-                        opacity: _cardFades[fadeIdx],
-                        child: SlideTransition(
-                          position: _cardSlides[fadeIdx],
-                          child: _VehiculeCard(
-                            vehicule: vehicule,
-                            onTap: () =>
-                                context.push('/vehicule/${vehicule.id}'),
-                          ),
-                        ),
+                  child: asyncData.when(
+                    loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFFFF8C00))),
+                    error: (e, _) => Center(child: Text('Erreur: $e', style: TextStyle(color: Colors.white.withValues(alpha: 0.5)))),
+                    data: (allItems) {
+                      final filtered = _filterVehicules(allItems);
+                      if (filtered.isEmpty) {
+                        return Center(child: Text('Aucun véhicule trouvé', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 16)));
+                      }
+                      return ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                        itemCount: filtered.length,
+                        addAutomaticKeepAlives: false,
+                        separatorBuilder: (_, _) => const SizedBox(height: 20),
+                        itemBuilder: (context, index) {
+                          final vehicule = filtered[index];
+                          final fadeIdx = index.clamp(0, _cardFades.length - 1);
+                          return FadeTransition(
+                            opacity: _cardFades[fadeIdx],
+                            child: SlideTransition(
+                              position: _cardSlides[fadeIdx],
+                              child: _VehiculeCard(
+                                vehicule: vehicule,
+                                onTap: () => context.push('/vehicule/${vehicule.id}'),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),

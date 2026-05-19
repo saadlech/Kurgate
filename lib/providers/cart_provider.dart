@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../services/supabase_service.dart';
 
 class CartItem {
   final String id;
@@ -36,6 +37,18 @@ class CartItem {
     quantity: quantity ?? this.quantity,
     addedAt: addedAt,
   );
+
+  /// Convert to a map for Supabase commandes insertion
+  Map<String, dynamic> toCommandeMap() => {
+    'boutique_name': boutiqueName,
+    'artisan': artisan,
+    'product_name': productName,
+    'product_desc': productDesc,
+    'image_url': imageUrl,
+    'unit_price': unitPrice,
+    'quantity': quantity,
+    'total_price': totalPrice,
+  };
 }
 
 class CartNotifier extends StateNotifier<List<CartItem>> {
@@ -68,6 +81,25 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
       return;
     }
     state = state.map((i) => i.id == id ? i.copyWith(quantity: quantity) : i).toList();
+  }
+
+  /// Checkout: persist all cart items to Supabase `commandes` then clear
+  Future<void> checkout({String? address}) async {
+    if (state.isEmpty) return;
+    // Persist each item as a commande row
+    for (final item in state) {
+      final map = item.toCommandeMap();
+      if (address != null && address.isNotEmpty) {
+        map['address'] = address;
+      }
+      map['statut'] = 'Payée';
+      try {
+        await SupabaseService.createCommande(map);
+      } catch (_) {
+        // fire-and-forget — local cart clears regardless
+      }
+    }
+    state = [];
   }
 
   void clearAll() {

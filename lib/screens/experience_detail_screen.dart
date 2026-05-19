@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
 import '../widgets/reviews_section.dart';
 import '../models/experience.dart';
+import '../providers/catalog_providers.dart';
 
-class ExperienceDetailScreen extends StatefulWidget {
+class ExperienceDetailScreen extends ConsumerStatefulWidget {
   final String experienceId;
   const ExperienceDetailScreen({super.key, required this.experienceId});
   @override
-  State<ExperienceDetailScreen> createState() => _ExperienceDetailScreenState();
+  ConsumerState<ExperienceDetailScreen> createState() => _ExperienceDetailScreenState();
 }
 
-class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
+class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen> {
   bool _bookingExpanded = false;
   late DateTime _date;
   int _participants = 2;
@@ -179,8 +181,10 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
     ),
   };
 
+  Experience? _expOverride;
+
   Experience get _exp =>
-      _expDataMap[widget.experienceId] ?? _expDataMap['exp_001']!;
+      _expOverride ?? _expDataMap[widget.experienceId] ?? _expDataMap['exp_001']!;
   int get _totalPrice => _exp.price * _participants;
 
   @override
@@ -237,6 +241,11 @@ class _ExperienceDetailScreenState extends State<ExperienceDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final expAsync = ref.watch(experienceByIdProvider(widget.experienceId));
+    if (expAsync.valueOrNull != null) {
+      _expOverride = expAsync.valueOrNull;
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: Stack(

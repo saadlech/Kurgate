@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
 import '../models/restaurant.dart';
 import '../providers/booking_provider.dart';
+import '../providers/catalog_providers.dart';
 import '../widgets/reviews_section.dart';
 
 class RestaurantDetailScreen extends ConsumerStatefulWidget {
@@ -188,7 +189,9 @@ class _RestaurantDetailScreenState
     '21:00',
   ];
 
-  Restaurant get _resto => _dataMap[widget.restaurantId] ?? _dataMap['resto_001']!;
+  Restaurant? _restoOverride;
+
+  Restaurant get _resto => _restoOverride ?? _dataMap[widget.restaurantId] ?? _dataMap['resto_001']!;
 
   @override
   void initState() {
@@ -267,6 +270,11 @@ class _RestaurantDetailScreenState
 
   @override
   Widget build(BuildContext context) {
+    final restoAsync = ref.watch(restaurantByIdProvider(widget.restaurantId));
+    if (restoAsync.valueOrNull != null) {
+      _restoOverride = restoAsync.valueOrNull;
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: Stack(

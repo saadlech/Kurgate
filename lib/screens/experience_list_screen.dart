@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/destination_provider.dart';
+import '../providers/catalog_providers.dart';
 import '../models/experience.dart';
 
 class ExperienceListScreen extends ConsumerStatefulWidget {
@@ -31,128 +32,6 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
     'Nature',
     'Gastronomie',
   ];
-
-  final _experiences = const [
-    Experience(
-      id: 'exp_001',
-      name: 'Safari dans le Désert d\'Agafay',
-      location: 'Désert d\'Agafay, Marrakech',
-      price: 85,
-      rating: 4.8,
-      reviews: 342,
-      imageUrl: 'assets/images/marrakech/experiences/safari_agafay/1.png',
-      tags: ['Quad', 'Coucher de soleil', 'Dîner'],
-      category: 'Aventure',
-      duree: '6h',
-      capacite: 12,
-    ),
-    Experience(
-      id: 'exp_002',
-      name: 'Visite Guidée de la Médina',
-      location: 'Médina, Marrakech',
-      price: 35,
-      rating: 4.7,
-      reviews: 528,
-      imageUrl: 'assets/images/marrakech/experiences/medina_visite/1.png',
-      tags: ['Guide local', 'Souks', 'Histoire'],
-      category: 'Culture',
-      duree: '3h',
-      capacite: 15,
-    ),
-    Experience(
-      id: 'exp_003',
-      name: 'Randonnée dans l\'Atlas',
-      location: 'Vallée de l\'Ourika',
-      price: 60,
-      rating: 4.9,
-      reviews: 189,
-      imageUrl: 'assets/images/marrakech/experiences/randonnee_atlas/1.png',
-      tags: ['Trekking', 'Cascades', 'Montagne'],
-      category: 'Nature',
-      duree: '8h',
-      capacite: 10,
-    ),
-    Experience(
-      id: 'exp_004',
-      name: 'Cours de Cuisine Marocaine',
-      location: 'Riad Cooking, Médina',
-      price: 50,
-      rating: 4.8,
-      reviews: 267,
-      imageUrl: 'assets/images/marrakech/experiences/cours_cuisine/1.png',
-      tags: ['Tajine', 'Couscous', 'Pâtisseries'],
-      category: 'Gastronomie',
-      duree: '4h',
-      capacite: 8,
-    ),
-    Experience(
-      id: 'exp_005',
-      name: 'Vol en Montgolfière',
-      location: 'Palmeraie, Marrakech',
-      price: 180,
-      rating: 4.9,
-      reviews: 124,
-      imageUrl: 'assets/images/marrakech/experiences/vol_montgolfiere/1.png',
-      tags: ['Vue panoramique', 'Lever du soleil', 'Photos'],
-      category: 'Aventure',
-      duree: '2h',
-      capacite: 6,
-    ),
-    Experience(
-      id: 'exp_006',
-      name: 'Jardin Majorelle & YSL',
-      location: 'Guéliz, Marrakech',
-      price: 15,
-      rating: 4.7,
-      reviews: 892,
-      imageUrl: 'assets/images/marrakech/experiences/jardin_majorelle/1.png',
-      tags: ['Jardin', 'Musée', 'Art'],
-      category: 'Culture',
-      duree: '2h',
-      capacite: 20,
-    ),
-  ];
-
-  // Casablanca experiences
-  final _experiencesCasa = const [
-    Experience(
-      id: 'exp_casa_001', name: 'Visite Privée avec Mosquée Hassan II',
-      location: 'Boulevard de la Corniche, Casablanca', price: 53, rating: 4.9, reviews: 1245,
-      imageUrl: 'assets/images/casablanca/experiences/mosquee_hassan/1.jpg',
-      tags: ['Monument', 'Guide Privé', 'Architecture'], category: 'Culture', duree: '4h', capacite: 15,
-    ),
-    Experience(
-      id: 'exp_casa_002', name: 'Excursion Casablanca – Tanger en TGV',
-      location: 'Gare Casa Voyageurs, Casablanca', price: 95, rating: 4.7, reviews: 678,
-      imageUrl: 'assets/images/casablanca/experiences/corniche_casa/1.jpg',
-      tags: ['TGV', 'Tanger', 'Chameau'], category: 'Aventure', duree: '12h', capacite: 20,
-    ),
-    Experience(
-      id: 'exp_casa_003', name: 'Session Surf sur la Côte Atlantique',
-      location: 'Côte Atlantique, Casablanca', price: 40, rating: 4.8, reviews: 423,
-      imageUrl: 'assets/images/casablanca/experiences/medina_casa/1.jpeg',
-      tags: ['Surf', 'Océan', 'Sport'], category: 'Aventure', duree: '3h', capacite: 10,
-    ),
-    Experience(
-      id: 'exp_casa_004', name: 'Morocco Mall & Shopping',
-      location: 'Morocco Mall, Casablanca', price: 0, rating: 4.5, reviews: 892,
-      imageUrl: 'assets/images/casablanca/experiences/morocco_mall/1.png',
-      tags: ['Shopping', 'Aquarium', 'Loisirs'], category: 'Aventure', duree: '4h', capacite: 20,
-    ),
-    Experience(
-      id: 'exp_casa_005', name: 'Quartier Art Déco & Habous',
-      location: 'Quartier Habous, Casablanca', price: 20, rating: 4.8, reviews: 312,
-      imageUrl: 'assets/images/casablanca/experiences/art_deco_tour/1.png',
-      tags: ['Architecture', 'Pâtisseries', 'Artisanat'], category: 'Culture', duree: '3h', capacite: 12,
-    ),
-    Experience(
-      id: 'exp_casa_006', name: 'Coucher de soleil en Yacht',
-      location: 'Marina, Casablanca', price: 200, rating: 4.9, reviews: 156,
-      imageUrl: 'assets/images/casablanca/experiences/yacht_casa/1.png',
-      tags: ['Yacht', 'Sunset', 'Champagne'], category: 'Aventure', duree: '3h', capacite: 8,
-    ),
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -165,8 +44,8 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
     _headerSlide = _makeSlide(0.0, 0.3);
     _searchFade = _makeFade(0.1, 0.4);
     _filterFade = _makeFade(0.15, 0.5);
-    for (int i = 0; i < _experiences.length; i++) {
-      final delay = 0.2 + (i * 0.12);
+    for (int i = 0; i < 12; i++) {
+      final delay = 0.2 + (i * 0.08);
       final end = (delay + 0.3).clamp(0.0, 1.0);
       _cardFades.add(_makeFade(delay, end));
       _cardSlides.add(_makeSlide(delay, end));
@@ -195,13 +74,8 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
     super.dispose();
   }
 
-  List<Experience> get _activeExperiences {
-    final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
-    return isCasa ? _experiencesCasa : _experiences;
-  }
-
-  List<Experience> get _filteredExperiences {
-    var base = _activeExperiences;
+  List<Experience> _filterExperiences(List<Experience> all) {
+    var base = all;
     if (_selectedFilter != 0) {
       final filterName = _filters[_selectedFilter];
       base = base.where((e) => e.category == filterName).toList();
@@ -213,6 +87,9 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
 
   @override
   Widget build(BuildContext context) {
+    final destId = ref.watch(selectedDestinationProvider).idDestination;
+    final experiencesAsync = ref.watch(experiencesProvider(destId));
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: AnimatedBuilder(
@@ -254,7 +131,7 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
                                 ),
                               ),
                               Text(
-                                '${ref.watch(selectedDestinationProvider).nom} · ${_filteredExperiences.length} activités',
+                                ref.watch(selectedDestinationProvider).nom,
                                 style: TextStyle(
                                   fontFamily: 'DarkerGrotesque',
                                   color: Colors.white.withValues(alpha: 0.4),
@@ -382,26 +259,36 @@ class _ExperienceListScreenState extends ConsumerState<ExperienceListScreen>
                   ),
                 ),
                 const SizedBox(height: 16),
-                // Experience list
+                // Experience list — from Supabase
                 Expanded(
-                  child: ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                    itemCount: _filteredExperiences.length,
-                    addAutomaticKeepAlives: false,
-                    separatorBuilder: (_, _) => const SizedBox(height: 20),
-                    itemBuilder: (context, index) {
-                      final exp = _filteredExperiences[index];
-                      final fadeIdx = index.clamp(0, _cardFades.length - 1);
-                      return FadeTransition(
-                        opacity: _cardFades[fadeIdx],
-                        child: SlideTransition(
-                          position: _cardSlides[fadeIdx],
-                          child: _ExperienceCard(
-                            experience: exp,
-                            onTap: () => context.push('/experience/${exp.id}'),
-                          ),
-                        ),
+                  child: experiencesAsync.when(
+                    loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFFFF8C00))),
+                    error: (e, _) => Center(child: Text('Erreur: $e', style: TextStyle(color: Colors.white.withValues(alpha: 0.5)))),
+                    data: (allExperiences) {
+                      final filtered = _filterExperiences(allExperiences);
+                      if (filtered.isEmpty) {
+                        return Center(child: Text('Aucune expérience trouvée', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 16)));
+                      }
+                      return ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                        itemCount: filtered.length,
+                        addAutomaticKeepAlives: false,
+                        separatorBuilder: (_, _) => const SizedBox(height: 20),
+                        itemBuilder: (context, index) {
+                          final exp = filtered[index];
+                          final fadeIdx = index.clamp(0, _cardFades.length - 1);
+                          return FadeTransition(
+                            opacity: _cardFades[fadeIdx],
+                            child: SlideTransition(
+                              position: _cardSlides[fadeIdx],
+                              child: _ExperienceCard(
+                                experience: exp,
+                                onTap: () => context.push('/experience/${exp.id}'),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),

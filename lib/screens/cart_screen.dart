@@ -155,7 +155,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (ctx) => _CartPaymentSheet(items: cart, totalPrice: notifier.totalPrice, totalItems: notifier.totalItems, onPaid: () => notifier.clearAll()),
+      builder: (ctx) => _CartPaymentSheet(items: cart, totalPrice: notifier.totalPrice, totalItems: notifier.totalItems, onPaid: (address) => notifier.checkout(address: address)),
     );
   }
 }
@@ -215,7 +215,7 @@ class _CartItemCard extends StatelessWidget {
 class _CartPaymentSheet extends StatefulWidget {
   final List<CartItem> items;
   final int totalPrice, totalItems;
-  final VoidCallback onPaid;
+  final void Function(String address) onPaid;
   const _CartPaymentSheet({required this.items, required this.totalPrice, required this.totalItems, required this.onPaid});
   @override
   State<_CartPaymentSheet> createState() => _CartPaymentSheetState();
@@ -251,7 +251,7 @@ class _CartPaymentSheetState extends State<_CartPaymentSheet> with TickerProvide
     setState(() => _processing = true);
     Future.delayed(const Duration(milliseconds: 2500), () {
       if (!mounted) return;
-      widget.onPaid();
+      widget.onPaid(_addressCtrl.text.trim());
       setState(() { _processing = false; _success = true; });
       _successCtrl.forward();
       Future.delayed(const Duration(seconds: 2), () { if (mounted) Navigator.pop(context); });

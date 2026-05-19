@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
 import '../models/hotel.dart';
 import '../providers/booking_provider.dart';
+import '../providers/catalog_providers.dart';
 import '../widgets/reviews_section.dart';
 
 class HotelDetailScreen extends ConsumerStatefulWidget {
@@ -255,8 +256,10 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
     ),
   };
 
+  Hotel? _hotelOverride;
+
   Hotel get _hotel =>
-      _hotelDataMap[widget.hotelId] ?? _hotelDataMap['hotel_002']!;
+      _hotelOverride ?? _hotelDataMap[widget.hotelId] ?? _hotelDataMap['hotel_002']!;
   bool get _hasGallery => _hotel.imageAssets.isNotEmpty;
   int get _imageCount => _hasGallery ? _hotel.imageAssets.length : 1;
 
@@ -418,6 +421,12 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Fetch from Supabase, use static map as instant fallback
+    final hotelAsync = ref.watch(hotelByIdProvider(widget.hotelId));
+    if (hotelAsync.valueOrNull != null) {
+      _hotelOverride = hotelAsync.valueOrNull;
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: Stack(

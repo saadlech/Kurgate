@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/destination_provider.dart';
+import '../providers/catalog_providers.dart';
 import '../models/restaurant.dart';
 
 class RestaurantListScreen extends ConsumerStatefulWidget {
@@ -28,126 +29,6 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
     'Street Food',
   ];
 
-  final _restaurants = const [
-    Restaurant(
-      id: 'resto_001',
-      name: 'Le Jardin',
-      location: 'Souk Sidi Abdelaziz, Médina',
-      price: 25,
-      rating: 4.7,
-      reviews: 487,
-      imageUrl: 'assets/images/marrakech/restaurants/le_jardin/1.png',
-      tags: ['Terrasse', 'Végétarien', 'Bio'],
-      category: 'International',
-      specialite: 'Méditerranéen',
-      horaires: '12h-23h',
-    ),
-    Restaurant(
-      id: 'resto_002',
-      name: 'Nomad',
-      location: 'Derb Aarjan, Médina',
-      price: 30,
-      rating: 4.8,
-      reviews: 623,
-      imageUrl: 'assets/images/marrakech/restaurants/nomad/1.png',
-      tags: ['Rooftop', 'Vue Médina', 'Cocktails'],
-      category: 'Rooftop',
-      specialite: 'Marocain Moderne',
-      horaires: '10h-23h',
-    ),
-    Restaurant(
-      id: 'resto_003',
-      name: 'Al Fassia',
-      location: 'Guéliz, Marrakech',
-      price: 35,
-      rating: 4.9,
-      reviews: 389,
-      imageUrl: 'assets/images/marrakech/restaurants/al_fassia/1.png',
-      tags: ['Tajine', 'Couscous', 'Familial'],
-      category: 'Marocain',
-      specialite: 'Cuisine Fassi',
-      horaires: '12h-14h30 · 19h-23h',
-    ),
-    Restaurant(
-      id: 'resto_004',
-      name: 'CAFE CLOCK',
-      location: 'Derb Chtouka, Kasbah',
-      price: 12,
-      rating: 4.5,
-      reviews: 712,
-      imageUrl: 'assets/images/marrakech/restaurants/cafe_clock/1.png',
-      tags: ['Burger Chameau', 'Live Music', 'Culturel'],
-      category: 'Street Food',
-      specialite: 'Fusion',
-      horaires: '9h-22h',
-    ),
-    Restaurant(
-      id: 'resto_005',
-      name: 'La Table du Palais',
-      location: 'Royal Mansour, Médina',
-      price: 120,
-      rating: 4.9,
-      reviews: 234,
-      imageUrl: 'assets/images/marrakech/restaurants/la_table_du_palais/1.png',
-      tags: ['Gastronomique', 'Étoilé', 'Luxe'],
-      category: 'International',
-      specialite: 'Français-Marocain',
-      horaires: '19h-23h',
-    ),
-    Restaurant(
-      id: 'resto_006',
-      name: 'Chez Lamine Hadj Mustapha',
-      location: 'Place Jemaa el-Fna',
-      price: 8,
-      rating: 4.6,
-      reviews: 1024,
-      imageUrl: 'assets/images/marrakech/restaurants/chez_lamine/1.png',
-      tags: ['Tanjia', 'Authentique', 'Populaire'],
-      category: 'Street Food',
-      specialite: 'Tanjia Marrakchia',
-      horaires: '11h-22h',
-    ),
-  ];
-
-  // Casablanca restaurants
-  final _restaurantsCasa = const [
-    Restaurant(
-      id: 'resto_casa_001', name: 'Restaurant Dar El Kaid', location: 'Quartier Habous, Casablanca',
-      price: 35, rating: 4.8, reviews: 567,
-      imageUrl: 'assets/images/casablanca/restaurants/ricks_cafe/1.jpg',
-      tags: ['Traditionnel', 'Cuivre', 'Ambiance'], category: 'Marocain',
-      specialite: 'Cuisine Marocaine', horaires: '12h-23h',
-    ),
-    Restaurant(
-      id: 'resto_casa_002', name: 'Riad 1930', location: 'Ancienne Médina, Casablanca',
-      price: 35, rating: 4.8, reviews: 612,
-      imageUrl: 'assets/images/casablanca/restaurants/riad_1930/1.jpg',
-      tags: ['Patio', 'Traditionnel', 'Charme'], category: 'Marocain',
-      specialite: 'Cuisine Marocaine Raffinée', horaires: '12h-23h',
-    ),
-    Restaurant(
-      id: 'resto_casa_004', name: 'Kyoto Sushi Casablanca', location: 'Maarif, Casablanca',
-      price: 40, rating: 4.7, reviews: 412,
-      imageUrl: 'assets/images/casablanca/restaurants/basmane/1.jpg',
-      tags: ['Japonais', 'Sushi', 'Moderne'], category: 'International',
-      specialite: 'Cuisine Japonaise', horaires: '12h-23h',
-    ),
-    Restaurant(
-      id: 'resto_casa_005', name: 'La Pergola', location: 'Boulevard d\'Anfa, Casablanca',
-      price: 45, rating: 4.8, reviews: 389,
-      imageUrl: 'assets/images/casablanca/restaurants/la_bodega/1.jpg',
-      tags: ['Art Déco', 'Gastronomique', 'Terrasse'], category: 'International',
-      specialite: 'Français-Marocain', horaires: '12h-00h',
-    ),
-    Restaurant(
-      id: 'resto_casa_006', name: 'Le Doge Café & Tapas', location: 'Quartier Gauthier, Casablanca',
-      price: 30, rating: 4.6, reviews: 534,
-      imageUrl: 'assets/images/casablanca/restaurants/blend/1.jpg',
-      tags: ['Tapas', 'Cocktails', 'Brunch'], category: 'International',
-      specialite: 'Tapas & Cocktails', horaires: '9h-01h',
-    ),
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -160,8 +41,8 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
     _headerSlide = _makeSlide(0.0, 0.3);
     _searchFade = _makeFade(0.1, 0.4);
     _filterFade = _makeFade(0.15, 0.5);
-    for (int i = 0; i < _restaurants.length; i++) {
-      final d = 0.2 + (i * 0.12);
+    for (int i = 0; i < 12; i++) {
+      final d = 0.2 + (i * 0.08);
       final e = (d + 0.3).clamp(0.0, 1.0);
       _cardFades.add(_makeFade(d, e));
       _cardSlides.add(_makeSlide(d, e));
@@ -189,13 +70,8 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
     super.dispose();
   }
 
-  List<Restaurant> get _activeRestaurants {
-    final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
-    return isCasa ? _restaurantsCasa : _restaurants;
-  }
-
-  List<Restaurant> get _filtered {
-    var base = _activeRestaurants;
+  List<Restaurant> _filterRestaurants(List<Restaurant> all) {
+    var base = all;
     if (_selectedFilter != 0) {
       base = base.where((r) => r.category == _filters[_selectedFilter]).toList();
     }
@@ -206,6 +82,9 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
 
   @override
   Widget build(BuildContext context) {
+    final destId = ref.watch(selectedDestinationProvider).idDestination;
+    final restaurantsAsync = ref.watch(restaurantsProvider(destId));
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: AnimatedBuilder(
@@ -247,7 +126,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
                                 ),
                               ),
                               Text(
-                                '${ref.watch(selectedDestinationProvider).nom} · ${_filtered.length} adresses',
+                                ref.watch(selectedDestinationProvider).nom,
                                 style: TextStyle(
                                   fontFamily: 'DarkerGrotesque',
                                   color: Colors.white.withValues(alpha: 0.4),
@@ -374,26 +253,36 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen>
                   ),
                 ),
                 const SizedBox(height: 16),
-                // List
+                // List — from Supabase
                 Expanded(
-                  child: ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                    itemCount: _filtered.length,
-                    addAutomaticKeepAlives: false,
-                    separatorBuilder: (_, _) => const SizedBox(height: 20),
-                    itemBuilder: (context, index) {
-                      final r = _filtered[index];
-                      final fi = index.clamp(0, _cardFades.length - 1);
-                      return FadeTransition(
-                        opacity: _cardFades[fi],
-                        child: SlideTransition(
-                          position: _cardSlides[fi],
-                          child: _RestaurantCard(
-                            restaurant: r,
-                            onTap: () => context.push('/restaurant/${r.id}'),
-                          ),
-                        ),
+                  child: restaurantsAsync.when(
+                    loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFFFF8C00))),
+                    error: (e, _) => Center(child: Text('Erreur: $e', style: TextStyle(color: Colors.white.withValues(alpha: 0.5)))),
+                    data: (allRestaurants) {
+                      final filtered = _filterRestaurants(allRestaurants);
+                      if (filtered.isEmpty) {
+                        return Center(child: Text('Aucun restaurant trouvé', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 16)));
+                      }
+                      return ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                        itemCount: filtered.length,
+                        addAutomaticKeepAlives: false,
+                        separatorBuilder: (_, _) => const SizedBox(height: 20),
+                        itemBuilder: (context, index) {
+                          final r = filtered[index];
+                          final fi = index.clamp(0, _cardFades.length - 1);
+                          return FadeTransition(
+                            opacity: _cardFades[fi],
+                            child: SlideTransition(
+                              position: _cardSlides[fi],
+                              child: _RestaurantCard(
+                                restaurant: r,
+                                onTap: () => context.push('/restaurant/${r.id}'),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),

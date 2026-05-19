@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/cart_provider.dart';
+import '../providers/catalog_providers.dart';
 import '../models/boutique_artisanale.dart';
 import '../widgets/reviews_section.dart';
 
@@ -249,8 +250,10 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
     ),
   };
 
+  BoutiqueArtisanale? _boutiqueOverride;
+
   BoutiqueArtisanale get _boutique =>
-      _dataMap[widget.boutiqueId] ?? _dataMap['boutique_001']!;
+      _boutiqueOverride ?? _dataMap[widget.boutiqueId] ?? _dataMap['boutique_001']!;
   Produit get _currentProduct => _boutique.products[_selectedProduct];
   int get _totalPrice => _currentProduct.price * _quantity;
 
@@ -287,6 +290,34 @@ class _BoutiqueDetailScreenState extends ConsumerState<BoutiqueDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final boutiqueAsync = ref.watch(boutiqueByIdProvider(widget.boutiqueId));
+    if (boutiqueAsync.valueOrNull != null) {
+      final remote = boutiqueAsync.valueOrNull!;
+      // Supabase doesn't store products — preserve them from static _dataMap
+      final staticProducts = _dataMap[widget.boutiqueId]?.products ?? [];
+      _boutiqueOverride = BoutiqueArtisanale(
+        id: remote.id,
+        name: remote.name,
+        location: remote.location,
+        price: remote.price,
+        rating: remote.rating,
+        reviews: remote.reviews,
+        imageUrl: remote.imageUrl,
+        description: remote.description.isNotEmpty
+            ? remote.description
+            : (_dataMap[widget.boutiqueId]?.description ?? ''),
+        tags: remote.tags,
+        category: remote.category,
+        images: remote.images.isNotEmpty
+            ? remote.images
+            : (_dataMap[widget.boutiqueId]?.images ?? []),
+        artisan: remote.artisan,
+        prixMoyen: remote.prixMoyen,
+        horaires: remote.horaires,
+        products: staticProducts,
+      );
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: Stack(

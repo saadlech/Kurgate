@@ -82,9 +82,10 @@ L'application couvre **deux villes** — **Marrakech** et **Casablanca** — et 
 
 ### 📅 Réservations & Paiement
 - Système de réservation centralisé (hôtels, véhicules, expériences, restaurants)
-- **Panier** pour les produits artisanaux
+- **Panier** pour les produits artisanaux avec **persistance Supabase** (`commandes`)
 - **Écran de paiement** avec confirmation et feedback
 - Historique des réservations avec statuts (En attente, Payée, Annulée)
+- **Synchronisation cloud** — Réservations, paiements et avis sauvegardés dans PostgreSQL
 
 ### 🗺️ Carte Interactive
 - Carte OpenStreetMap avec points d'intérêt par destination
@@ -95,6 +96,7 @@ L'application couvre **deux villes** — **Marrakech** et **Casablanca** — et 
 - Système d'avis intégré sur tous les écrans de détail
 - Notes 1-5 étoiles avec commentaires
 - Prévention des avis doubles par utilisateur
+- **Persistance cloud** — Avis sauvegardés dans la table `avis` via Supabase
 
 ### 🔧 Performance
 - **Cache images optimisé** — `cacheWidth`/`cacheHeight` sur tous les `Image.asset` (400px listes, 500px détails)
@@ -142,14 +144,16 @@ kurgate/
 │   │   ├── chambre.dart             # Modèle chambre d'hôtel
 │   │   ├── attraction.dart          # Modèle point d'intérêt
 │   │   └── chatbot.dart             # Modèle chatbot (réservé)
-│   ├── providers/                   # 6 providers Riverpod
+│   ├── providers/                   # 8 providers Riverpod
 │   │   ├── auth_provider.dart       # AuthNotifier (login, signup, delete, update)
-│   │   ├── booking_provider.dart    # ReservationNotifier (add, cancel, pay)
-│   │   ├── cart_provider.dart       # CartNotifier (add, remove, quantity)
-│   │   ├── review_provider.dart     # ReviewNotifier (add, average, check)
-│   │   ├── destination_provider.dart # selectedDestinationProvider
+│   │   ├── booking_provider.dart    # ReservationNotifier (add, cancel, pay, feedback → Supabase)
+│   │   ├── cart_provider.dart       # CartNotifier (add, remove, checkout → Supabase commandes)
+│   │   ├── review_provider.dart     # ReviewNotifier (add, average, check → Supabase avis)
+│   │   ├── catalog_providers.dart   # FutureProviders for all catalog entities (Supabase)
+│   │   ├── destination_provider.dart # FutureProvider → Supabase with static fallback
 │   │   └── onboarding_provider.dart # hasSeenOnboarding, splashComplete
 │   ├── services/
+│   │   ├── supabase_service.dart     # Centralized Supabase data operations (14 methods)
 │   │   └── local_storage_service.dart # Hive (credentials, remember me)
 │   ├── router/
 │   │   └── app_router.dart          # GoRouter (20 routes avec transitions)
@@ -304,12 +308,46 @@ La police **Darker Grotesque** est utilisée en 7 graisses (300–900) pour cré
 
 ## 🗄️ Backend & Stockage
 
-### Supabase (Cloud)
+### Supabase (Cloud) — 100% Connecté
+
+L'application est **entièrement synchronisée** avec Supabase. Toutes les opérations de lecture et d'écriture passent par le cloud.
+
+| Table | Opérations | RLS |
+|-------|-----------|-----|
+| `destinations` | SELECT | ✅ Public read |
+| `hotels` | SELECT (list + by ID) | ✅ Public read |
+| `restaurants` | SELECT (list + by ID) | ✅ Public read |
+| `experiences` | SELECT (list + by ID) | ✅ Public read |
+| `boutiques_artisanales` | SELECT (list + by ID) | ✅ Public read |
+| `vehicules` | SELECT (list + by ID) | ✅ Public read |
+| `utilisateurs` | SELECT, INSERT, UPDATE, DELETE | ✅ Own user only |
+| `reservations` | SELECT, INSERT, UPDATE (status + feedback) | ✅ Own user only |
+| `avis` | SELECT, INSERT | ✅ Public read, own insert |
+| `commandes` | SELECT, INSERT, UPDATE | ✅ Own user only |
 
 - **Authentication** — Email/password avec vérification, reset password
-- **Database (PostgreSQL)** — Table `utilisateurs` pour les profils
-- **Row Level Security** — Sécurité au niveau des lignes
-- **RPC** — Fonction `delete_user` pour suppression de compte
+- **Row Level Security** — Sécurité au niveau des lignes sur toutes les tables
+- **RPC** — Fonction `delete_user()` pour suppression de compte
+- **Offline-First** — Fallback local si Supabase est indisponible
+
+### Architecture de Synchronisation
+
+```
+┌──────────────┐     FutureProvider      ┌──────────────────┐
+│  UI Screens  │ ◄──────────────────────► │  SupabaseService │
+│  (Riverpod)  │                         │  (14 methods)    │
+└──────────────┘                         └────────┬─────────┘
+       │                                          │
+       │  Fire-and-forget                          ▼
+       │  (mutations)                    ┌──────────────────┐
+       └────────────────────────────────►│  Supabase Cloud  │
+                                         │  PostgreSQL + RLS│
+                                         └──────────────────┘
+```
+
+- **Lecture** : `FutureProvider` → `SupabaseService.fetch*()` → UI
+- **Écriture** : UI → local state update → fire-and-forget Supabase sync
+- **Résultat** : UI jamais bloquée par le réseau
 
 ### Hive (Local)
 

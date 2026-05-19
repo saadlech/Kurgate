@@ -42,6 +42,7 @@ class Hotel extends OffreTouristique {
       tags: (map['tags'] as List<dynamic>?)?.cast<String>() ?? [],
       category: map['category'] as String? ?? '',
       images: (map['images'] as List<dynamic>?)?.cast<String>() ?? [],
+      imageAssets: (map['images'] as List<dynamic>?)?.cast<String>() ?? [],
       stars: (map['stars'] as num?)?.toInt() ?? 0,
     );
   }

@@ -5,7 +5,7 @@ import '../providers/auth_provider.dart';
 import '../models/avis.dart';
 import '../widgets/feedback_sheet.dart';
 
-class ReviewsSection extends ConsumerWidget {
+class ReviewsSection extends ConsumerStatefulWidget {
   final String itemId;
   final String itemName;
   final String itemType; // 'Hôtel', 'Restaurant', etc.
@@ -18,9 +18,23 @@ class ReviewsSection extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ReviewsSection> createState() => _ReviewsSectionState();
+}
+
+class _ReviewsSectionState extends ConsumerState<ReviewsSection> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch remote reviews for this item
+    Future.microtask(() =>
+      ref.read(reviewProvider.notifier).loadForItem(widget.itemId),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final reviews = ref.watch(reviewProvider.select(
-      (all) => all.where((r) => r.itemId == itemId).toList(),
+      (all) => all.where((r) => r.itemId == widget.itemId).toList(),
     ));
     final auth = ref.watch(authProvider);
     final userId = auth.currentUser?.id ?? '';
@@ -137,12 +151,12 @@ class ReviewsSection extends ConsumerWidget {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => FeedbackSheet(
-        bookingName: itemName,
-        bookingType: itemType,
+        bookingName: widget.itemName,
+        bookingType: widget.itemType,
         onSubmit: (rating, comment) {
           ref.read(reviewProvider.notifier).addReview(Avis(
-            idAvis: '${itemId}_${user.id}',
-            itemId: itemId,
+            idAvis: '${widget.itemId}_${user.id}',
+            itemId: widget.itemId,
             userId: user.id,
             userName: user.nom,
             note: rating,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/destination_provider.dart';
+import '../providers/catalog_providers.dart';
 import '../models/boutique_artisanale.dart';
 
 class BoutiqueListScreen extends ConsumerStatefulWidget {
@@ -29,157 +30,6 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
     'Textile',
   ];
 
-  final _boutiques = const [
-    BoutiqueArtisanale(
-      id: 'boutique_001',
-      name: 'Tapis Berbères El Badi',
-      artisan: 'Maître Hassan El Badi',
-      location: 'Souk des Tapis, Médina',
-      rating: 4.8,
-      reviews: 312,
-      imageUrl: 'assets/images/marrakech/boutiques/tapis_berberes/1.png',
-      tags: ['Fait main', 'Berbère', 'Laine'],
-      category: 'Tapis',
-      prixMoyen: '150-2000',
-    ),
-    BoutiqueArtisanale(
-      id: 'boutique_002',
-      name: 'Atelier Céramique Safi',
-      artisan: 'Fatima Zahra Bennani',
-      location: 'Derb Dabachi, Médina',
-      rating: 4.7,
-      reviews: 198,
-      imageUrl: 'assets/images/marrakech/boutiques/ceramique_safi/1.png',
-      tags: ['Zellige', 'Assiettes', 'Vases'],
-      category: 'Poterie',
-      prixMoyen: '20-300',
-    ),
-    BoutiqueArtisanale(
-      id: 'boutique_003',
-      name: 'Maroquinerie Artisanale Youssef',
-      artisan: 'Youssef Amrani',
-      location: 'Souk Cherratine, Médina',
-      rating: 4.6,
-      reviews: 456,
-      imageUrl: 'assets/images/marrakech/boutiques/maroquinerie_youssef/1.png',
-      tags: ['Babouches', 'Sacs', 'Ceintures'],
-      category: 'Cuir',
-      prixMoyen: '30-500',
-    ),
-    BoutiqueArtisanale(
-      id: 'boutique_004',
-      name: 'Bijoux Touareg Amina',
-      artisan: 'Amina Ait Brahim',
-      location: 'Place des Ferblantiers',
-      rating: 4.9,
-      reviews: 167,
-      imageUrl: 'assets/images/marrakech/boutiques/bijoux_touareg/1.png',
-      tags: ['Argent', 'Touareg', 'Pierres'],
-      category: 'Bijoux',
-      prixMoyen: '50-800',
-    ),
-    BoutiqueArtisanale(
-      id: 'boutique_005',
-      name: 'Tissages Tradition Amazigh',
-      artisan: 'Khadija Oulhaj',
-      location: 'Souk Haddadine, Médina',
-      rating: 4.7,
-      reviews: 234,
-      imageUrl: 'assets/images/marrakech/boutiques/tissages_amazigh/1.png',
-      tags: ['Caftans', 'Foulards', 'Coussins'],
-      category: 'Textile',
-      prixMoyen: '40-600',
-    ),
-    BoutiqueArtisanale(
-      id: 'boutique_006',
-      name: 'Poterie d\'Art Tamegroute',
-      artisan: 'Ahmed Bel Kacem',
-      location: 'Quartier des Potiers',
-      rating: 4.5,
-      reviews: 289,
-      imageUrl: 'assets/images/marrakech/boutiques/poterie_tamegroute/1.png',
-      tags: ['Tamegroute', 'Vert', 'Traditionnel'],
-      category: 'Poterie',
-      prixMoyen: '15-200',
-    ),
-  ];
-
-  // Casablanca boutiques (same artisan items as Marrakech)
-  final _boutiquesCasa = const [
-    BoutiqueArtisanale(
-      id: 'boutique_casa_001',
-      name: 'Tapis Berbères El Badi',
-      artisan: 'Maître Hassan El Badi',
-      location: 'Quartier Habous, Casablanca',
-      rating: 4.8,
-      reviews: 312,
-      imageUrl: 'assets/images/marrakech/boutiques/tapis_berberes/1.png',
-      tags: ['Fait main', 'Berbère', 'Laine'],
-      category: 'Tapis',
-      prixMoyen: '150-2000',
-    ),
-    BoutiqueArtisanale(
-      id: 'boutique_casa_002',
-      name: 'Atelier Céramique Safi',
-      artisan: 'Fatima Zahra Bennani',
-      location: 'Derb Omar, Casablanca',
-      rating: 4.7,
-      reviews: 198,
-      imageUrl: 'assets/images/marrakech/boutiques/ceramique_safi/1.png',
-      tags: ['Zellige', 'Assiettes', 'Vases'],
-      category: 'Poterie',
-      prixMoyen: '20-300',
-    ),
-    BoutiqueArtisanale(
-      id: 'boutique_casa_003',
-      name: 'Maroquinerie Artisanale Youssef',
-      artisan: 'Youssef Amrani',
-      location: 'Quartier Habous, Casablanca',
-      rating: 4.6,
-      reviews: 456,
-      imageUrl: 'assets/images/marrakech/boutiques/maroquinerie_youssef/1.png',
-      tags: ['Babouches', 'Sacs', 'Ceintures'],
-      category: 'Cuir',
-      prixMoyen: '30-500',
-    ),
-    BoutiqueArtisanale(
-      id: 'boutique_casa_004',
-      name: 'Bijoux Touareg Amina',
-      artisan: 'Amina Ait Brahim',
-      location: 'Derb Omar, Casablanca',
-      rating: 4.9,
-      reviews: 167,
-      imageUrl: 'assets/images/marrakech/boutiques/bijoux_touareg/1.png',
-      tags: ['Argent', 'Touareg', 'Pierres'],
-      category: 'Bijoux',
-      prixMoyen: '50-800',
-    ),
-    BoutiqueArtisanale(
-      id: 'boutique_casa_005',
-      name: 'Tissages Tradition Amazigh',
-      artisan: 'Khadija Oulhaj',
-      location: 'Aïn Sebaâ, Casablanca',
-      rating: 4.7,
-      reviews: 234,
-      imageUrl: 'assets/images/marrakech/boutiques/tissages_amazigh/1.png',
-      tags: ['Caftans', 'Foulards', 'Coussins'],
-      category: 'Textile',
-      prixMoyen: '40-600',
-    ),
-    BoutiqueArtisanale(
-      id: 'boutique_casa_006',
-      name: 'Poterie d\'Art Tamegroute',
-      artisan: 'Ahmed Bel Kacem',
-      location: 'Quartier Gauthier, Casablanca',
-      rating: 4.5,
-      reviews: 289,
-      imageUrl: 'assets/images/marrakech/boutiques/poterie_tamegroute/1.png',
-      tags: ['Tamegroute', 'Vert', 'Traditionnel'],
-      category: 'Poterie',
-      prixMoyen: '15-200',
-    ),
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -192,8 +42,8 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
     _headerSlide = _makeSlide(0.0, 0.3);
     _searchFade = _makeFade(0.1, 0.4);
     _filterFade = _makeFade(0.15, 0.5);
-    for (int i = 0; i < _boutiques.length; i++) {
-      final d = 0.2 + (i * 0.12);
+    for (int i = 0; i < 12; i++) {
+      final d = 0.2 + (i * 0.08);
       final e = (d + 0.3).clamp(0.0, 1.0);
       _cardFades.add(_makeFade(d, e));
       _cardSlides.add(_makeSlide(d, e));
@@ -221,13 +71,8 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
     super.dispose();
   }
 
-  List<BoutiqueArtisanale> get _activeBoutiques {
-    final isCasa = ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
-    return isCasa ? _boutiquesCasa : _boutiques;
-  }
-
-  List<BoutiqueArtisanale> get _filtered {
-    var base = _activeBoutiques;
+  List<BoutiqueArtisanale> _filterBoutiques(List<BoutiqueArtisanale> all) {
+    var base = all;
     if (_selectedFilter != 0) {
       base = base.where((b) => b.category == _filters[_selectedFilter]).toList();
     }
@@ -238,6 +83,9 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
 
   @override
   Widget build(BuildContext context) {
+    final destId = ref.watch(selectedDestinationProvider).idDestination;
+    final asyncData = ref.watch(boutiquesProvider(destId));
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: AnimatedBuilder(
@@ -278,7 +126,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
                                 ),
                               ),
                               Text(
-                                '${ref.watch(selectedDestinationProvider).nom} · ${_filtered.length} boutiques',
+                                ref.watch(selectedDestinationProvider).nom,
                                 style: TextStyle(
                                   fontFamily: 'DarkerGrotesque',
                                   color: Colors.white.withValues(alpha: 0.4),
@@ -404,24 +252,34 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
                 ),
                 const SizedBox(height: 16),
                 Expanded(
-                  child: ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                    itemCount: _filtered.length,
-                    addAutomaticKeepAlives: false,
-                    separatorBuilder: (_, _) => const SizedBox(height: 20),
-                    itemBuilder: (context, index) {
-                      final b = _filtered[index];
-                      final fi = index.clamp(0, _cardFades.length - 1);
-                      return FadeTransition(
-                        opacity: _cardFades[fi],
-                        child: SlideTransition(
-                          position: _cardSlides[fi],
-                          child: _BoutiqueCard(
-                            boutique: b,
-                            onTap: () => context.push('/boutique/${b.id}'),
-                          ),
-                        ),
+                  child: asyncData.when(
+                    loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFFFF8C00))),
+                    error: (e, _) => Center(child: Text('Erreur: $e', style: TextStyle(color: Colors.white.withValues(alpha: 0.5)))),
+                    data: (allBoutiques) {
+                      final filtered = _filterBoutiques(allBoutiques);
+                      if (filtered.isEmpty) {
+                        return Center(child: Text('Aucune boutique trouvée', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 16)));
+                      }
+                      return ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                        itemCount: filtered.length,
+                        addAutomaticKeepAlives: false,
+                        separatorBuilder: (_, _) => const SizedBox(height: 20),
+                        itemBuilder: (context, index) {
+                          final b = filtered[index];
+                          final fi = index.clamp(0, _cardFades.length - 1);
+                          return FadeTransition(
+                            opacity: _cardFades[fi],
+                            child: SlideTransition(
+                              position: _cardSlides[fi],
+                              child: _BoutiqueCard(
+                                boutique: b,
+                                onTap: () => context.push('/boutique/${b.id}'),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),

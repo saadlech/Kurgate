@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../providers/destination_provider.dart';
+import '../providers/catalog_providers.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final VoidCallback? onProfileTap;
@@ -405,40 +406,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 position: _sectionSlide,
                 child: Column(
                   children: [
-                    _buildSection(
-                      '🏨  Popular Hotels',
-                      '/hotels',
-                      _isCasa ? _hotelsCasa : _hotels,
-                      '/night',
-                    ),
+                    _buildAsyncHotels(),
                     const SizedBox(height: 24),
-                    _buildSection(
-                      '🚗  Rent a Car',
-                      '/vehicules',
-                      _isCasa ? _vehiculesCasa : _vehicles,
-                      '/day',
-                    ),
+                    _buildAsyncVehicles(),
                     const SizedBox(height: 24),
-                    _buildSection(
-                      '🌟  Top Experiences',
-                      '/experiences',
-                      _isCasa ? _experiencesCasa : _experiences,
-                      '/pers',
-                    ),
+                    _buildAsyncExperiences(),
                     const SizedBox(height: 24),
-                    _buildSection(
-                      '🍽️  Restaurants',
-                      '/restaurants',
-                      _isCasa ? _restaurantsCasa : _restaurants,
-                      '/avg',
-                    ),
+                    _buildAsyncRestaurants(),
                     const SizedBox(height: 24),
-                    _buildSection(
-                      '🛍️  Artisan Shops',
-                      '/boutiques',
-                      _isCasa ? _boutiquesCasa : _boutiques,
-                      '',
-                    ),
+                    _buildAsyncBoutiques(),
                   ],
                 ),
               ),
@@ -924,6 +900,53 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ),
       ),
     );
+  }
+
+  // ── Async Section Builders — fetch from Supabase, fallback to static ──
+
+  Widget _buildAsyncHotels() {
+    final destId = ref.watch(selectedDestinationProvider).idDestination;
+    final async = ref.watch(hotelsProvider(destId));
+    final items = async.valueOrNull?.take(4).map((h) => _Item(
+      h.name, h.location, h.price.toDouble(), h.rating, h.imageUrl, '/hotel/${h.id}', 'hotel',
+    )).toList() ?? (_isCasa ? _hotelsCasa : _hotels);
+    return _buildSection('🏨  Popular Hotels', '/hotels', items, '/night');
+  }
+
+  Widget _buildAsyncVehicles() {
+    final destId = ref.watch(selectedDestinationProvider).idDestination;
+    final async = ref.watch(vehiculesProvider(destId));
+    final items = async.valueOrNull?.take(4).map((v) => _Item(
+      v.name, '${v.category} · ${v.carburant}', v.price.toDouble(), v.rating, v.imageUrl, '/vehicule/${v.id}', 'vehicle',
+    )).toList() ?? (_isCasa ? _vehiculesCasa : _vehicles);
+    return _buildSection('🚗  Rent a Car', '/vehicules', items, '/day');
+  }
+
+  Widget _buildAsyncExperiences() {
+    final destId = ref.watch(selectedDestinationProvider).idDestination;
+    final async = ref.watch(experiencesProvider(destId));
+    final items = async.valueOrNull?.take(4).map((e) => _Item(
+      e.name, '${e.category} · ${e.duree}', e.price.toDouble(), e.rating, e.imageUrl, '/experience/${e.id}', 'experience',
+    )).toList() ?? (_isCasa ? _experiencesCasa : _experiences);
+    return _buildSection('🌟  Top Experiences', '/experiences', items, '/pers');
+  }
+
+  Widget _buildAsyncRestaurants() {
+    final destId = ref.watch(selectedDestinationProvider).idDestination;
+    final async = ref.watch(restaurantsProvider(destId));
+    final items = async.valueOrNull?.take(4).map((r) => _Item(
+      r.name, r.specialite, r.price.toDouble(), r.rating, r.imageUrl, '/restaurant/${r.id}', 'restaurant',
+    )).toList() ?? (_isCasa ? _restaurantsCasa : _restaurants);
+    return _buildSection('🍽️  Restaurants', '/restaurants', items, '/avg');
+  }
+
+  Widget _buildAsyncBoutiques() {
+    final destId = ref.watch(selectedDestinationProvider).idDestination;
+    final async = ref.watch(boutiquesProvider(destId));
+    final items = async.valueOrNull?.take(4).map((b) => _Item(
+      b.name, '${b.category} · Fait main', 0, b.rating, b.imageUrl, '/boutique/${b.id}', 'boutique',
+    )).toList() ?? (_isCasa ? _boutiquesCasa : _boutiques);
+    return _buildSection('🛍️  Artisan Shops', '/boutiques', items, '');
   }
 
   // ── Section with horizontal scroll ──

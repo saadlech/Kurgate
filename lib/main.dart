@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'router/app_router.dart';
 import 'services/local_storage_service.dart';
+import 'services/connectivity_service.dart';
+import 'screens/no_connection_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +39,7 @@ class KurgateApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final connectivityAsync = ref.watch(connectivityProvider);
 
     return MaterialApp.router(
       title: 'Kurgate',
@@ -56,6 +59,19 @@ class KurgateApp extends ConsumerWidget {
           surface: Color(0xFF1A1A1A),
         ),
       ),
+      builder: (context, child) {
+        // Show "No Connection" overlay when offline
+        return connectivityAsync.when(
+          data: (isConnected) {
+            if (!isConnected) {
+              return const NoConnectionScreen();
+            }
+            return child ?? const SizedBox.shrink();
+          },
+          loading: () => child ?? const SizedBox.shrink(),
+          error: (_, _) => child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }
