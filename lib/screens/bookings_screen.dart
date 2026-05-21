@@ -346,7 +346,7 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
             ),
             const SizedBox(height: 8),
             Text(
-              'Cette réservation a déjà été payée (\$${booking.prixTotal}). L\'annulation entraînera un remboursement.',
+              'Cette réservation a déjà été payée (${booking.prixTotal} MAD). L\'annulation entraînera un remboursement.',
               style: TextStyle(
                 fontFamily: 'DarkerGrotesque',
                 color: Colors.white.withValues(alpha: 0.6),
@@ -629,7 +629,7 @@ class _BookingCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    '\$${booking.prixTotal}',
+                    '${booking.prixTotal} MAD',
                     style: const TextStyle(
                       fontFamily: 'DarkerGrotesque',
                       color: Color(0xFFFF8C00),

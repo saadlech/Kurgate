@@ -1,7 +1,6 @@
 class Vehicule {
   final String id;
   final String name;
-  final String agence;
   final int price;
   final double rating;
   final int reviews;
@@ -17,7 +16,6 @@ class Vehicule {
   const Vehicule({
     this.id = '',
     required this.name,
-    required this.agence,
     required this.price,
     required this.rating,
     required this.reviews,
@@ -36,7 +34,6 @@ class Vehicule {
     return {
       'id': id,
       'name': name,
-      'agence': agence,
       'price': price,
       'rating': rating,
       'reviews': reviews,
@@ -56,7 +53,6 @@ class Vehicule {
     return Vehicule(
       id: map['id'] as String? ?? '',
       name: map['name'] as String? ?? '',
-      agence: map['agence'] as String? ?? '',
       price: (map['price'] as num?)?.toInt() ?? 0,
       rating: (map['rating'] as num?)?.toDouble() ?? 0,
       reviews: (map['reviews'] as num?)?.toInt() ?? 0,

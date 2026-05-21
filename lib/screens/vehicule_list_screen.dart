@@ -85,7 +85,7 @@ class _VehiculeListScreenState extends ConsumerState<VehiculeListScreen>
     }
     final q = _searchController.text.trim().toLowerCase();
     if (q.isEmpty) return base;
-    return base.where((v) => v.name.toLowerCase().contains(q) || v.agence.toLowerCase().contains(q)).toList();
+    return base.where((v) => v.name.toLowerCase().contains(q) || v.category.toLowerCase().contains(q)).toList();
   }
 
   @override
@@ -443,7 +443,7 @@ class _VehiculeCard extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: '\$${vehicule.price}',
+                              text: '${vehicule.price} MAD',
                               style: const TextStyle(
                                 fontFamily: 'DarkerGrotesque',
                                 color: Color(0xFFFF8C00),
@@ -469,13 +469,13 @@ class _VehiculeCard extends StatelessWidget {
                   Row(
                     children: [
                       Icon(
-                        Icons.store_rounded,
+                        Icons.directions_car_rounded,
                         color: Colors.white.withValues(alpha: 0.4),
                         size: 14,
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        vehicule.agence,
+                        '${vehicule.category} · ${vehicule.transmission}',
                         style: TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           color: Colors.white.withValues(alpha: 0.4),

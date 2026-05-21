@@ -78,7 +78,7 @@ class _BoutiqueListScreenState extends ConsumerState<BoutiqueListScreen>
     }
     final q = _searchController.text.trim().toLowerCase();
     if (q.isEmpty) return base;
-    return base.where((b) => b.name.toLowerCase().contains(q) || b.artisan.toLowerCase().contains(q) || b.location.toLowerCase().contains(q)).toList();
+    return base.where((b) => b.name.toLowerCase().contains(q) || b.artisan.toLowerCase().contains(q)).toList();
   }
 
   @override
@@ -417,7 +417,7 @@ class _BoutiqueCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '\$${boutique.prixMoyen}',
+                        '${boutique.prixMoyen} MAD',
                         style: const TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           color: Color(0xFFFF8C00),
@@ -443,28 +443,6 @@ class _BoutiqueCard extends StatelessWidget {
                           color: Colors.white.withValues(alpha: 0.5),
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on_outlined,
-                        color: Colors.white.withValues(alpha: 0.4),
-                        size: 14,
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          boutique.location,
-                          style: TextStyle(
-                            fontFamily: 'DarkerGrotesque',
-                            color: Colors.white.withValues(alpha: 0.4),
-                            fontSize: 13,
-                          ),
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],

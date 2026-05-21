@@ -98,6 +98,14 @@ L'application couvre **deux villes** — **Marrakech** et **Casablanca** — et 
 - Prévention des avis doubles par utilisateur
 - **Persistance cloud** — Avis sauvegardés dans la table `avis` via Supabase
 
+### 🧠 Recherche Sémantique (pgvector)
+- **Recherche IA** — Recherche par intention ("dîner romantique avec vue" → restaurants rooftop)
+- **Cross-catégorie** — "journée relaxante" → hôtels spa + expériences hammam
+- **pgvector + HNSW** — Index de similarité cosinus pour des résultats instantanés
+- **Embeddings OpenAI** — `text-embedding-3-small` (1536 dimensions)
+- **Edge Function** — Génération d'embeddings via Supabase Edge Functions
+- **UI hybride** — Résultats locaux instantanés + résultats IA avec badge de similarité
+
 ### 🔧 Performance
 - **Cache images optimisé** — `cacheWidth`/`cacheHeight` sur tous les `Image.asset` (400px listes, 500px détails)
 - **Limite cache globale** — 50 MB / 30 images max
@@ -113,7 +121,7 @@ L'application couvre **deux villes** — **Marrakech** et **Casablanca** — et 
 | **Langage** | Dart 3.7 |
 | **State Management** | Riverpod (`flutter_riverpod`) |
 | **Navigation** | GoRouter (`go_router`) |
-| **Backend** | Supabase (Auth + PostgreSQL) |
+| **Backend** | Supabase (Auth + PostgreSQL + pgvector + Edge Functions) |
 | **Stockage Local** | Hive (`hive_flutter`) |
 | **Cartographie** | flutter_map + latlong2 (OpenStreetMap) |
 | **Typographie** | Darker Grotesque (7 weights) |
@@ -144,16 +152,17 @@ kurgate/
 │   │   ├── chambre.dart             # Modèle chambre d'hôtel
 │   │   ├── attraction.dart          # Modèle point d'intérêt
 │   │   └── chatbot.dart             # Modèle chatbot (réservé)
-│   ├── providers/                   # 8 providers Riverpod
+│   ├── providers/                   # 9 providers Riverpod
 │   │   ├── auth_provider.dart       # AuthNotifier (login, signup, delete, update)
 │   │   ├── booking_provider.dart    # ReservationNotifier (add, cancel, pay, feedback → Supabase)
 │   │   ├── cart_provider.dart       # CartNotifier (add, remove, checkout → Supabase commandes)
 │   │   ├── review_provider.dart     # ReviewNotifier (add, average, check → Supabase avis)
+│   │   ├── search_provider.dart     # SemanticSearchNotifier (pgvector cosine similarity)
 │   │   ├── catalog_providers.dart   # FutureProviders for all catalog entities (Supabase)
 │   │   ├── destination_provider.dart # FutureProvider → Supabase with static fallback
 │   │   └── onboarding_provider.dart # hasSeenOnboarding, splashComplete
 │   ├── services/
-│   │   ├── supabase_service.dart     # Centralized Supabase data operations (14 methods)
+│   │   ├── supabase_service.dart     # Centralized Supabase data operations (16 methods)
 │   │   └── local_storage_service.dart # Hive (credentials, remember me)
 │   ├── router/
 │   │   └── app_router.dart          # GoRouter (20 routes avec transitions)
@@ -324,10 +333,13 @@ L'application est **entièrement synchronisée** avec Supabase. Toutes les opér
 | `reservations` | SELECT, INSERT, UPDATE (status + feedback) | ✅ Own user only |
 | `avis` | SELECT, INSERT | ✅ Public read, own insert |
 | `commandes` | SELECT, INSERT, UPDATE | ✅ Own user only |
+| `item_embeddings` | SELECT + RPC `match_items()` | ✅ Public read |
 
 - **Authentication** — Email/password avec vérification, reset password
 - **Row Level Security** — Sécurité au niveau des lignes sur toutes les tables
-- **RPC** — Fonction `delete_user()` pour suppression de compte
+- **RPC** — Fonctions `delete_user()` et `match_items()` (recherche sémantique)
+- **pgvector** — Extension vectorielle pour la recherche par similarité cosinus (HNSW)
+- **Edge Functions** — `embed()` pour génération d'embeddings OpenAI
 - **Offline-First** — Fallback local si Supabase est indisponible
 
 ### Architecture de Synchronisation

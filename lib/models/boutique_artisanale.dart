@@ -36,6 +36,14 @@ class BoutiqueArtisanale extends OffreTouristique {
 
   /// Create from Map (from Supabase database)
   factory BoutiqueArtisanale.fromMap(Map<String, dynamic> map) {
+    // Parse nested products if present (from joined query)
+    final rawProducts = map['produits_boutique'] as List<dynamic>?;
+    final parsedProducts = rawProducts != null
+        ? rawProducts
+            .map((p) => Produit.fromMap(p as Map<String, dynamic>))
+            .toList()
+        : <Produit>[];
+
     return BoutiqueArtisanale(
       id: map['id'] as String? ?? '',
       name: map['name'] as String? ?? '',
@@ -51,14 +59,46 @@ class BoutiqueArtisanale extends OffreTouristique {
       artisan: map['artisan'] as String? ?? '',
       prixMoyen: map['prix_moyen'] as String? ?? '',
       horaires: map['horaires'] as String? ?? '',
+      products: parsedProducts,
     );
   }
 }
 
 class Produit {
+  final String id;
+  final String boutiqueId;
   final String name;
-  final String desc;
   final int price;
+  final String desc;
+  final int stock;
+  final String imageUrl;
 
-  const Produit(this.name, this.price, this.desc);
+  const Produit({
+    this.id = '',
+    this.boutiqueId = '',
+    required this.name,
+    required this.price,
+    this.desc = '',
+    this.stock = 10,
+    this.imageUrl = '',
+  });
+
+  factory Produit.fromMap(Map<String, dynamic> map) => Produit(
+        id: map['id'] as String? ?? '',
+        boutiqueId: map['boutique_id'] as String? ?? '',
+        name: map['nom'] as String? ?? '',
+        price: (map['prix'] as num?)?.toInt() ?? 0,
+        desc: map['description'] as String? ?? '',
+        stock: (map['stock'] as num?)?.toInt() ?? 10,
+        imageUrl: map['image_url'] as String? ?? '',
+      );
+
+  Map<String, dynamic> toMap() => {
+        'boutique_id': boutiqueId,
+        'nom': name,
+        'prix': price,
+        'description': desc,
+        'stock': stock,
+        'image_url': imageUrl,
+      };
 }

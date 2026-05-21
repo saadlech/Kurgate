@@ -100,13 +100,21 @@ flutter:
     - assets/images/marrakech/restaurants/cafe_clock/
     - assets/images/marrakech/restaurants/la_table_du_palais/
     - assets/images/marrakech/restaurants/chez_lamine/
-    # Marrakech Boutiques
-    - assets/images/marrakech/boutiques/tapis_berberes/
-    - assets/images/marrakech/boutiques/ceramique_safi/
-    - assets/images/marrakech/boutiques/maroquinerie_youssef/
-    - assets/images/marrakech/boutiques/bijoux_touareg/
-    - assets/images/marrakech/boutiques/tissages_amazigh/
-    - assets/images/marrakech/boutiques/poterie_tamegroute/
+    # Boutiques (shared)
+    - assets/images/boutiques/tapis_berberes/
+    - assets/images/boutiques/ceramique_safi/
+    - assets/images/boutiques/maroquinerie_youssef/
+    - assets/images/boutiques/bijoux_touareg/
+    - assets/images/boutiques/tissages_amazigh/
+    - assets/images/boutiques/poterie_tamegroute/
+
+    - assets/images/boutiques/habous_artisanat/
+    - assets/images/boutiques/tresor_arts/
+    - assets/images/boutiques/maroquinerie_casa/
+    - assets/images/boutiques/parfumerie_casa/
+    # Product images (shared)
+    - assets/images/produits/
+
     # Casablanca Hotels
     - assets/images/casablanca/hotels/four_seasons_casa/
     - assets/images/casablanca/hotels/le_doge_casa/
@@ -127,13 +135,7 @@ flutter:
     - assets/images/casablanca/restaurants/basmane/
     - assets/images/casablanca/restaurants/la_bodega/
     - assets/images/casablanca/restaurants/blend/
-    # Casablanca Boutiques
-    - assets/images/casablanca/boutiques/derb_ghallef/
-    - assets/images/casablanca/boutiques/habous_artisanat/
-    - assets/images/casablanca/boutiques/tresor_arts/
-    - assets/images/casablanca/boutiques/maroquinerie_casa/
-    - assets/images/casablanca/boutiques/parfumerie_casa/
-    - assets/images/casablanca/boutiques/atelier_zellige/
+
     # Vehicles (shared)
     - assets/images/vehicules/dacia_duster/
     - assets/images/vehicules/renault_clio/
@@ -141,6 +143,62 @@ flutter:
     - assets/images/vehicules/toyota_hilux/
     - assets/images/vehicules/peugeot_3008/
     - assets/images/vehicules/citroen_berlingo/
+    # Marrakech Attractions
+    - assets/images/marrakech/attractions/bahia_palace/
+    - assets/images/marrakech/attractions/jardin_majorelle/
+    - assets/images/marrakech/attractions/koutoubia/
+    - assets/images/marrakech/attractions/tombeaux_saadiens/
+    - assets/images/marrakech/attractions/menara/
+    # Casablanca Attractions
+    - assets/images/casablanca/attractions/hassan_ii/
+    - assets/images/casablanca/attractions/morocco_mall/
+    - assets/images/casablanca/attractions/quartier_habous/
+    - assets/images/casablanca/attractions/royal_palace/
+    - assets/images/casablanca/attractions/mohammed_v/
+    - assets/images/casablanca/attractions/notre_dame/
+    # Tanger Attractions
+    - assets/images/tanger/attractions/cap_spartel/
+    - assets/images/tanger/attractions/caves_hercules/
+    - assets/images/tanger/attractions/parc_perdicaris/
+    - assets/images/tanger/attractions/st_andrew/
+    - assets/images/tanger/attractions/legation_museum/
+    # Agadir Attractions
+    - assets/images/agadir/attractions/kasbah_oufella/
+    - assets/images/agadir/attractions/marina_agadir/
+    # Agadir Hotels
+    - assets/images/agadir/hotels/dunes_dor/
+    - assets/images/agadir/hotels/riu_palace_tikida/
+    - assets/images/agadir/hotels/sofitel_royal_bay/
+    - assets/images/agadir/hotels/sofitel_thalassa/
+    - assets/images/agadir/hotels/the_view/
+    # Agadir Restaurants
+    - assets/images/agadir/restaurants/el_toro/
+    - assets/images/agadir/restaurants/la_plage/
+    - assets/images/agadir/restaurants/le_20/
+    - assets/images/agadir/restaurants/little_italy/
+    - assets/images/agadir/restaurants/rafiq/
+    # Agadir Experiences
+    - assets/images/agadir/experiences/city_tour/
+    - assets/images/agadir/experiences/sandboarding/
+    - assets/images/agadir/experiences/yacht_cruise/
+    - assets/images/agadir/experiences/cable_car/
+    - assets/images/agadir/experiences/paradise_valley/
+    - assets/images/agadir/experiences/crocoparc/
+    # Tanger Hotels
+    - assets/images/tanger/hotels/barcelo/
+    - assets/images/tanger/hotels/hilton_garden_inn/
+    - assets/images/tanger/hotels/hilton_al_houara/
+    - assets/images/tanger/hotels/hilton_city_center/
+    - assets/images/tanger/hotels/pestana/
+    # Tanger Restaurants
+    - assets/images/tanger/restaurants/el_morocco_club/
+    - assets/images/tanger/restaurants/lolivier/
+    - assets/images/tanger/restaurants/macondo/
+    - assets/images/tanger/restaurants/les_huitres/
+    - assets/images/tanger/restaurants/palais_zahia/
+    # Tanger Experiences
+    - assets/images/tanger/experiences/luxury_tour/
+    - assets/images/tanger/experiences/grand_tour/
 
   fonts:
     - family: DarkerGrotesque

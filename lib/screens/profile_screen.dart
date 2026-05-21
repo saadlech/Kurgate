@@ -48,7 +48,7 @@ class ProfileScreen extends ConsumerWidget {
                   // Info tiles
                   _infoTile(Icons.person_rounded, 'Nom complet', user?.nom ?? '-'),
                   _infoTile(Icons.email_rounded, 'Email', user?.email ?? '-'),
-                  _infoTile(Icons.phone_rounded, 'Téléphone', user != null && user.numDeTelephone > 0 ? '+212 ${user.numDeTelephone}' : '-'),
+                  _infoTile(Icons.phone_rounded, 'Téléphone', user != null && user.numDeTelephone.isNotEmpty ? user.numDeTelephone : '-'),
 
                   const SizedBox(height: 20),
 

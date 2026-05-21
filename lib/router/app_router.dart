@@ -21,6 +21,8 @@ import '../screens/boutique_list_screen.dart';
 import '../screens/boutique_detail_screen.dart';
 import '../screens/payment_screen.dart';
 import '../screens/edit_profile_screen.dart';
+import '../screens/attraction_list_screen.dart';
+import '../screens/attraction_detail_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -427,6 +429,45 @@ final routerProvider = Provider<GoRouter>((ref) {
             );
           },
         ),
+      ),
+
+      // Attraction listing
+      GoRoute(
+        path: '/attractions',
+        name: 'attractions',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const AttractionListScreen(),
+          transitionDuration: const Duration(milliseconds: 400),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
+                  .animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+              child: child,
+            );
+          },
+        ),
+      ),
+
+      // Attraction detail
+      GoRoute(
+        path: '/attraction/:id',
+        name: 'attractionDetail',
+        pageBuilder: (context, state) {
+          final attractionId = state.pathParameters['id']!;
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: AttractionDetailScreen(attractionId: attractionId),
+            transitionDuration: const Duration(milliseconds: 400),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(begin: const Offset(0, 0.15), end: Offset.zero)
+                    .animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+                child: FadeTransition(opacity: animation, child: child),
+              );
+            },
+          );
+        },
       ),
     ],
   );

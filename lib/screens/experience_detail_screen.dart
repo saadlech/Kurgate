@@ -11,10 +11,12 @@ class ExperienceDetailScreen extends ConsumerStatefulWidget {
   final String experienceId;
   const ExperienceDetailScreen({super.key, required this.experienceId});
   @override
-  ConsumerState<ExperienceDetailScreen> createState() => _ExperienceDetailScreenState();
+  ConsumerState<ExperienceDetailScreen> createState() =>
+      _ExperienceDetailScreenState();
 }
 
-class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen> {
+class _ExperienceDetailScreenState
+    extends ConsumerState<ExperienceDetailScreen> {
   bool _bookingExpanded = false;
   late DateTime _date;
   int _participants = 2;
@@ -35,7 +37,7 @@ class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen>
         'assets/images/marrakech/experiences/safari_agafay/2.png',
         'assets/images/marrakech/experiences/safari_agafay/3.png',
       ],
-      price: 85,
+      price: 850,
       duree: '6h',
       capacite: 12,
       category: 'Aventure',
@@ -53,7 +55,7 @@ class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen>
         'assets/images/marrakech/experiences/medina_visite/2.png',
         'assets/images/marrakech/experiences/medina_visite/3.png',
       ],
-      price: 35,
+      price: 350,
       duree: '3h',
       capacite: 15,
       category: 'Culture',
@@ -71,7 +73,7 @@ class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen>
         'assets/images/marrakech/experiences/randonnee_atlas/2.png',
         'assets/images/marrakech/experiences/randonnee_atlas/3.png',
       ],
-      price: 60,
+      price: 600,
       duree: '8h',
       capacite: 10,
       category: 'Nature',
@@ -89,7 +91,7 @@ class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen>
         'assets/images/marrakech/experiences/cours_cuisine/2.png',
         'assets/images/marrakech/experiences/cours_cuisine/3.png',
       ],
-      price: 50,
+      price: 500,
       duree: '4h',
       capacite: 8,
       category: 'Gastronomie',
@@ -107,7 +109,7 @@ class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen>
         'assets/images/marrakech/experiences/vol_montgolfiere/2.png',
         'assets/images/marrakech/experiences/vol_montgolfiere/3.png',
       ],
-      price: 180,
+      price: 1800,
       duree: '2h',
       capacite: 6,
       category: 'Aventure',
@@ -125,66 +127,193 @@ class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen>
         'assets/images/marrakech/experiences/jardin_majorelle/2.png',
         'assets/images/marrakech/experiences/jardin_majorelle/3.png',
       ],
-      price: 15,
+      price: 150,
       duree: '2h',
       capacite: 20,
       category: 'Culture',
     ),
     // Casablanca experiences
     'exp_casa_001': Experience(
-      name: 'Visite Privée avec Mosquée Hassan II', location: 'Boulevard de la Corniche, Casablanca',
-      rating: 4.9, reviews: 1245,
-      description: 'Découvrez la plus grande mosquée d\'Afrique et la 3e au monde avec un guide privé. Chef-d\'œuvre architectural avec son minaret de 210m, son toit ouvrant et ses sols en marbre. Visite guidée personnalisée à travers les salles de prière, les hammams et les jardins.',
+      name: 'Visite Privée avec Mosquée Hassan II',
+      location: 'Boulevard de la Corniche, Casablanca',
+      rating: 4.9,
+      reviews: 1245,
+      description:
+          'Découvrez la plus grande mosquée d\'Afrique et la 3e au monde avec un guide privé. Chef-d\'œuvre architectural avec son minaret de 210m, son toit ouvrant et ses sols en marbre. Visite guidée personnalisée à travers les salles de prière, les hammams et les jardins.',
       imageUrl: 'assets/images/casablanca/experiences/mosquee_hassan/1.jpg',
-      images: ['assets/images/casablanca/experiences/mosquee_hassan/1.jpg', 'assets/images/casablanca/experiences/mosquee_hassan/2.jpg', 'assets/images/casablanca/experiences/mosquee_hassan/3.jpg', 'assets/images/casablanca/experiences/mosquee_hassan/4.jpg', 'assets/images/casablanca/experiences/mosquee_hassan/5.jpg', 'assets/images/casablanca/experiences/mosquee_hassan/6.jpg'],
-      price: 53, duree: '4h', capacite: 15, category: 'Culture',
+      images: [
+        'assets/images/casablanca/experiences/mosquee_hassan/1.jpg',
+        'assets/images/casablanca/experiences/mosquee_hassan/2.jpg',
+        'assets/images/casablanca/experiences/mosquee_hassan/3.jpg',
+        'assets/images/casablanca/experiences/mosquee_hassan/4.jpg',
+        'assets/images/casablanca/experiences/mosquee_hassan/5.jpg',
+        'assets/images/casablanca/experiences/mosquee_hassan/6.jpg',
+      ],
+      price: 530,
+      duree: '4h',
+      capacite: 15,
+      category: 'Culture',
     ),
     'exp_casa_002': Experience(
-      name: 'Excursion Casablanca – Tanger en TGV', location: 'Gare Casa Voyageurs, Casablanca',
-      rating: 4.7, reviews: 678,
-      description: 'Voyagez en TGV Al Boraq vers Tanger et découvrez la perle du détroit. Visite de la Kasbah, balade en chameau sur la plage et exploration de la médina. Déjeuner traditionnel inclus avec vue sur le détroit de Gibraltar.',
+      name: 'Excursion Casablanca – Tanger en TGV',
+      location: 'Gare Casa Voyageurs, Casablanca',
+      rating: 4.7,
+      reviews: 678,
+      description:
+          'Voyagez en TGV Al Boraq vers Tanger et découvrez la perle du détroit. Visite de la Kasbah, balade en chameau sur la plage et exploration de la médina. Déjeuner traditionnel inclus avec vue sur le détroit de Gibraltar.',
       imageUrl: 'assets/images/casablanca/experiences/corniche_casa/1.jpg',
-      images: ['assets/images/casablanca/experiences/corniche_casa/1.jpg', 'assets/images/casablanca/experiences/corniche_casa/2.jpg', 'assets/images/casablanca/experiences/corniche_casa/3.jpg', 'assets/images/casablanca/experiences/corniche_casa/4.jpg', 'assets/images/casablanca/experiences/corniche_casa/5.jpg', 'assets/images/casablanca/experiences/corniche_casa/6.jpg'],
-      price: 95, duree: '12h', capacite: 20, category: 'Aventure',
+      images: [
+        'assets/images/casablanca/experiences/corniche_casa/1.jpg',
+        'assets/images/casablanca/experiences/corniche_casa/2.jpg',
+        'assets/images/casablanca/experiences/corniche_casa/3.jpg',
+        'assets/images/casablanca/experiences/corniche_casa/4.jpg',
+        'assets/images/casablanca/experiences/corniche_casa/5.jpg',
+        'assets/images/casablanca/experiences/corniche_casa/6.jpg',
+      ],
+      price: 950,
+      duree: '12h',
+      capacite: 20,
+      category: 'Aventure',
     ),
     'exp_casa_003': Experience(
-      name: 'Session Surf sur la Côte Atlantique', location: 'Côte Atlantique, Casablanca',
-      rating: 4.8, reviews: 423,
-      description: 'Domptez les vagues de l\'Atlantique avec des instructeurs certifiés. Session de surf adaptée à tous les niveaux sur les meilleurs spots de la côte casablancaise. Équipement fourni et photos souvenir incluses.',
+      name: 'Session Surf sur la Côte Atlantique',
+      location: 'Côte Atlantique, Casablanca',
+      rating: 4.8,
+      reviews: 423,
+      description:
+          'Domptez les vagues de l\'Atlantique avec des instructeurs certifiés. Session de surf adaptée à tous les niveaux sur les meilleurs spots de la côte casablancaise. Équipement fourni et photos souvenir incluses.',
       imageUrl: 'assets/images/casablanca/experiences/medina_casa/1.jpeg',
-      images: ['assets/images/casablanca/experiences/medina_casa/1.jpeg', 'assets/images/casablanca/experiences/medina_casa/2.jpg', 'assets/images/casablanca/experiences/medina_casa/3.jpg', 'assets/images/casablanca/experiences/medina_casa/4.jpeg'],
-      price: 40, duree: '3h', capacite: 10, category: 'Aventure',
+      images: [
+        'assets/images/casablanca/experiences/medina_casa/1.jpeg',
+        'assets/images/casablanca/experiences/medina_casa/2.jpg',
+        'assets/images/casablanca/experiences/medina_casa/3.jpg',
+        'assets/images/casablanca/experiences/medina_casa/4.jpeg',
+      ],
+      price: 400,
+      duree: '3h',
+      capacite: 10,
+      category: 'Aventure',
     ),
     'exp_casa_004': Experience(
-      name: 'Morocco Mall & Shopping', location: 'Morocco Mall, Casablanca',
-      rating: 4.5, reviews: 892,
-      description: 'Découvrez le plus grand mall d\'Afrique avec son aquarium géant, ses 600 boutiques et sa fontaine musicale. Shopping, loisirs et gastronomie dans un seul lieu.',
+      name: 'Morocco Mall & Shopping',
+      location: 'Morocco Mall, Casablanca',
+      rating: 4.5,
+      reviews: 892,
+      description:
+          'Découvrez le plus grand mall d\'Afrique avec son aquarium géant, ses 600 boutiques et sa fontaine musicale. Shopping, loisirs et gastronomie dans un seul lieu.',
       imageUrl: 'assets/images/casablanca/experiences/morocco_mall/1.png',
-      images: ['assets/images/casablanca/experiences/morocco_mall/1.png', 'assets/images/casablanca/experiences/morocco_mall/2.png', 'assets/images/casablanca/experiences/morocco_mall/3.png'],
-      price: 0, duree: '4h', capacite: 20, category: 'Aventure',
+      images: [
+        'assets/images/casablanca/experiences/morocco_mall/1.png',
+        'assets/images/casablanca/experiences/morocco_mall/2.png',
+        'assets/images/casablanca/experiences/morocco_mall/3.png',
+      ],
+      price: 0,
+      duree: '4h',
+      capacite: 20,
+      category: 'Aventure',
     ),
     'exp_casa_005': Experience(
-      name: 'Quartier Art Déco & Habous', location: 'Quartier Habous, Casablanca',
-      rating: 4.8, reviews: 312,
-      description: 'Découvrez le patrimoine Art Déco unique de Casablanca et le charmant quartier Habous, la "nouvelle médina" avec ses pâtisseries, ses olives et son artisanat traditionnel.',
+      name: 'Quartier Art Déco & Habous',
+      location: 'Quartier Habous, Casablanca',
+      rating: 4.8,
+      reviews: 312,
+      description:
+          'Découvrez le patrimoine Art Déco unique de Casablanca et le charmant quartier Habous, la "nouvelle médina" avec ses pâtisseries, ses olives et son artisanat traditionnel.',
       imageUrl: 'assets/images/casablanca/experiences/art_deco_tour/1.png',
-      images: ['assets/images/casablanca/experiences/art_deco_tour/1.png', 'assets/images/casablanca/experiences/art_deco_tour/2.png', 'assets/images/casablanca/experiences/art_deco_tour/3.png'],
-      price: 20, duree: '3h', capacite: 12, category: 'Culture',
+      images: [
+        'assets/images/casablanca/experiences/art_deco_tour/1.png',
+        'assets/images/casablanca/experiences/art_deco_tour/2.png',
+        'assets/images/casablanca/experiences/art_deco_tour/3.png',
+      ],
+      price: 200,
+      duree: '3h',
+      capacite: 12,
+      category: 'Culture',
     ),
     'exp_casa_006': Experience(
-      name: 'Coucher de soleil en Yacht', location: 'Marina, Casablanca',
-      rating: 4.9, reviews: 156,
-      description: 'Embarquez pour une croisière au coucher du soleil sur l\'Atlantique. Champagne, canapés et musique d\'ambiance à bord d\'un yacht privatisé. Vue imprenable sur la skyline de Casablanca.',
+      name: 'Coucher de soleil en Yacht',
+      location: 'Marina, Casablanca',
+      rating: 4.9,
+      reviews: 156,
+      description:
+          'Embarquez pour une croisière au coucher du soleil sur l\'Atlantique. Champagne, canapés et musique d\'ambiance à bord d\'un yacht privatisé. Vue imprenable sur la skyline de Casablanca.',
       imageUrl: 'assets/images/casablanca/experiences/yacht_casa/1.png',
-      images: ['assets/images/casablanca/experiences/yacht_casa/1.png', 'assets/images/casablanca/experiences/yacht_casa/2.png', 'assets/images/casablanca/experiences/yacht_casa/3.png'],
-      price: 200, duree: '3h', capacite: 8, category: 'Aventure',
+      images: [
+        'assets/images/casablanca/experiences/yacht_casa/1.png',
+        'assets/images/casablanca/experiences/yacht_casa/2.png',
+        'assets/images/casablanca/experiences/yacht_casa/3.png',
+      ],
+      price: 2000,
+      duree: '3h',
+      capacite: 8,
+      category: 'Aventure',
+    ),
+    // Agadir experiences
+    'exp_aga_001': Experience(
+      name: 'City Tour Kasbah & Souk', location: 'Agadir', rating: 4.7, reviews: 156,
+      description: 'Découvrez la Kasbah d\'Agadir Oufella et le souk El Had, le plus grand souk du Maroc. Guide local inclus.',
+      imageUrl: 'assets/images/agadir/experiences/city_tour/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/agadir/experiences/city_tour/${i + 1}.jpg'),
+      price: 350, duree: '4h', capacite: 15, category: 'Culture',
+    ),
+    'exp_aga_002': Experience(
+      name: 'Sandboarding & Quad Bike', location: 'Désert de Tamri', rating: 4.8, reviews: 203,
+      description: 'Aventure dans les dunes de sable : sandboarding et quad dans le désert près d\'Agadir.',
+      imageUrl: 'assets/images/agadir/experiences/sandboarding/1.jpg',
+      images: List.generate(5, (i) => 'assets/images/agadir/experiences/sandboarding/${i + 1}.jpg'),
+      price: 650, duree: '5h', capacite: 10, category: 'Aventure',
+    ),
+    'exp_aga_003': Experience(
+      name: 'Yacht Cruise & Fishing', location: 'Port Marina, Agadir', rating: 4.9, reviews: 178,
+      description: 'Croisière privée en yacht le long de la côte atlantique avec pêche en haute mer et déjeuner à bord.',
+      imageUrl: 'assets/images/agadir/experiences/yacht_cruise/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/agadir/experiences/yacht_cruise/${i + 1}.jpg'),
+      price: 1200, duree: '4h', capacite: 8, category: 'Aventure',
+    ),
+    'exp_aga_004': Experience(
+      name: 'Téléphérique & City Tour', location: 'Centre-ville, Agadir', rating: 4.6, reviews: 112,
+      description: 'Montée en téléphérique jusqu\'à la Kasbah avec vue à 360° sur Agadir, suivie d\'un tour guidé.',
+      imageUrl: 'assets/images/agadir/experiences/cable_car/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/agadir/experiences/cable_car/${i + 1}.jpg'),
+      price: 400, duree: '3h', capacite: 20, category: 'Culture',
+    ),
+    'exp_aga_005': Experience(
+      name: 'Paradise Valley & Atlas', location: 'Imouzzer', rating: 4.8, reviews: 234,
+      description: 'Excursion dans la Paradise Valley, oasis naturelle avec cascades et piscines naturelles au pied de l\'Atlas.',
+      imageUrl: 'assets/images/agadir/experiences/paradise_valley/1.jpg',
+      images: List.generate(5, (i) => 'assets/images/agadir/experiences/paradise_valley/${i + 1}.jpg'),
+      price: 550, duree: '8h', capacite: 12, category: 'Nature',
+    ),
+    'exp_aga_006': Experience(
+      name: 'Crocoparc Agadir', location: 'Route de Drarga', rating: 4.5, reviews: 89,
+      description: 'Parc zoologique avec plus de 300 crocodiles, jardin tropical et spectacles éducatifs pour toute la famille.',
+      imageUrl: 'assets/images/agadir/experiences/crocoparc/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/agadir/experiences/crocoparc/${i + 1}.jpg'),
+      price: 250, duree: '2h', capacite: 50, category: 'Nature',
+    ),
+    // Tanger experiences
+    'exp_tan_001': Experience(
+      name: 'Luxury Tangier Tour', location: 'Médina de Tanger', rating: 4.9, reviews: 178,
+      description: 'Visite privée luxueuse de Tanger : Kasbah, Grottes d\'Hercule, Cap Spartel et déjeuner dans un palais.',
+      imageUrl: 'assets/images/tanger/experiences/luxury_tour/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/tanger/experiences/luxury_tour/${i + 1}.jpg'),
+      price: 950, duree: '4h', capacite: 6, category: 'Culture',
+    ),
+    'exp_tan_002': Experience(
+      name: 'Grand Tour de Tanger', location: 'Tanger', rating: 4.8, reviews: 312,
+      description: 'Journée complète à la découverte de Tanger : visite guidée de la Médina et la Kasbah, excursion au Cap Spartel et aux Grottes d\'Hercule, parcours des galeries d\'art, croisière sur le Détroit de Gibraltar avec observation de dauphins, et circuit gastronomique à travers les souks avec dégustation de spécialités tangerois.',
+      imageUrl: 'assets/images/tanger/experiences/grand_tour/4.png',
+      images: List.generate(6, (i) => 'assets/images/tanger/experiences/grand_tour/${i + 1}.${i == 5 ? 'jpg' : 'png'}'),
+      price: 850, duree: '8h', capacite: 12, category: 'Premium',
     ),
   };
 
   Experience? _expOverride;
 
   Experience get _exp =>
-      _expOverride ?? _expDataMap[widget.experienceId] ?? _expDataMap['exp_001']!;
+      _expOverride ??
+      _expDataMap[widget.experienceId] ??
+      _expDataMap['exp_001']!;
   int get _totalPrice => _exp.price * _participants;
 
   @override
@@ -406,22 +535,45 @@ class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen>
                                 const SizedBox(height: 8),
                                 GestureDetector(
                                   onTap: () => launchUrl(
-                                    Uri.parse('https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(_exp.name + ', Marrakech')}'),
+                                    Uri.parse(
+                                      'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent('${_exp.name}, Marrakech')}',
+                                    ),
                                     mode: LaunchMode.externalApplication,
                                   ),
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.06),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.06,
+                                      ),
                                       borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                                      border: Border.all(
+                                        color: Colors.white.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                      ),
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(Icons.navigation_rounded, size: 14, color: const Color(0xFFFF8C00)),
+                                        Icon(
+                                          Icons.navigation_rounded,
+                                          size: 14,
+                                          color: const Color(0xFFFF8C00),
+                                        ),
                                         const SizedBox(width: 6),
-                                        Text('Itinéraire', style: TextStyle(fontFamily: 'DarkerGrotesque', color: const Color(0xFFFF8C00), fontSize: 13, fontWeight: FontWeight.w700)),
+                                        Text(
+                                          'Itinéraire',
+                                          style: TextStyle(
+                                            fontFamily: 'DarkerGrotesque',
+                                            color: const Color(0xFFFF8C00),
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -533,7 +685,7 @@ class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '\$$_totalPrice',
+                        '$_totalPrice MAD',
                         style: const TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           color: Color(0xFFFF8C00),
@@ -887,7 +1039,7 @@ class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen>
                       _summaryRow('Expérience', _exp.name),
                       _summaryRow('Date', _fmtDate(_date)),
                       _summaryRow('Participants', '$_participants'),
-                      _summaryRow('Prix unitaire', '\$${_exp.price}'),
+                      _summaryRow('Prix unitaire', '${_exp.price} MAD'),
                       const Divider(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -902,7 +1054,7 @@ class _ExperienceDetailScreenState extends ConsumerState<ExperienceDetailScreen>
                             ),
                           ),
                           Text(
-                            '\$$_totalPrice',
+                            '$_totalPrice MAD',
                             style: const TextStyle(
                               fontFamily: 'DarkerGrotesque',
                               color: Color(0xFFFF8C00),
@@ -1126,7 +1278,7 @@ class _ReservationSheetState extends State<_ReservationSheet>
                         ),
                       ),
                       Text(
-                        '\$${widget.totalPrice}',
+                        '${widget.totalPrice} MAD',
                         style: const TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           color: Color(0xFFFF8C00),

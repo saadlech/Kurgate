@@ -51,6 +51,11 @@ final boutiqueByIdProvider = FutureProvider.family<BoutiqueArtisanale?, String>(
   return SupabaseService.fetchBoutiqueById(id);
 });
 
+/// Products for a given boutique ID
+final produitsProvider = FutureProvider.family<List<Produit>, String>((ref, boutiqueId) async {
+  return SupabaseService.fetchProduitsForBoutique(boutiqueId);
+});
+
 /// Single vehicule by ID
 final vehiculeByIdProvider = FutureProvider.family<Vehicule?, String>((ref, id) async {
   return SupabaseService.fetchVehiculeById(id);

@@ -429,7 +429,7 @@ class _ExperienceCard extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: '\$${experience.price}',
+                              text: '${experience.price} MAD',
                               style: const TextStyle(
                                 fontFamily: 'DarkerGrotesque',
                                 color: Color(0xFFFF8C00),

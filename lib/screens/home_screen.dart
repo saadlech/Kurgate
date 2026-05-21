@@ -20,6 +20,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   final _searchController = TextEditingController();
   final _searchFocusNode = FocusNode();
 
+
   late AnimationController _entryController;
   late AnimationController _pulseController;
   late Animation<double> _pulseAnim;
@@ -35,6 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Cat(Icons.explore_rounded, 'Experiences', '/experiences'),
     _Cat(Icons.restaurant_rounded, 'Restaurants', '/restaurants'),
     _Cat(Icons.storefront_rounded, 'Artisan Shop', '/boutiques'),
+    _Cat(Icons.account_balance_rounded, 'Attractions', '/attractions'),
   ];
 
   // ── Data ──
@@ -196,7 +198,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Tapis · Fait main',
       0,
       4.8,
-      'assets/images/marrakech/boutiques/tapis_berberes/1.png',
+      'assets/images/boutiques/tapis_berberes/1.png',
       '/boutique/boutique_001',
       'boutique',
     ),
@@ -205,7 +207,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Poterie · Zellige',
       0,
       4.7,
-      'assets/images/marrakech/boutiques/ceramique_safi/1.png',
+      'assets/images/boutiques/ceramique_safi/1.png',
       '/boutique/boutique_002',
       'boutique',
     ),
@@ -214,7 +216,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Cuir · Babouches',
       0,
       4.6,
-      'assets/images/marrakech/boutiques/maroquinerie_youssef/1.png',
+      'assets/images/boutiques/maroquinerie_youssef/1.png',
       '/boutique/boutique_003',
       'boutique',
     ),
@@ -223,7 +225,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       'Bijoux · Argent',
       0,
       4.9,
-      'assets/images/marrakech/boutiques/bijoux_touareg/1.png',
+      'assets/images/boutiques/bijoux_touareg/1.png',
       '/boutique/boutique_004',
       'boutique',
     ),
@@ -231,42 +233,104 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   // ── Casablanca Data ──
   static const _hotelsCasa = [
-    _Item('Four Seasons Casablanca', 'Anfa Place', 380, 4.9, 'assets/images/casablanca/hotels/four_seasons_casa/1.jpg', '/hotel/hotel_casa_001', 'hotel'),
-    _Item('ONE Hotel Casablanca', 'Quartier Gauthier', 200, 4.7, 'assets/images/casablanca/hotels/le_doge_casa/1.jpg', '/hotel/hotel_casa_002', 'hotel'),
-    _Item('Marriott Casablanca', 'Place des Nations Unies', 220, 4.7, 'assets/images/casablanca/hotels/hyatt_casa/1.jpg', '/hotel/hotel_casa_003', 'hotel'),
-    _Item('Kenzi Tower Hotel', 'Twin Center', 160, 4.6, 'assets/images/casablanca/hotels/kenzi_tower/1.jpg', '/hotel/hotel_casa_004', 'hotel'),
+    _Item('Four Seasons Casablanca', 'Anfa Place', 3800, 4.9, 'assets/images/casablanca/hotels/four_seasons_casa/1.jpg', '/hotel/hotel_casa_001', 'hotel'),
+    _Item('ONE Hotel Casablanca', 'Quartier Gauthier', 2000, 4.7, 'assets/images/casablanca/hotels/le_doge_casa/1.jpg', '/hotel/hotel_casa_002', 'hotel'),
+    _Item('Marriott Casablanca', 'Place des Nations Unies', 2200, 4.7, 'assets/images/casablanca/hotels/hyatt_casa/1.jpg', '/hotel/hotel_casa_003', 'hotel'),
+    _Item('Kenzi Tower Hotel', 'Twin Center', 1600, 4.6, 'assets/images/casablanca/hotels/kenzi_tower/1.jpg', '/hotel/hotel_casa_004', 'hotel'),
   ];
-  static const _vehiculesCasa = [
-    _Item('Dacia Duster 2024', 'SUV · Diesel', 45, 4.6, 'assets/images/vehicules/dacia_duster/1.png', '/vehicule/vehicule_casa_001', 'vehicle'),
-    _Item('Renault Clio 5', 'Citadine · Essence', 22, 4.4, 'assets/images/vehicules/renault_clio/1.png', '/vehicule/vehicule_casa_002', 'vehicle'),
-    _Item('Mercedes Classe E', 'Berline · Luxe', 150, 4.9, 'assets/images/vehicules/mercedes_classe_e/1.png', '/vehicule/vehicule_casa_003', 'vehicle'),
-    _Item('Peugeot 3008', 'SUV · Familial', 65, 4.7, 'assets/images/vehicules/peugeot_3008/1.png', '/vehicule/vehicule_casa_005', 'vehicle'),
-  ];
+
   static const _experiencesCasa = [
-    _Item('Visite Privée Mosquée Hassan II', 'Culture · 4h', 53, 4.9, 'assets/images/casablanca/experiences/mosquee_hassan/1.jpg', '/experience/exp_casa_001', 'experience'),
-    _Item('Excursion Tanger en TGV', 'Aventure · 12h', 95, 4.7, 'assets/images/casablanca/experiences/corniche_casa/1.jpg', '/experience/exp_casa_002', 'experience'),
-    _Item('Session Surf Atlantique', 'Aventure · 3h', 40, 4.8, 'assets/images/casablanca/experiences/medina_casa/1.jpeg', '/experience/exp_casa_003', 'experience'),
-    _Item('Coucher de soleil en Yacht', 'Aventure · 3h', 200, 4.9, 'assets/images/casablanca/experiences/yacht_casa/1.png', '/experience/exp_casa_006', 'experience'),
+    _Item('Visite Privée Mosquée Hassan II', 'Culture · 4h', 530, 4.9, 'assets/images/casablanca/experiences/mosquee_hassan/1.jpg', '/experience/exp_casa_001', 'experience'),
+    _Item('Excursion Tanger en TGV', 'Aventure · 12h', 950, 4.7, 'assets/images/casablanca/experiences/corniche_casa/1.jpg', '/experience/exp_casa_002', 'experience'),
+    _Item('Session Surf Atlantique', 'Aventure · 3h', 400, 4.8, 'assets/images/casablanca/experiences/medina_casa/1.jpeg', '/experience/exp_casa_003', 'experience'),
+    _Item('Coucher de soleil en Yacht', 'Aventure · 3h', 2000, 4.9, 'assets/images/casablanca/experiences/yacht_casa/1.png', '/experience/exp_casa_006', 'experience'),
   ];
   static const _restaurantsCasa = [
-    _Item('Dar El Kaid', 'Quartier Habous', 35, 4.8, 'assets/images/casablanca/restaurants/ricks_cafe/1.jpg', '/restaurant/resto_casa_001', 'restaurant'),
-    _Item('Riad 1930', 'Ancienne Médina', 35, 4.8, 'assets/images/casablanca/restaurants/riad_1930/1.jpg', '/restaurant/resto_casa_002', 'restaurant'),
+    _Item('Dar El Kaid', 'Quartier Habous', 350, 4.8, 'assets/images/casablanca/restaurants/ricks_cafe/1.jpg', '/restaurant/resto_casa_001', 'restaurant'),
+    _Item('Riad 1930', 'Ancienne Médina', 350, 4.8, 'assets/images/casablanca/restaurants/riad_1930/1.jpg', '/restaurant/resto_casa_002', 'restaurant'),
     _Item('La Pergola', 'Boulevard d\'Anfa', 45, 4.8, 'assets/images/casablanca/restaurants/la_bodega/1.jpg', '/restaurant/resto_casa_005', 'restaurant'),
   ];
-  static const _boutiquesCasa = [
-    _Item('Tapis Berbères El Badi', 'Tapis · Fait main', 0, 4.8, 'assets/images/marrakech/boutiques/tapis_berberes/1.png', '/boutique/boutique_casa_001', 'boutique'),
-    _Item('Atelier Céramique Safi', 'Poterie · Zellige', 0, 4.7, 'assets/images/marrakech/boutiques/ceramique_safi/1.png', '/boutique/boutique_casa_002', 'boutique'),
-    _Item('Maroquinerie Youssef', 'Cuir · Babouches', 0, 4.6, 'assets/images/marrakech/boutiques/maroquinerie_youssef/1.png', '/boutique/boutique_casa_003', 'boutique'),
-    _Item('Bijoux Touareg Amina', 'Bijoux · Argent', 0, 4.9, 'assets/images/marrakech/boutiques/bijoux_touareg/1.png', '/boutique/boutique_casa_006', 'boutique'),
+
+
+  // ── Agadir Data ──
+  static const _hotelsAgadir = [
+    _Item('Sofitel Royal Bay Resort', 'Baie d\'Agadir', 280, 4.8, 'assets/images/agadir/hotels/sofitel_royal_bay/1.jpg', '/hotel/hotel_aga_001', 'hotel'),
+    _Item('Sofitel Thalassa Sea & Spa', 'Bord de Mer', 3200, 4.9, 'assets/images/agadir/hotels/sofitel_thalassa/1.jpg', '/hotel/hotel_aga_002', 'hotel'),
+    _Item('Riu Palace Tikida', 'Secteur Balnéaire', 1800, 4.7, 'assets/images/agadir/hotels/riu_palace_tikida/1.jpg', '/hotel/hotel_aga_003', 'hotel'),
+    _Item('The View Agadir', 'Colline Oufella', 1500, 4.6, 'assets/images/agadir/hotels/the_view/1.jpg', '/hotel/hotel_aga_004', 'hotel'),
+    _Item('Dunes d\'Or Ocean Club', 'Secteur Balnéaire', 120, 4.5, 'assets/images/agadir/hotels/dunes_dor/1.jpg', '/hotel/hotel_aga_005', 'hotel'),
   ];
 
-  bool get _isCasa => ref.watch(selectedDestinationProvider).idDestination == 'dest_002';
+  static const _experiencesAgadir = [
+    _Item('City Tour Kasbah & Souk', 'Culture · 4h', 350, 4.7, 'assets/images/agadir/experiences/city_tour/1.jpg', '/experience/exp_aga_001', 'experience'),
+    _Item('Sandboarding & Quad Bike', 'Aventure · 5h', 650, 4.8, 'assets/images/agadir/experiences/sandboarding/1.jpg', '/experience/exp_aga_002', 'experience'),
+    _Item('Yacht Cruise & Fishing', 'Nautique · 4h', 1200, 4.9, 'assets/images/agadir/experiences/yacht_cruise/1.jpg', '/experience/exp_aga_003', 'experience'),
+    _Item('Téléphérique & City Tour', 'Découverte · 3h', 400, 4.6, 'assets/images/agadir/experiences/cable_car/1.jpg', '/experience/exp_aga_004', 'experience'),
+    _Item('Paradise Valley & Atlas', 'Nature · 8h', 550, 4.8, 'assets/images/agadir/experiences/paradise_valley/1.jpg', '/experience/exp_aga_005', 'experience'),
+    _Item('Crocoparc Agadir', 'Famille · 2h', 250, 4.5, 'assets/images/agadir/experiences/crocoparc/1.jpg', '/experience/exp_aga_006', 'experience'),
+  ];
+  static const _restaurantsAgadir = [
+    _Item('El Toro', 'Steakhouse · Grill', 450, 4.7, 'assets/images/agadir/restaurants/el_toro/1.jpg', '/restaurant/resto_aga_001', 'restaurant'),
+    _Item('La Plage Restaurant', 'Fruits de Mer · Vue Mer', 550, 4.8, 'assets/images/agadir/restaurants/la_plage/1.jpg', '/restaurant/resto_aga_002', 'restaurant'),
+    _Item('Le 20\' Restaurant', 'Gastronomique · Fusion', 60, 4.9, 'assets/images/agadir/restaurants/le_20/1.jpg', '/restaurant/resto_aga_003', 'restaurant'),
+    _Item('Little Italy', 'Italien · Pizza', 350, 4.6, 'assets/images/agadir/restaurants/little_italy/1.jpg', '/restaurant/resto_aga_004', 'restaurant'),
+    _Item('Restaurant Rafiq', 'Marocain · Traditionnel', 300, 4.5, 'assets/images/agadir/restaurants/rafiq/1.jpg', '/restaurant/resto_aga_005', 'restaurant'),
+  ];
+
+
+  // ── Tangier Data ──
+  static const _hotelsTangier = [
+    _Item('Hilton Al Houara Resort', 'Al Houara · Spa', 3500, 4.9, 'assets/images/tanger/hotels/hilton_al_houara/1.jpg', '/hotel/hotel_tan_001', 'hotel'),
+    _Item('Hilton Tangier City Center', 'Centre Ville', 2200, 4.8, 'assets/images/tanger/hotels/hilton_city_center/1.jpg', '/hotel/hotel_tan_002', 'hotel'),
+    _Item('Barceló Tanger', 'Malabata', 1800, 4.7, 'assets/images/tanger/hotels/barcelo/1.jpg', '/hotel/hotel_tan_003', 'hotel'),
+    _Item('Hilton Garden Inn', 'Centre Ville', 1400, 4.6, 'assets/images/tanger/hotels/hilton_garden_inn/1.jpg', '/hotel/hotel_tan_004', 'hotel'),
+    _Item('Pestana Tanger', 'Centre Ville', 1600, 4.7, 'assets/images/tanger/hotels/pestana/1.jpg', '/hotel/hotel_tan_005', 'hotel'),
+  ];
+
+  static const _experiencesTangier = [
+    _Item('Luxury Tangier Tour', 'Privé · 4h', 950, 4.9, 'assets/images/tanger/experiences/luxury_tour/1.jpg', '/experience/exp_tan_001', 'experience'),
+    _Item('Grand Tour de Tanger', 'Premium · 8h', 850, 4.8, 'assets/images/tanger/experiences/grand_tour/4.png', '/experience/exp_tan_002', 'experience'),
+  ];
+  static const _restaurantsTangier = [
+    _Item('El Morocco Club', 'Gastronomique · Médina', 550, 4.9, 'assets/images/tanger/restaurants/el_morocco_club/1.jpg', '/restaurant/resto_tan_001', 'restaurant'),
+    _Item('L\'Olivier Restaurant', 'Méditerranéen · Terrasse', 45, 4.7, 'assets/images/tanger/restaurants/lolivier/1.jpg', '/restaurant/resto_tan_002', 'restaurant'),
+    _Item('Macondo', 'International · Branché', 400, 4.6, 'assets/images/tanger/restaurants/macondo/1.jpg', '/restaurant/resto_tan_003', 'restaurant'),
+    _Item('Les Huîtres', 'Fruits de Mer · Corniche', 500, 4.8, 'assets/images/tanger/restaurants/les_huitres/1.jpg', '/restaurant/resto_tan_004', 'restaurant'),
+    _Item('Palais Zahia', 'Marocain · Palais', 600, 4.8, 'assets/images/tanger/restaurants/palais_zahia/1.jpg', '/restaurant/resto_tan_005', 'restaurant'),
+  ];
+
+
+  String get _destId => ref.watch(selectedDestinationProvider).idDestination;
+
+  List<_Item> _hotelsForDest() {
+    switch (_destId) {
+      case 'dest_002': return _hotelsCasa;
+      case 'dest_003': return _hotelsAgadir;
+      case 'dest_004': return _hotelsTangier;
+      default: return _hotels;
+    }
+  }
+  List<_Item> _vehiclesForDest() => _vehicles;
+  List<_Item> _experiencesForDest() {
+    switch (_destId) {
+      case 'dest_002': return _experiencesCasa;
+      case 'dest_003': return _experiencesAgadir;
+      case 'dest_004': return _experiencesTangier;
+      default: return _experiences;
+    }
+  }
+  List<_Item> _restaurantsForDest() {
+    switch (_destId) {
+      case 'dest_002': return _restaurantsCasa;
+      case 'dest_003': return _restaurantsAgadir;
+      case 'dest_004': return _restaurantsTangier;
+      default: return _restaurants;
+    }
+  }
+  List<_Item> _boutiquesForDest() => _boutiques;
 
   List<_Item> get _activeItems {
-    if (_isCasa) {
-      return [..._hotelsCasa, ..._vehiculesCasa, ..._experiencesCasa, ..._restaurantsCasa, ..._boutiquesCasa];
-    }
-    return [..._hotels, ..._vehicles, ..._experiences, ..._restaurants, ..._boutiques];
+    return [..._hotelsForDest(), ..._vehiclesForDest(), ..._experiencesForDest(), ..._restaurantsForDest(), ..._boutiquesForDest()];
   }
 
   List<_Item> get _searchResults {
@@ -328,6 +392,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   @override
   void dispose() {
+
     _searchController.dispose();
     _searchFocusNode.dispose();
     _carouselController.dispose();
@@ -426,7 +491,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   Widget _buildSearchResults() {
-    final results = _searchResults;
+    final localResults = _searchResults;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -437,9 +503,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            results.isEmpty
+            localResults.isEmpty
                 ? 'No results for "$_searchQuery"'
-                : '${results.length} results',
+                : '${localResults.length} results',
             style: TextStyle(
               fontFamily: 'DarkerGrotesque',
               color: Colors.white.withValues(alpha: 0.5),
@@ -450,103 +516,72 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ),
         const SizedBox(height: 12),
         Expanded(
-          child: ListView.separated(
+          child: ListView(
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-            itemCount: results.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 10),
-            itemBuilder: (ctx, i) {
-              final item = results[i];
-              return GestureDetector(
-                onTap: () {
-                  _searchFocusNode.unfocus();
-                  context.push(item.route);
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.04),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.06),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
-                          item.image,
-                          width: 56,
-                          height: 56,
-                          fit: BoxFit.cover,
-                          cacheWidth: 112,
-                          cacheHeight: 112,
-                          gaplessPlayback: true,
-                          errorBuilder: (_, _, _) => Container(
-                            width: 56,
-                            height: 56,
-                            color: const Color(0xFF2A2A2A),
-                            child: const Icon(
-                              Icons.image,
-                              color: Color(0xFF555555),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item.name,
-                              style: const TextStyle(
-                                fontFamily: 'DarkerGrotesque',
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              item.subtitle,
-                              style: TextStyle(
-                                fontFamily: 'DarkerGrotesque',
-                                color: Colors.white.withValues(alpha: 0.4),
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (item.price > 0)
-                        Text(
-                          '\$${item.price.toInt()}',
-                          style: const TextStyle(
-                            fontFamily: 'DarkerGrotesque',
-                            color: Color(0xFFFF8C00),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      Icon(
-                        Icons.chevron_right_rounded,
-                        color: Colors.white.withValues(alpha: 0.2),
-                        size: 20,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+            children: [
+              ...localResults.map((item) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _buildLocalResultCard(item),
+              )),
+            ],
           ),
         ),
       ],
     );
   }
+
+  Widget _buildLocalResultCard(_Item item) {
+    return GestureDetector(
+      onTap: () {
+        _searchFocusNode.unfocus();
+        context.push(item.route);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                item.image,
+                width: 56, height: 56,
+                fit: BoxFit.cover,
+                cacheWidth: 112, cacheHeight: 112,
+                gaplessPlayback: true,
+                errorBuilder: (_, _, _) => Container(
+                  width: 56, height: 56,
+                  color: const Color(0xFF2A2A2A),
+                  child: const Icon(Icons.image, color: Color(0xFF555555)),
+                ),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(item.name, style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  const SizedBox(height: 2),
+                  Text(item.subtitle, style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 13)),
+                ],
+              ),
+            ),
+            if (item.price > 0)
+              Text('${item.price.toInt()} MAD', style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Color(0xFFFF8C00), fontSize: 16, fontWeight: FontWeight.w800)),
+            Icon(Icons.chevron_right_rounded, color: Colors.white.withValues(alpha: 0.2), size: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+
 
   // ── Header ──
   Widget _buildHeader() {
@@ -907,45 +942,60 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget _buildAsyncHotels() {
     final destId = ref.watch(selectedDestinationProvider).idDestination;
     final async = ref.watch(hotelsProvider(destId));
-    final items = async.valueOrNull?.take(4).map((h) => _Item(
-      h.name, h.location, h.price.toDouble(), h.rating, h.imageUrl, '/hotel/${h.id}', 'hotel',
-    )).toList() ?? (_isCasa ? _hotelsCasa : _hotels);
+    final remote = async.valueOrNull;
+    final items = (remote != null && remote.isNotEmpty)
+        ? remote.take(4).map((h) => _Item(
+            h.name, h.location, h.price.toDouble(), h.rating, h.imageUrl, '/hotel/${h.id}', 'hotel',
+          )).toList()
+        : _hotelsForDest();
     return _buildSection('🏨  Popular Hotels', '/hotels', items, '/night');
   }
 
   Widget _buildAsyncVehicles() {
     final destId = ref.watch(selectedDestinationProvider).idDestination;
     final async = ref.watch(vehiculesProvider(destId));
-    final items = async.valueOrNull?.take(4).map((v) => _Item(
-      v.name, '${v.category} · ${v.carburant}', v.price.toDouble(), v.rating, v.imageUrl, '/vehicule/${v.id}', 'vehicle',
-    )).toList() ?? (_isCasa ? _vehiculesCasa : _vehicles);
+    final remote = async.valueOrNull;
+    final items = (remote != null && remote.isNotEmpty)
+        ? remote.take(4).map((v) => _Item(
+            v.name, '${v.category} · ${v.carburant}', v.price.toDouble(), v.rating, v.imageUrl, '/vehicule/${v.id}', 'vehicle',
+          )).toList()
+        : _vehiclesForDest();
     return _buildSection('🚗  Rent a Car', '/vehicules', items, '/day');
   }
 
   Widget _buildAsyncExperiences() {
     final destId = ref.watch(selectedDestinationProvider).idDestination;
     final async = ref.watch(experiencesProvider(destId));
-    final items = async.valueOrNull?.take(4).map((e) => _Item(
-      e.name, '${e.category} · ${e.duree}', e.price.toDouble(), e.rating, e.imageUrl, '/experience/${e.id}', 'experience',
-    )).toList() ?? (_isCasa ? _experiencesCasa : _experiences);
+    final remote = async.valueOrNull;
+    final items = (remote != null && remote.isNotEmpty)
+        ? remote.take(4).map((e) => _Item(
+            e.name, '${e.category} · ${e.duree}', e.price.toDouble(), e.rating, e.imageUrl, '/experience/${e.id}', 'experience',
+          )).toList()
+        : _experiencesForDest();
     return _buildSection('🌟  Top Experiences', '/experiences', items, '/pers');
   }
 
   Widget _buildAsyncRestaurants() {
     final destId = ref.watch(selectedDestinationProvider).idDestination;
     final async = ref.watch(restaurantsProvider(destId));
-    final items = async.valueOrNull?.take(4).map((r) => _Item(
-      r.name, r.specialite, r.price.toDouble(), r.rating, r.imageUrl, '/restaurant/${r.id}', 'restaurant',
-    )).toList() ?? (_isCasa ? _restaurantsCasa : _restaurants);
+    final remote = async.valueOrNull;
+    final items = (remote != null && remote.isNotEmpty)
+        ? remote.take(4).map((r) => _Item(
+            r.name, r.specialite, r.price.toDouble(), r.rating, r.imageUrl, '/restaurant/${r.id}', 'restaurant',
+          )).toList()
+        : _restaurantsForDest();
     return _buildSection('🍽️  Restaurants', '/restaurants', items, '/avg');
   }
 
   Widget _buildAsyncBoutiques() {
     final destId = ref.watch(selectedDestinationProvider).idDestination;
     final async = ref.watch(boutiquesProvider(destId));
-    final items = async.valueOrNull?.take(4).map((b) => _Item(
-      b.name, '${b.category} · Fait main', 0, b.rating, b.imageUrl, '/boutique/${b.id}', 'boutique',
-    )).toList() ?? (_isCasa ? _boutiquesCasa : _boutiques);
+    final remote = async.valueOrNull;
+    final items = (remote != null && remote.isNotEmpty)
+        ? remote.take(4).map((b) => _Item(
+            b.name, '${b.category} · Fait main', 0, b.rating, b.imageUrl, '/boutique/${b.id}', 'boutique',
+          )).toList()
+        : _boutiquesForDest();
     return _buildSection('🛍️  Artisan Shops', '/boutiques', items, '');
   }
 
@@ -1114,7 +1164,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: '\$${item.price.toInt()}',
+                                      text: '${item.price.toInt()} MAD',
                                       style: const TextStyle(
                                         fontFamily: 'DarkerGrotesque',
                                         color: Color(0xFFFF8C00),

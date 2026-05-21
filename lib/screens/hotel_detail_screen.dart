@@ -245,7 +245,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
       description:
           'Hôtel moderne sur la Corniche avec vue sur l\'Atlantique. Chambres contemporaines, centre de conférences, restaurant panoramique et accès direct à la plage.',
       imageUrl: 'assets/images/casablanca/hotels/transatlantique/1.jpg',
-      imageAssets: [
+       imageAssets: [
         'assets/images/casablanca/hotels/transatlantique/1.jpg',
         'assets/images/casablanca/hotels/transatlantique/2.jpg',
         'assets/images/casablanca/hotels/transatlantique/3.jpg',
@@ -254,20 +254,84 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         'assets/images/casablanca/hotels/transatlantique/6.jpg',
       ],
     ),
+    // Agadir hotels
+    'hotel_aga_001': Hotel(
+      name: 'Sofitel Royal Bay Resort', location: 'Baie d\'Agadir', rating: 4.8, reviews: 245,
+      description: 'Resort de luxe avec vue panoramique sur la baie d\'Agadir, piscine olympique, spa et accès direct à la plage.',
+      imageUrl: 'assets/images/agadir/hotels/sofitel_royal_bay/1.jpg',
+      imageAssets: List.generate(6, (i) => 'assets/images/agadir/hotels/sofitel_royal_bay/${i + 1}.jpg'),
+    ),
+    'hotel_aga_002': Hotel(
+      name: 'Sofitel Thalassa Sea & Spa', location: 'Bord de Mer, Agadir', rating: 4.9, reviews: 312,
+      description: 'Hôtel 5 étoiles avec centre thalasso, spa luxueux et restaurant gastronomique face à l\'océan Atlantique.',
+      imageUrl: 'assets/images/agadir/hotels/sofitel_thalassa/1.jpg',
+      imageAssets: List.generate(6, (i) => 'assets/images/agadir/hotels/sofitel_thalassa/${i + 1}.jpg'),
+    ),
+    'hotel_aga_003': Hotel(
+      name: 'Riu Palace Tikida', location: 'Secteur Balnéaire, Agadir', rating: 4.7, reviews: 189,
+      description: 'Complexe hôtelier all-inclusive avec 4 piscines, animation et accès direct à la plage de sable doré.',
+      imageUrl: 'assets/images/agadir/hotels/riu_palace_tikida/1.jpg',
+      imageAssets: List.generate(6, (i) => 'assets/images/agadir/hotels/riu_palace_tikida/${i + 1}.jpg'),
+    ),
+    'hotel_aga_004': Hotel(
+      name: 'The View Agadir', location: 'Colline Oufella, Agadir', rating: 4.6, reviews: 134,
+      description: 'Boutique-hôtel perché sur la colline d\'Oufella offrant une vue spectaculaire sur toute la baie d\'Agadir.',
+      imageUrl: 'assets/images/agadir/hotels/the_view/1.jpg',
+      imageAssets: List.generate(6, (i) => 'assets/images/agadir/hotels/the_view/${i + 1}.jpg'),
+    ),
+    'hotel_aga_005': Hotel(
+      name: 'Dunes d\'Or Ocean Club', location: 'Secteur Balnéaire, Agadir', rating: 4.5, reviews: 98,
+      description: 'Hôtel moderne en front de mer avec piscine tropicale, club de plage et restaurants variés.',
+      imageUrl: 'assets/images/agadir/hotels/dunes_dor/1.jpg',
+      imageAssets: List.generate(5, (i) => 'assets/images/agadir/hotels/dunes_dor/${i + 1}.jpg'),
+    ),
+    // Tanger hotels
+    'hotel_tan_001': Hotel(
+      name: 'Hilton Al Houara Resort', location: 'Al Houara, Tanger', rating: 4.9, reviews: 287,
+      description: 'Resort de luxe 5 étoiles avec golf 18 trous, spa, piscines multiples et accès privé à la plage atlantique.',
+      imageUrl: 'assets/images/tanger/hotels/hilton_al_houara/1.jpg',
+      imageAssets: List.generate(6, (i) => 'assets/images/tanger/hotels/hilton_al_houara/${i + 1}.jpg'),
+    ),
+    'hotel_tan_002': Hotel(
+      name: 'Hilton Tangier City Center', location: 'Centre Ville, Tanger', rating: 4.8, reviews: 234,
+      description: 'Hôtel 5 étoiles au cœur de Tanger avec vue sur le détroit de Gibraltar, rooftop bar et restaurant gourmet.',
+      imageUrl: 'assets/images/tanger/hotels/hilton_city_center/1.jpg',
+      imageAssets: List.generate(6, (i) => 'assets/images/tanger/hotels/hilton_city_center/${i + 1}.jpg'),
+    ),
+    'hotel_tan_003': Hotel(
+      name: 'Barceló Tanger', location: 'Malabata, Tanger', rating: 4.7, reviews: 198,
+      description: 'Hôtel moderne face à la Méditerranée avec piscine infinity, centre de fitness et chambres spacieuses.',
+      imageUrl: 'assets/images/tanger/hotels/barcelo/1.jpg',
+      imageAssets: List.generate(6, (i) => 'assets/images/tanger/hotels/barcelo/${i + 1}.jpg'),
+    ),
+    'hotel_tan_004': Hotel(
+      name: 'Hilton Garden Inn', location: 'Centre Ville, Tanger', rating: 4.6, reviews: 156,
+      description: 'Hôtel contemporain idéalement situé, parfait pour voyages d\'affaires et tourisme, restaurant et fitness.',
+      imageUrl: 'assets/images/tanger/hotels/hilton_garden_inn/1.jpg',
+      imageAssets: List.generate(6, (i) => 'assets/images/tanger/hotels/hilton_garden_inn/${i + 1}.jpg'),
+    ),
+    'hotel_tan_005': Hotel(
+      name: 'Pestana Tanger', location: 'Centre Ville, Tanger', rating: 4.7, reviews: 167,
+      description: 'Hôtel charme dans un bâtiment historique rénové avec terrasse panoramique sur la baie de Tanger.',
+      imageUrl: 'assets/images/tanger/hotels/pestana/1.jpg',
+      imageAssets: List.generate(6, (i) => 'assets/images/tanger/hotels/pestana/${i + 1}.jpg'),
+    ),
   };
 
   Hotel? _hotelOverride;
 
   Hotel get _hotel =>
-      _hotelOverride ?? _hotelDataMap[widget.hotelId] ?? _hotelDataMap['hotel_002']!;
+      _hotelOverride ??
+      _hotelDataMap[widget.hotelId] ??
+      _hotelDataMap['hotel_002']!;
   bool get _hasGallery => _hotel.imageAssets.isNotEmpty;
   int get _imageCount => _hasGallery ? _hotel.imageAssets.length : 1;
 
   final _rooms = const [
-    _RoomType('Standard', 'Chambre confortable avec vue cour', 120),
-    _RoomType('Supérieure', 'Plus spacieuse avec balcon privé', 168),
-    _RoomType('Suite Royale', 'Salon séparé et terrasse privée', 240),
-    _RoomType('Familiale', 'Grande chambre pour toute la famille', 216),
+    _RoomType('Standard', 'Chambre confortable avec vue cour', 1200),
+    _RoomType('Supérieure', 'Plus spacieuse avec balcon privé', 1680),
+    _RoomType('Suite Royale', 'Salon séparé et terrasse privée', 2400),
+    _RoomType('Familiale', 'Grande chambre pour toute la famille', 2160),
   ];
 
   final _beds = const [
@@ -374,7 +438,8 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
     );
   }
 
-  String _fmtDateShort(DateTime d) => '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year}';
+  String _fmtDateShort(DateTime d) =>
+      '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year}';
 
   void _confirmReservation() {
     if (_isConfirming) return;
@@ -395,25 +460,32 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
         totalPrice: _totalPrice,
         nights: _nights,
         onConfirmed: () {
-          ref.read(bookingProvider.notifier).addBooking(Reservation(
-            idReservation: 'hotel_${DateTime.now().millisecondsSinceEpoch}',
-            itemId: widget.hotelId,
-            typeOffre: 'hotel',
-            nom: _hotel.name,
-            sousTitre: '${_hotel.location} · ${_rooms[_selectedRoom].name}',
-            imageUrl: _hasGallery ? _hotel.imageAssets.first : '',
-            nbPersonnes: _adults + _children,
-            dateDebut: _checkIn,
-            dateFin: _checkOut,
-            prixTotal: _totalPrice,
-            details: {
-              'Arrivée': _fmtDateShort(_checkIn),
-              'Départ': _fmtDateShort(_checkOut),
-              'Nuits': '$_nights',
-              'Chambre': _rooms[_selectedRoom].name,
-              'Personnes': '$_adults adultes${_children > 0 ? ' + $_children enfants' : ''}',
-            },
-          ));
+          ref
+              .read(bookingProvider.notifier)
+              .addBooking(
+                Reservation(
+                  idReservation:
+                      'hotel_${DateTime.now().millisecondsSinceEpoch}',
+                  itemId: widget.hotelId,
+                  typeOffre: 'hotel',
+                  nom: _hotel.name,
+                  sousTitre:
+                      '${_hotel.location} · ${_rooms[_selectedRoom].name}',
+                  imageUrl: _hasGallery ? _hotel.imageAssets.first : '',
+                  nbPersonnes: _adults + _children,
+                  dateDebut: _checkIn,
+                  dateFin: _checkOut,
+                  prixTotal: _totalPrice,
+                  details: {
+                    'Arrivée': _fmtDateShort(_checkIn),
+                    'Départ': _fmtDateShort(_checkOut),
+                    'Nuits': '$_nights',
+                    'Chambre': _rooms[_selectedRoom].name,
+                    'Personnes':
+                        '$_adults adultes${_children > 0 ? ' + $_children enfants' : ''}',
+                  },
+                ),
+              );
         },
       ),
     ).then((_) => setState(() => _isConfirming = false));
@@ -612,22 +684,45 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
                                 const SizedBox(height: 8),
                                 GestureDetector(
                                   onTap: () => launchUrl(
-                                    Uri.parse('https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(_hotel.name + ', ' + _hotel.location)}'),
+                                    Uri.parse(
+                                      'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent('${_hotel.name}, ${_hotel.location}')}',
+                                    ),
                                     mode: LaunchMode.externalApplication,
                                   ),
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.06),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.06,
+                                      ),
                                       borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                                      border: Border.all(
+                                        color: Colors.white.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                      ),
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(Icons.navigation_rounded, size: 14, color: const Color(0xFFFF8C00)),
+                                        Icon(
+                                          Icons.navigation_rounded,
+                                          size: 14,
+                                          color: const Color(0xFFFF8C00),
+                                        ),
                                         const SizedBox(width: 6),
-                                        Text('Itinéraire', style: TextStyle(fontFamily: 'DarkerGrotesque', color: const Color(0xFFFF8C00), fontSize: 13, fontWeight: FontWeight.w700)),
+                                        Text(
+                                          'Itinéraire',
+                                          style: TextStyle(
+                                            fontFamily: 'DarkerGrotesque',
+                                            color: const Color(0xFFFF8C00),
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -751,7 +846,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '\$$_totalPrice',
+                        '$_totalPrice MAD',
                         style: const TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           color: Color(0xFFFF8C00),
@@ -1229,7 +1324,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
                     ),
                   ),
                   Text(
-                    '\$${room.price}',
+                    '${room.price} MAD',
                     style: TextStyle(
                       fontFamily: 'DarkerGrotesque',
                       color: active
@@ -1405,7 +1500,7 @@ class _HotelDetailScreenState extends ConsumerState<HotelDetailScreen> {
                 ),
               ),
               Text(
-                '\$$_totalPrice',
+                '$_totalPrice MAD',
                 style: const TextStyle(
                   fontFamily: 'DarkerGrotesque',
                   color: Color(0xFFFF8C00),
@@ -1624,7 +1719,7 @@ class _ReservationConfirmationSheetState
                         ),
                       ),
                       Text(
-                        '\$${widget.totalPrice}',
+                        '${widget.totalPrice} MAD',
                         style: const TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           color: Color(0xFFFF8C00),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/auth_error_snackbar.dart';
 import '../widgets/kurgate_button.dart';
@@ -22,6 +23,428 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
   bool _signupSuccess = false;
   int _passwordStrength = 0;
 
+  // Country code for phone
+  String _selectedCountryCode = '+212';
+
+  static const List<Map<String, String>> _countryCodes = [
+    // Default — Morocco first
+    {'code': '+212', 'flag': '🇲🇦', 'name': 'Morocco'},
+    // A
+    {'code': '+93', 'flag': '🇦🇫', 'name': 'Afghanistan'},
+    {'code': '+355', 'flag': '🇦🇱', 'name': 'Albania'},
+    {'code': '+213', 'flag': '🇩🇿', 'name': 'Algeria'},
+    {'code': '+376', 'flag': '🇦🇩', 'name': 'Andorra'},
+    {'code': '+244', 'flag': '🇦🇴', 'name': 'Angola'},
+    {'code': '+1268', 'flag': '🇦🇬', 'name': 'Antigua & Barbuda'},
+    {'code': '+54', 'flag': '🇦🇷', 'name': 'Argentina'},
+    {'code': '+374', 'flag': '🇦🇲', 'name': 'Armenia'},
+    {'code': '+61', 'flag': '🇦🇺', 'name': 'Australia'},
+    {'code': '+43', 'flag': '🇦🇹', 'name': 'Austria'},
+    {'code': '+994', 'flag': '🇦🇿', 'name': 'Azerbaijan'},
+    // B
+    {'code': '+1242', 'flag': '🇧🇸', 'name': 'Bahamas'},
+    {'code': '+973', 'flag': '🇧🇭', 'name': 'Bahrain'},
+    {'code': '+880', 'flag': '🇧🇩', 'name': 'Bangladesh'},
+    {'code': '+1246', 'flag': '🇧🇧', 'name': 'Barbados'},
+    {'code': '+375', 'flag': '🇧🇾', 'name': 'Belarus'},
+    {'code': '+32', 'flag': '🇧🇪', 'name': 'Belgium'},
+    {'code': '+501', 'flag': '🇧🇿', 'name': 'Belize'},
+    {'code': '+229', 'flag': '🇧🇯', 'name': 'Benin'},
+    {'code': '+975', 'flag': '🇧🇹', 'name': 'Bhutan'},
+    {'code': '+591', 'flag': '🇧🇴', 'name': 'Bolivia'},
+    {'code': '+387', 'flag': '🇧🇦', 'name': 'Bosnia & Herzegovina'},
+    {'code': '+267', 'flag': '🇧🇼', 'name': 'Botswana'},
+    {'code': '+55', 'flag': '🇧🇷', 'name': 'Brazil'},
+    {'code': '+673', 'flag': '🇧🇳', 'name': 'Brunei'},
+    {'code': '+359', 'flag': '🇧🇬', 'name': 'Bulgaria'},
+    {'code': '+226', 'flag': '🇧🇫', 'name': 'Burkina Faso'},
+    {'code': '+257', 'flag': '🇧🇮', 'name': 'Burundi'},
+    // C
+    {'code': '+855', 'flag': '🇰🇭', 'name': 'Cambodia'},
+    {'code': '+237', 'flag': '🇨🇲', 'name': 'Cameroon'},
+    {'code': '+1', 'flag': '🇨🇦', 'name': 'Canada'},
+    {'code': '+238', 'flag': '🇨🇻', 'name': 'Cape Verde'},
+    {'code': '+236', 'flag': '🇨🇫', 'name': 'Central African Republic'},
+    {'code': '+235', 'flag': '🇹🇩', 'name': 'Chad'},
+    {'code': '+56', 'flag': '🇨🇱', 'name': 'Chile'},
+    {'code': '+86', 'flag': '🇨🇳', 'name': 'China'},
+    {'code': '+57', 'flag': '🇨🇴', 'name': 'Colombia'},
+    {'code': '+269', 'flag': '🇰🇲', 'name': 'Comoros'},
+    {'code': '+242', 'flag': '🇨🇬', 'name': 'Congo'},
+    {'code': '+243', 'flag': '🇨🇩', 'name': 'Congo (DRC)'},
+    {'code': '+506', 'flag': '🇨🇷', 'name': 'Costa Rica'},
+    {'code': '+385', 'flag': '🇭🇷', 'name': 'Croatia'},
+    {'code': '+53', 'flag': '🇨🇺', 'name': 'Cuba'},
+    {'code': '+357', 'flag': '🇨🇾', 'name': 'Cyprus'},
+    {'code': '+420', 'flag': '🇨🇿', 'name': 'Czech Republic'},
+    // D
+    {'code': '+45', 'flag': '🇩🇰', 'name': 'Denmark'},
+    {'code': '+253', 'flag': '🇩🇯', 'name': 'Djibouti'},
+    {'code': '+1767', 'flag': '🇩🇲', 'name': 'Dominica'},
+    {'code': '+1809', 'flag': '🇩🇴', 'name': 'Dominican Republic'},
+    // E
+    {'code': '+593', 'flag': '🇪🇨', 'name': 'Ecuador'},
+    {'code': '+20', 'flag': '🇪🇬', 'name': 'Egypt'},
+    {'code': '+503', 'flag': '🇸🇻', 'name': 'El Salvador'},
+    {'code': '+240', 'flag': '🇬🇶', 'name': 'Equatorial Guinea'},
+    {'code': '+291', 'flag': '🇪🇷', 'name': 'Eritrea'},
+    {'code': '+372', 'flag': '🇪🇪', 'name': 'Estonia'},
+    {'code': '+268', 'flag': '🇸🇿', 'name': 'Eswatini'},
+    {'code': '+251', 'flag': '🇪🇹', 'name': 'Ethiopia'},
+    // F
+    {'code': '+679', 'flag': '🇫🇯', 'name': 'Fiji'},
+    {'code': '+358', 'flag': '🇫🇮', 'name': 'Finland'},
+    {'code': '+33', 'flag': '🇫🇷', 'name': 'France'},
+    // G
+    {'code': '+241', 'flag': '🇬🇦', 'name': 'Gabon'},
+    {'code': '+220', 'flag': '🇬🇲', 'name': 'Gambia'},
+    {'code': '+995', 'flag': '🇬🇪', 'name': 'Georgia'},
+    {'code': '+49', 'flag': '🇩🇪', 'name': 'Germany'},
+    {'code': '+233', 'flag': '🇬🇭', 'name': 'Ghana'},
+    {'code': '+30', 'flag': '🇬🇷', 'name': 'Greece'},
+    {'code': '+1473', 'flag': '🇬🇩', 'name': 'Grenada'},
+    {'code': '+502', 'flag': '🇬🇹', 'name': 'Guatemala'},
+    {'code': '+224', 'flag': '🇬🇳', 'name': 'Guinea'},
+    {'code': '+245', 'flag': '🇬🇼', 'name': 'Guinea-Bissau'},
+    {'code': '+592', 'flag': '🇬🇾', 'name': 'Guyana'},
+    // H
+    {'code': '+509', 'flag': '🇭🇹', 'name': 'Haiti'},
+    {'code': '+504', 'flag': '🇭🇳', 'name': 'Honduras'},
+    {'code': '+852', 'flag': '🇭🇰', 'name': 'Hong Kong'},
+    {'code': '+36', 'flag': '🇭🇺', 'name': 'Hungary'},
+    // I
+    {'code': '+354', 'flag': '🇮🇸', 'name': 'Iceland'},
+    {'code': '+91', 'flag': '🇮🇳', 'name': 'India'},
+    {'code': '+62', 'flag': '🇮🇩', 'name': 'Indonesia'},
+    {'code': '+98', 'flag': '🇮🇷', 'name': 'Iran'},
+    {'code': '+964', 'flag': '🇮🇶', 'name': 'Iraq'},
+    {'code': '+353', 'flag': '🇮🇪', 'name': 'Ireland'},
+    {'code': '+972', 'flag': '🇮🇱', 'name': 'Israel'},
+    {'code': '+39', 'flag': '🇮🇹', 'name': 'Italy'},
+    {'code': '+225', 'flag': '🇨🇮', 'name': 'Ivory Coast'},
+    // J
+    {'code': '+1876', 'flag': '🇯🇲', 'name': 'Jamaica'},
+    {'code': '+81', 'flag': '🇯🇵', 'name': 'Japan'},
+    {'code': '+962', 'flag': '🇯🇴', 'name': 'Jordan'},
+    // K
+    {'code': '+7', 'flag': '🇰🇿', 'name': 'Kazakhstan'},
+    {'code': '+254', 'flag': '🇰🇪', 'name': 'Kenya'},
+    {'code': '+686', 'flag': '🇰🇮', 'name': 'Kiribati'},
+    {'code': '+383', 'flag': '🇽🇰', 'name': 'Kosovo'},
+    {'code': '+965', 'flag': '🇰🇼', 'name': 'Kuwait'},
+    {'code': '+996', 'flag': '🇰🇬', 'name': 'Kyrgyzstan'},
+    // L
+    {'code': '+856', 'flag': '🇱🇦', 'name': 'Laos'},
+    {'code': '+371', 'flag': '🇱🇻', 'name': 'Latvia'},
+    {'code': '+961', 'flag': '🇱🇧', 'name': 'Lebanon'},
+    {'code': '+266', 'flag': '🇱🇸', 'name': 'Lesotho'},
+    {'code': '+231', 'flag': '🇱🇷', 'name': 'Liberia'},
+    {'code': '+218', 'flag': '🇱🇾', 'name': 'Libya'},
+    {'code': '+423', 'flag': '🇱🇮', 'name': 'Liechtenstein'},
+    {'code': '+370', 'flag': '🇱🇹', 'name': 'Lithuania'},
+    {'code': '+352', 'flag': '🇱🇺', 'name': 'Luxembourg'},
+    // M
+    {'code': '+853', 'flag': '🇲🇴', 'name': 'Macau'},
+    {'code': '+261', 'flag': '🇲🇬', 'name': 'Madagascar'},
+    {'code': '+265', 'flag': '🇲🇼', 'name': 'Malawi'},
+    {'code': '+60', 'flag': '🇲🇾', 'name': 'Malaysia'},
+    {'code': '+960', 'flag': '🇲🇻', 'name': 'Maldives'},
+    {'code': '+223', 'flag': '🇲🇱', 'name': 'Mali'},
+    {'code': '+356', 'flag': '🇲🇹', 'name': 'Malta'},
+    {'code': '+222', 'flag': '🇲🇷', 'name': 'Mauritania'},
+    {'code': '+230', 'flag': '🇲🇺', 'name': 'Mauritius'},
+    {'code': '+52', 'flag': '🇲🇽', 'name': 'Mexico'},
+    {'code': '+373', 'flag': '🇲🇩', 'name': 'Moldova'},
+    {'code': '+377', 'flag': '🇲🇨', 'name': 'Monaco'},
+    {'code': '+976', 'flag': '🇲🇳', 'name': 'Mongolia'},
+    {'code': '+382', 'flag': '🇲🇪', 'name': 'Montenegro'},
+    {'code': '+258', 'flag': '🇲🇿', 'name': 'Mozambique'},
+    {'code': '+95', 'flag': '🇲🇲', 'name': 'Myanmar'},
+    // N
+    {'code': '+264', 'flag': '🇳🇦', 'name': 'Namibia'},
+    {'code': '+977', 'flag': '🇳🇵', 'name': 'Nepal'},
+    {'code': '+31', 'flag': '🇳🇱', 'name': 'Netherlands'},
+    {'code': '+64', 'flag': '🇳🇿', 'name': 'New Zealand'},
+    {'code': '+505', 'flag': '🇳🇮', 'name': 'Nicaragua'},
+    {'code': '+227', 'flag': '🇳🇪', 'name': 'Niger'},
+    {'code': '+234', 'flag': '🇳🇬', 'name': 'Nigeria'},
+    {'code': '+850', 'flag': '🇰🇵', 'name': 'North Korea'},
+    {'code': '+389', 'flag': '🇲🇰', 'name': 'North Macedonia'},
+    {'code': '+47', 'flag': '🇳🇴', 'name': 'Norway'},
+    // O
+    {'code': '+968', 'flag': '🇴🇲', 'name': 'Oman'},
+    // P
+    {'code': '+92', 'flag': '🇵🇰', 'name': 'Pakistan'},
+    {'code': '+970', 'flag': '🇵🇸', 'name': 'Palestine'},
+    {'code': '+507', 'flag': '🇵🇦', 'name': 'Panama'},
+    {'code': '+675', 'flag': '🇵🇬', 'name': 'Papua New Guinea'},
+    {'code': '+595', 'flag': '🇵🇾', 'name': 'Paraguay'},
+    {'code': '+51', 'flag': '🇵🇪', 'name': 'Peru'},
+    {'code': '+63', 'flag': '🇵🇭', 'name': 'Philippines'},
+    {'code': '+48', 'flag': '🇵🇱', 'name': 'Poland'},
+    {'code': '+351', 'flag': '🇵🇹', 'name': 'Portugal'},
+    {'code': '+1787', 'flag': '🇵🇷', 'name': 'Puerto Rico'},
+    // Q
+    {'code': '+974', 'flag': '🇶🇦', 'name': 'Qatar'},
+    // R
+    {'code': '+40', 'flag': '🇷🇴', 'name': 'Romania'},
+    {'code': '+7', 'flag': '🇷🇺', 'name': 'Russia'},
+    {'code': '+250', 'flag': '🇷🇼', 'name': 'Rwanda'},
+    // S
+    {'code': '+1869', 'flag': '🇰🇳', 'name': 'Saint Kitts & Nevis'},
+    {'code': '+1758', 'flag': '🇱🇨', 'name': 'Saint Lucia'},
+    {'code': '+685', 'flag': '🇼🇸', 'name': 'Samoa'},
+    {'code': '+378', 'flag': '🇸🇲', 'name': 'San Marino'},
+    {'code': '+239', 'flag': '🇸🇹', 'name': 'São Tomé & Príncipe'},
+    {'code': '+966', 'flag': '🇸🇦', 'name': 'Saudi Arabia'},
+    {'code': '+221', 'flag': '🇸🇳', 'name': 'Senegal'},
+    {'code': '+381', 'flag': '🇷🇸', 'name': 'Serbia'},
+    {'code': '+248', 'flag': '🇸🇨', 'name': 'Seychelles'},
+    {'code': '+232', 'flag': '🇸🇱', 'name': 'Sierra Leone'},
+    {'code': '+65', 'flag': '🇸🇬', 'name': 'Singapore'},
+    {'code': '+421', 'flag': '🇸🇰', 'name': 'Slovakia'},
+    {'code': '+386', 'flag': '🇸🇮', 'name': 'Slovenia'},
+    {'code': '+677', 'flag': '🇸🇧', 'name': 'Solomon Islands'},
+    {'code': '+252', 'flag': '🇸🇴', 'name': 'Somalia'},
+    {'code': '+27', 'flag': '🇿🇦', 'name': 'South Africa'},
+    {'code': '+82', 'flag': '🇰🇷', 'name': 'South Korea'},
+    {'code': '+211', 'flag': '🇸🇸', 'name': 'South Sudan'},
+    {'code': '+34', 'flag': '🇪🇸', 'name': 'Spain'},
+    {'code': '+94', 'flag': '🇱🇰', 'name': 'Sri Lanka'},
+    {'code': '+249', 'flag': '🇸🇩', 'name': 'Sudan'},
+    {'code': '+597', 'flag': '🇸🇷', 'name': 'Suriname'},
+    {'code': '+46', 'flag': '🇸🇪', 'name': 'Sweden'},
+    {'code': '+41', 'flag': '🇨🇭', 'name': 'Switzerland'},
+    {'code': '+963', 'flag': '🇸🇾', 'name': 'Syria'},
+    // T
+    {'code': '+886', 'flag': '🇹🇼', 'name': 'Taiwan'},
+    {'code': '+992', 'flag': '🇹🇯', 'name': 'Tajikistan'},
+    {'code': '+255', 'flag': '🇹🇿', 'name': 'Tanzania'},
+    {'code': '+66', 'flag': '🇹🇭', 'name': 'Thailand'},
+    {'code': '+228', 'flag': '🇹🇬', 'name': 'Togo'},
+    {'code': '+676', 'flag': '🇹🇴', 'name': 'Tonga'},
+    {'code': '+1868', 'flag': '🇹🇹', 'name': 'Trinidad & Tobago'},
+    {'code': '+216', 'flag': '🇹🇳', 'name': 'Tunisia'},
+    {'code': '+90', 'flag': '🇹🇷', 'name': 'Turkey'},
+    {'code': '+993', 'flag': '🇹🇲', 'name': 'Turkmenistan'},
+    {'code': '+688', 'flag': '🇹🇻', 'name': 'Tuvalu'},
+    // U
+    {'code': '+256', 'flag': '🇺🇬', 'name': 'Uganda'},
+    {'code': '+380', 'flag': '🇺🇦', 'name': 'Ukraine'},
+    {'code': '+971', 'flag': '🇦🇪', 'name': 'UAE'},
+    {'code': '+44', 'flag': '🇬🇧', 'name': 'United Kingdom'},
+    {'code': '+1', 'flag': '🇺🇸', 'name': 'United States'},
+    {'code': '+598', 'flag': '🇺🇾', 'name': 'Uruguay'},
+    {'code': '+998', 'flag': '🇺🇿', 'name': 'Uzbekistan'},
+    // V
+    {'code': '+678', 'flag': '🇻🇺', 'name': 'Vanuatu'},
+    {'code': '+379', 'flag': '🇻🇦', 'name': 'Vatican City'},
+    {'code': '+58', 'flag': '🇻🇪', 'name': 'Venezuela'},
+    {'code': '+84', 'flag': '🇻🇳', 'name': 'Vietnam'},
+    // Y
+    {'code': '+967', 'flag': '🇾🇪', 'name': 'Yemen'},
+    // Z
+    {'code': '+260', 'flag': '🇿🇲', 'name': 'Zambia'},
+    {'code': '+263', 'flag': '🇿🇼', 'name': 'Zimbabwe'},
+  ];
+
+  /// Expected phone digit lengths per country code (local number only, without code).
+  /// Most countries accept a range; we store [min, max].
+  static const Map<String, List<int>> _phoneDigitLengths = {
+    '+93': [9, 9],     // Afghanistan
+    '+355': [9, 9],    // Albania
+    '+213': [9, 9],    // Algeria
+    '+376': [6, 9],    // Andorra
+    '+244': [9, 9],    // Angola
+    '+1268': [7, 7],   // Antigua & Barbuda
+    '+54': [10, 10],   // Argentina
+    '+374': [8, 8],    // Armenia
+    '+61': [9, 9],     // Australia
+    '+43': [10, 13],   // Austria
+    '+994': [9, 9],    // Azerbaijan
+    '+1242': [7, 7],   // Bahamas
+    '+973': [8, 8],    // Bahrain
+    '+880': [10, 10],  // Bangladesh
+    '+1246': [7, 7],   // Barbados
+    '+375': [9, 10],   // Belarus
+    '+32': [8, 9],     // Belgium
+    '+501': [7, 7],    // Belize
+    '+229': [8, 8],    // Benin
+    '+975': [8, 8],    // Bhutan
+    '+591': [8, 8],    // Bolivia
+    '+387': [8, 8],    // Bosnia & Herzegovina
+    '+267': [7, 8],    // Botswana
+    '+55': [10, 11],   // Brazil
+    '+673': [7, 7],    // Brunei
+    '+359': [8, 9],    // Bulgaria
+    '+226': [8, 8],    // Burkina Faso
+    '+257': [8, 8],    // Burundi
+    '+855': [8, 9],    // Cambodia
+    '+237': [9, 9],    // Cameroon
+    '+1': [10, 10],    // Canada / USA
+    '+238': [7, 7],    // Cape Verde
+    '+236': [8, 8],    // Central African Republic
+    '+235': [8, 8],    // Chad
+    '+56': [9, 9],     // Chile
+    '+86': [11, 11],   // China
+    '+57': [10, 10],   // Colombia
+    '+269': [7, 7],    // Comoros
+    '+242': [9, 9],    // Congo
+    '+243': [9, 9],    // Congo (DRC)
+    '+506': [8, 8],    // Costa Rica
+    '+385': [8, 9],    // Croatia
+    '+53': [8, 8],     // Cuba
+    '+357': [8, 8],    // Cyprus
+    '+420': [9, 9],    // Czech Republic
+    '+45': [8, 8],     // Denmark
+    '+253': [8, 8],    // Djibouti
+    '+1767': [7, 7],   // Dominica
+    '+1809': [7, 7],   // Dominican Republic
+    '+593': [9, 9],    // Ecuador
+    '+20': [10, 10],   // Egypt
+    '+503': [8, 8],    // El Salvador
+    '+240': [9, 9],    // Equatorial Guinea
+    '+291': [7, 7],    // Eritrea
+    '+372': [7, 8],    // Estonia
+    '+268': [8, 8],    // Eswatini
+    '+251': [9, 9],    // Ethiopia
+    '+679': [7, 7],    // Fiji
+    '+358': [9, 10],   // Finland
+    '+33': [9, 9],     // France
+    '+241': [7, 8],    // Gabon
+    '+220': [7, 7],    // Gambia
+    '+995': [9, 9],    // Georgia
+    '+49': [10, 11],   // Germany
+    '+233': [9, 9],    // Ghana
+    '+30': [10, 10],   // Greece
+    '+1473': [7, 7],   // Grenada
+    '+502': [8, 8],    // Guatemala
+    '+224': [9, 9],    // Guinea
+    '+245': [7, 7],    // Guinea-Bissau
+    '+592': [7, 7],    // Guyana
+    '+509': [8, 8],    // Haiti
+    '+504': [8, 8],    // Honduras
+    '+852': [8, 8],    // Hong Kong
+    '+36': [9, 9],     // Hungary
+    '+354': [7, 7],    // Iceland
+    '+91': [10, 10],   // India
+    '+62': [9, 12],    // Indonesia
+    '+98': [10, 10],   // Iran
+    '+964': [10, 10],  // Iraq
+    '+353': [9, 9],    // Ireland
+    '+972': [9, 9],    // Israel
+    '+39': [9, 10],    // Italy
+    '+225': [10, 10],  // Ivory Coast
+    '+1876': [7, 7],   // Jamaica
+    '+81': [10, 10],   // Japan
+    '+962': [9, 9],    // Jordan
+    '+7': [10, 10],    // Kazakhstan / Russia
+    '+254': [9, 9],    // Kenya
+    '+686': [8, 8],    // Kiribati
+    '+383': [8, 8],    // Kosovo
+    '+965': [8, 8],    // Kuwait
+    '+996': [9, 9],    // Kyrgyzstan
+    '+856': [9, 10],   // Laos
+    '+371': [8, 8],    // Latvia
+    '+961': [7, 8],    // Lebanon
+    '+266': [8, 8],    // Lesotho
+    '+231': [7, 8],    // Liberia
+    '+218': [9, 10],   // Libya
+    '+423': [7, 7],    // Liechtenstein
+    '+370': [8, 8],    // Lithuania
+    '+352': [8, 9],    // Luxembourg
+    '+853': [8, 8],    // Macau
+    '+261': [9, 9],    // Madagascar
+    '+265': [9, 9],    // Malawi
+    '+60': [9, 10],    // Malaysia
+    '+960': [7, 7],    // Maldives
+    '+223': [8, 8],    // Mali
+    '+356': [8, 8],    // Malta
+    '+222': [8, 8],    // Mauritania
+    '+230': [8, 8],    // Mauritius
+    '+52': [10, 10],   // Mexico
+    '+373': [8, 8],    // Moldova
+    '+377': [8, 8],    // Monaco
+    '+976': [8, 8],    // Mongolia
+    '+382': [8, 8],    // Montenegro
+    '+212': [9, 9],    // Morocco
+    '+258': [9, 9],    // Mozambique
+    '+95': [8, 10],    // Myanmar
+    '+264': [9, 9],    // Namibia
+    '+977': [10, 10],  // Nepal
+    '+31': [9, 9],     // Netherlands
+    '+64': [8, 10],    // New Zealand
+    '+505': [8, 8],    // Nicaragua
+    '+227': [8, 8],    // Niger
+    '+234': [10, 10],  // Nigeria
+    '+850': [8, 10],   // North Korea
+    '+389': [8, 8],    // North Macedonia
+    '+47': [8, 8],     // Norway
+    '+968': [8, 8],    // Oman
+    '+92': [10, 10],   // Pakistan
+    '+970': [9, 9],    // Palestine
+    '+507': [7, 8],    // Panama
+    '+675': [8, 8],    // Papua New Guinea
+    '+595': [9, 9],    // Paraguay
+    '+51': [9, 9],     // Peru
+    '+63': [10, 10],   // Philippines
+    '+48': [9, 9],     // Poland
+    '+351': [9, 9],    // Portugal
+    '+1787': [7, 7],   // Puerto Rico
+    '+974': [8, 8],    // Qatar
+    '+40': [9, 9],     // Romania
+    '+250': [9, 9],    // Rwanda
+    '+1869': [7, 7],   // Saint Kitts & Nevis
+    '+1758': [7, 7],   // Saint Lucia
+    '+685': [5, 7],    // Samoa
+    '+378': [8, 10],   // San Marino
+    '+239': [7, 7],    // São Tomé & Príncipe
+    '+966': [9, 9],    // Saudi Arabia
+    '+221': [9, 9],    // Senegal
+    '+381': [8, 9],    // Serbia
+    '+248': [7, 7],    // Seychelles
+    '+232': [8, 8],    // Sierra Leone
+    '+65': [8, 8],     // Singapore
+    '+421': [9, 9],    // Slovakia
+    '+386': [8, 8],    // Slovenia
+    '+677': [7, 7],    // Solomon Islands
+    '+252': [7, 8],    // Somalia
+    '+27': [9, 9],     // South Africa
+    '+82': [9, 10],    // South Korea
+    '+211': [9, 9],    // South Sudan
+    '+34': [9, 9],     // Spain
+    '+94': [9, 9],     // Sri Lanka
+    '+249': [9, 9],    // Sudan
+    '+597': [7, 7],    // Suriname
+    '+46': [9, 9],     // Sweden
+    '+41': [9, 9],     // Switzerland
+    '+963': [9, 9],    // Syria
+    '+886': [9, 9],    // Taiwan
+    '+992': [9, 9],    // Tajikistan
+    '+255': [9, 9],    // Tanzania
+    '+66': [9, 9],     // Thailand
+    '+228': [8, 8],    // Togo
+    '+676': [5, 7],    // Tonga
+    '+1868': [7, 7],   // Trinidad & Tobago
+    '+216': [8, 8],    // Tunisia
+    '+90': [10, 10],   // Turkey
+    '+993': [8, 8],    // Turkmenistan
+    '+688': [5, 6],    // Tuvalu
+    '+256': [9, 9],    // Uganda
+    '+380': [9, 9],    // Ukraine
+    '+971': [9, 9],    // UAE
+    '+44': [10, 10],   // United Kingdom
+    '+598': [8, 8],    // Uruguay
+    '+998': [9, 9],    // Uzbekistan
+    '+678': [5, 7],    // Vanuatu
+    '+379': [8, 10],   // Vatican City
+    '+58': [10, 10],   // Venezuela
+    '+84': [9, 10],    // Vietnam
+    '+967': [9, 9],    // Yemen
+    '+260': [9, 9],    // Zambia
+    '+263': [9, 9],    // Zimbabwe
+  };
+
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -40,8 +463,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
   late Animation<double> _pulseAnim;
 
   // Staggered animations
-  late Animation<double> _logoFade;
-  late Animation<Offset> _logoSlide;
+  late Animation<double> _logoFade; // ignore: unused_field
+  late Animation<Offset> _logoSlide; // ignore: unused_field
   late Animation<double> _titleFade;
   late Animation<Offset> _titleSlide;
   late Animation<double> _formFade;
@@ -156,6 +579,27 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     super.dispose();
   }
 
+  /// Returns the expected digit range [min, max] for the selected country code.
+  List<int> _expectedDigitRange() {
+    return _phoneDigitLengths[_selectedCountryCode] ?? [6, 15];
+  }
+
+  /// Checks if a phone number already exists in the `utilisateurs` table.
+  Future<bool> _checkPhoneExists(String fullPhone) async {
+    try {
+      final result = await Supabase.instance.client
+          .from('utilisateurs')
+          .select('id')
+          .eq('num_de_telephone', fullPhone)
+          .maybeSingle();
+      return result != null;
+    } catch (_) {
+      // If the check fails (e.g. network), allow signup to proceed
+      // — the server will catch duplicates if needed
+      return false;
+    }
+  }
+
   void _handleSignup() async {
     if (!_formKey.currentState!.validate()) return;
     if (!_agreeTerms) {
@@ -169,13 +613,28 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
 
     setState(() => _isLoading = true);
 
+    // Combine country code + phone number digits
+    final fullPhone = '$_selectedCountryCode${_phoneController.text.trim()}';
+
+    // Check if phone number is already registered
+    final phoneExists = await _checkPhoneExists(fullPhone);
+    if (phoneExists && mounted) {
+      setState(() => _isLoading = false);
+      showAuthErrorSnackBar(
+        context,
+        'This phone number is already registered. Try signing in instead.',
+        AuthErrorType.emailAlreadyRegistered,
+      );
+      return;
+    }
+
     final success = await ref
         .read(authProvider.notifier)
         .signup(
           nom: _nameController.text.trim(),
           email: _emailController.text.trim(),
           password: _passwordController.text,
-          numDeTelephone: int.tryParse(_phoneController.text.trim()) ?? 0,
+          numDeTelephone: fullPhone,
         );
 
     if (mounted) {
@@ -485,26 +944,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                   ),
                   const SizedBox(height: 16),
 
-                  // Phone number
-                  _field(
-                    controller: _phoneController,
-                    focus: _phoneFocus,
-                    label: 'Phone Number',
-                    hint: 'Enter your phone number',
-                    icon: Icons.phone_outlined,
-                    keyboard: TextInputType.phone,
-                    action: TextInputAction.next,
-                    validator: (v) {
-                      if (v == null || v.isEmpty) {
-                        return 'Please enter your phone number';
-                      }
-                      if (!RegExp(r'^[0-9]{10}$').hasMatch(v)) {
-                        return 'Please enter a valid 10-digit phone number';
-                      }
-                      return null;
-                    },
-                    onSubmit: (_) => _passwordFocus.requestFocus(),
-                  ),
+                  // Phone number with region code
+                  _phoneField(),
                   const SizedBox(height: 16),
 
                   // Password
@@ -835,6 +1276,301 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
           ),
         ),
       ],
+    );
+  }
+
+  /// Phone number field with country code dropdown prefix
+  Widget _phoneField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          child: Text(
+            'Phone Number',
+            style: TextStyle(
+              fontFamily: 'DarkerGrotesque',
+              color: Colors.white.withValues(alpha: 0.6),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+          ),
+          child: Row(
+            children: [
+              // Country code dropdown
+              GestureDetector(
+                onTap: _showCountryCodePicker,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 15,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      right: BorderSide(
+                        color: Colors.white.withValues(alpha: 0.08),
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _countryCodes.firstWhere(
+                          (c) => c['code'] == _selectedCountryCode,
+                        )['flag']!,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        _selectedCountryCode,
+                        style: TextStyle(
+                          fontFamily: 'DarkerGrotesque',
+                          color: Colors.white.withValues(alpha: 0.7),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: Colors.white.withValues(alpha: 0.35),
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Phone number input
+              Expanded(
+                child: TextFormField(
+                  controller: _phoneController,
+                  focusNode: _phoneFocus,
+                  keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.next,
+                  onFieldSubmitted: (_) => _passwordFocus.requestFocus(),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) {
+                      return 'Please enter your phone number';
+                    }
+                    // Strip spaces/dashes the user may have typed
+                    final digits = v.replaceAll(RegExp(r'[^0-9]'), '');
+                    if (digits.isEmpty) {
+                      return 'Phone number must contain digits';
+                    }
+                    final range = _expectedDigitRange();
+                    final min = range[0];
+                    final max = range[1];
+                    if (digits.length < min || digits.length > max) {
+                      if (min == max) {
+                        return 'Expected $min digits for this country';
+                      }
+                      return 'Expected $min–$max digits for this country';
+                    }
+                    return null;
+                  },
+                  style: const TextStyle(
+                    fontFamily: 'DarkerGrotesque',
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  cursorColor: const Color(0xFFFF8C00),
+                  decoration: InputDecoration(
+                    hintText: 'Phone number',
+                    hintStyle: TextStyle(
+                      fontFamily: 'DarkerGrotesque',
+                      color: Colors.white.withValues(alpha: 0.2),
+                      fontSize: 15,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 17,
+                    ),
+                    errorStyle: const TextStyle(
+                      fontFamily: 'DarkerGrotesque',
+                      color: Color(0xFFFF6B6B),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Shows a bottom sheet picker for country codes
+  void _showCountryCodePicker() {
+    final searchController = TextEditingController();
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF222222),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      isScrollControlled: true,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            final query = searchController.text.toLowerCase();
+            final filtered = _countryCodes.where((c) {
+              return c['name']!.toLowerCase().contains(query) ||
+                  c['code']!.contains(query);
+            }).toList();
+
+            return DraggableScrollableSheet(
+              initialChildSize: 0.55,
+              minChildSize: 0.3,
+              maxChildSize: 0.85,
+              expand: false,
+              builder: (_, scrollController) {
+                return Column(
+                  children: [
+                    // Handle bar
+                    Container(
+                      margin: const EdgeInsets.only(top: 12, bottom: 8),
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    // Title
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 8,
+                      ),
+                      child: Text(
+                        'Select Country Code',
+                        style: TextStyle(
+                          fontFamily: 'DarkerGrotesque',
+                          color: Colors.white.withValues(alpha: 0.9),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    // Search bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 8,
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.06),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.08),
+                          ),
+                        ),
+                        child: TextField(
+                          controller: searchController,
+                          onChanged: (_) => setModalState(() {}),
+                          style: const TextStyle(
+                            fontFamily: 'DarkerGrotesque',
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
+                          cursorColor: const Color(0xFFFF8C00),
+                          decoration: InputDecoration(
+                            hintText: 'Search country...',
+                            hintStyle: TextStyle(
+                              fontFamily: 'DarkerGrotesque',
+                              color: Colors.white.withValues(alpha: 0.25),
+                              fontSize: 15,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search_rounded,
+                              color: Colors.white.withValues(alpha: 0.3),
+                              size: 20,
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    // Country list
+                    Expanded(
+                      child: ListView.builder(
+                        controller: scrollController,
+                        itemCount: filtered.length,
+                        itemBuilder: (_, i) {
+                          final country = filtered[i];
+                          final isSelected =
+                              country['code'] == _selectedCountryCode;
+                          return ListTile(
+                            onTap: () {
+                              setState(
+                                () => _selectedCountryCode = country['code']!,
+                              );
+                              Navigator.pop(ctx);
+                            },
+                            leading: Text(
+                              country['flag']!,
+                              style: const TextStyle(fontSize: 24),
+                            ),
+                            title: Text(
+                              country['name']!,
+                              style: TextStyle(
+                                fontFamily: 'DarkerGrotesque',
+                                color: isSelected
+                                    ? const Color(0xFFFF8C00)
+                                    : Colors.white.withValues(alpha: 0.8),
+                                fontSize: 16,
+                                fontWeight: isSelected
+                                    ? FontWeight.w700
+                                    : FontWeight.w500,
+                              ),
+                            ),
+                            trailing: Text(
+                              country['code']!,
+                              style: TextStyle(
+                                fontFamily: 'DarkerGrotesque',
+                                color: isSelected
+                                    ? const Color(0xFFFF8C00)
+                                    : Colors.white.withValues(alpha: 0.4),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            tileColor: isSelected
+                                ? const Color(0xFFFF8C00)
+                                    .withValues(alpha: 0.08)
+                                : null,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -27,7 +27,14 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
   final List<Animation<double>> _cardFades = [];
   final List<Animation<Offset>> _cardSlides = [];
 
-  final _filters = const ['Tous', 'Riad', 'Luxe', 'Resort', 'Budget', 'Business'];
+  final _filters = const [
+    'Tous',
+    'Riad',
+    'Luxe',
+    'Resort',
+    'Budget',
+    'Business',
+  ];
 
   @override
   void initState() {
@@ -82,7 +89,13 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
     }
     final q = _searchController.text.trim().toLowerCase();
     if (q.isEmpty) return base;
-    return base.where((h) => h.name.toLowerCase().contains(q) || h.location.toLowerCase().contains(q)).toList();
+    return base
+        .where(
+          (h) =>
+              h.name.toLowerCase().contains(q) ||
+              h.location.toLowerCase().contains(q),
+        )
+        .toList();
   }
 
   @override
@@ -131,7 +144,7 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
                                 ),
                               ),
                               Text(
-                                '${ref.watch(selectedDestinationProvider).nom}',
+                                ref.watch(selectedDestinationProvider).nom,
                                 style: TextStyle(
                                   fontFamily: 'DarkerGrotesque',
                                   color: Colors.white.withValues(alpha: 0.4),
@@ -198,8 +211,14 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
                             GestureDetector(
                               onTap: () => _searchController.clear(),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
-                                child: Icon(Icons.close_rounded, color: Colors.white.withValues(alpha: 0.4), size: 18),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                ),
+                                child: Icon(
+                                  Icons.close_rounded,
+                                  color: Colors.white.withValues(alpha: 0.4),
+                                  size: 18,
+                                ),
                               ),
                             ),
                         ],
@@ -269,16 +288,30 @@ class _HotelListScreenState extends ConsumerState<HotelListScreen>
                 Expanded(
                   child: hotelsAsync.when(
                     loading: () => const Center(
-                      child: CircularProgressIndicator(color: Color(0xFFFF8C00)),
+                      child: CircularProgressIndicator(
+                        color: Color(0xFFFF8C00),
+                      ),
                     ),
                     error: (e, _) => Center(
-                      child: Text('Erreur: $e', style: TextStyle(color: Colors.white.withValues(alpha: 0.5))),
+                      child: Text(
+                        'Erreur: $e',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.5),
+                        ),
+                      ),
                     ),
                     data: (allHotels) {
                       final filtered = _filterHotels(allHotels);
                       if (filtered.isEmpty) {
                         return Center(
-                          child: Text('Aucun hôtel trouvé', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 16)),
+                          child: Text(
+                            'Aucun hôtel trouvé',
+                            style: TextStyle(
+                              fontFamily: 'DarkerGrotesque',
+                              color: Colors.white.withValues(alpha: 0.4),
+                              fontSize: 16,
+                            ),
+                          ),
                         );
                       }
                       return ListView.separated(
@@ -329,8 +362,7 @@ class _HotelCardState extends State<_HotelCard> {
   final PageController _pageController = PageController();
 
   bool get _hasGallery => widget.hotel.images.isNotEmpty;
-  int get _imageCount =>
-      _hasGallery ? widget.hotel.images.length : 1;
+  int get _imageCount => _hasGallery ? widget.hotel.images.length : 1;
 
   @override
   void dispose() {
@@ -536,7 +568,7 @@ class _HotelCardState extends State<_HotelCard> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: '\$${widget.hotel.price}',
+                              text: '${widget.hotel.price} MAD',
                               style: const TextStyle(
                                 fontFamily: 'DarkerGrotesque',
                                 color: Color(0xFFFF8C00),
@@ -642,4 +674,3 @@ class _HotelCardState extends State<_HotelCard> {
     );
   }
 }
-

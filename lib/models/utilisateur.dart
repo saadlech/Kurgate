@@ -2,20 +2,20 @@ class Utilisateur {
   final String id;
   final String nom;
   final String email;
-  final int numDeTelephone;
+  final String numDeTelephone;
 
   Utilisateur({
     required this.id,
     required this.nom,
     required this.email,
-    required this.numDeTelephone,
+    this.numDeTelephone = '',
   });
 
   // ModifierProfil - Update profile
   Utilisateur modifierProfil({
     String? nom,
     String? email,
-    int? numDeTelephone,
+    String? numDeTelephone,
   }) {
     return Utilisateur(
       id: id,
@@ -41,7 +41,7 @@ class Utilisateur {
       id: map['id'] as String,
       nom: map['nom'] as String,
       email: map['email'] as String,
-      numDeTelephone: (map['num_de_telephone'] as num).toInt(),
+      numDeTelephone: (map['num_de_telephone'] ?? '').toString(),
     );
   }
 

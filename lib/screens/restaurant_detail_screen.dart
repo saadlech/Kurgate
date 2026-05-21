@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/kurgate_button.dart';
 import '../models/restaurant.dart';
 import '../providers/booking_provider.dart';
-import '../providers/catalog_providers.dart';
 import '../widgets/reviews_section.dart';
 
 class RestaurantDetailScreen extends ConsumerStatefulWidget {
@@ -39,7 +38,7 @@ class _RestaurantDetailScreenState
         'assets/images/marrakech/restaurants/le_jardin/2.png',
         'assets/images/marrakech/restaurants/le_jardin/3.png',
       ],
-      price: 25,
+      price: 250,
       specialite: 'Méditerranéen',
       horaires: '12h-23h',
       capacite: 60,
@@ -57,7 +56,7 @@ class _RestaurantDetailScreenState
         'assets/images/marrakech/restaurants/nomad/2.png',
         'assets/images/marrakech/restaurants/nomad/3.png',
       ],
-      price: 30,
+      price: 300,
       specialite: 'Marocain Moderne',
       horaires: '10h-23h',
       capacite: 80,
@@ -75,7 +74,7 @@ class _RestaurantDetailScreenState
         'assets/images/marrakech/restaurants/al_fassia/2.png',
         'assets/images/marrakech/restaurants/al_fassia/3.png',
       ],
-      price: 35,
+      price: 350,
       specialite: 'Cuisine Fassi',
       horaires: '12h-14h30 · 19h-23h',
       capacite: 100,
@@ -93,7 +92,7 @@ class _RestaurantDetailScreenState
         'assets/images/marrakech/restaurants/cafe_clock/2.png',
         'assets/images/marrakech/restaurants/cafe_clock/3.png',
       ],
-      price: 12,
+      price: 120,
       specialite: 'Fusion',
       horaires: '9h-22h',
       capacite: 120,
@@ -111,7 +110,7 @@ class _RestaurantDetailScreenState
         'assets/images/marrakech/restaurants/la_table_du_palais/2.png',
         'assets/images/marrakech/restaurants/la_table_du_palais/3.png',
       ],
-      price: 120,
+      price: 1200,
       specialite: 'Français-Marocain',
       horaires: '19h-23h',
       capacite: 40,
@@ -129,51 +128,188 @@ class _RestaurantDetailScreenState
         'assets/images/marrakech/restaurants/chez_lamine/2.png',
         'assets/images/marrakech/restaurants/chez_lamine/3.png',
       ],
-      price: 8,
+      price: 80,
       specialite: 'Tanjia Marrakchia',
       horaires: '11h-22h',
       capacite: 50,
     ),
     // Casablanca restaurants
     'resto_casa_001': Restaurant(
-      name: 'Restaurant Dar El Kaid', location: 'Quartier Habous, Casablanca',
-      rating: 4.8, reviews: 567,
-      description: 'Restaurant traditionnel marocain niché dans le quartier Habous. Cuisine authentique servie dans un décor de cuivre et boiseries. Tajines mijotés, couscous royal et pâtisseries maison dans une ambiance chaleureuse.',
+      name: 'Restaurant Dar El Kaid',
+      location: 'Quartier Habous, Casablanca',
+      rating: 4.8,
+      reviews: 567,
+      description:
+          'Restaurant traditionnel marocain niché dans le quartier Habous. Cuisine authentique servie dans un décor de cuivre et boiseries. Tajines mijotés, couscous royal et pâtisseries maison dans une ambiance chaleureuse.',
       imageUrl: 'assets/images/casablanca/restaurants/ricks_cafe/1.jpg',
-      images: ['assets/images/casablanca/restaurants/ricks_cafe/1.jpg', 'assets/images/casablanca/restaurants/ricks_cafe/2.jpg', 'assets/images/casablanca/restaurants/ricks_cafe/3.jpg', 'assets/images/casablanca/restaurants/ricks_cafe/4.jpg', 'assets/images/casablanca/restaurants/ricks_cafe/5.jpg', 'assets/images/casablanca/restaurants/ricks_cafe/6.jpg'],
-      price: 35, specialite: 'Cuisine Marocaine', horaires: '12h-23h', capacite: 80,
+      images: [
+        'assets/images/casablanca/restaurants/ricks_cafe/1.jpg',
+        'assets/images/casablanca/restaurants/ricks_cafe/2.jpg',
+        'assets/images/casablanca/restaurants/ricks_cafe/3.jpg',
+        'assets/images/casablanca/restaurants/ricks_cafe/4.jpg',
+        'assets/images/casablanca/restaurants/ricks_cafe/5.jpg',
+        'assets/images/casablanca/restaurants/ricks_cafe/6.jpg',
+      ],
+      price: 350,
+      specialite: 'Cuisine Marocaine',
+      horaires: '12h-23h',
+      capacite: 80,
     ),
     'resto_casa_002': Restaurant(
-      name: 'Riad 1930', location: 'Ancienne Médina, Casablanca',
-      rating: 4.8, reviews: 612,
-      description: 'Un patio enchanteur où le charme des années 1930 rencontre la gastronomie marocaine raffinée. Riad 1930 propose une cuisine traditionnelle revisitée dans un cadre architectural exceptionnel, mêlant zelliges d\'époque, fontaines en marbre et orangers centenaires.',
+      name: 'Riad 1930',
+      location: 'Ancienne Médina, Casablanca',
+      rating: 4.8,
+      reviews: 612,
+      description:
+          'Un patio enchanteur où le charme des années 1930 rencontre la gastronomie marocaine raffinée. Riad 1930 propose une cuisine traditionnelle revisitée dans un cadre architectural exceptionnel, mêlant zelliges d\'époque, fontaines en marbre et orangers centenaires.',
       imageUrl: 'assets/images/casablanca/restaurants/riad_1930/1.jpg',
-      images: ['assets/images/casablanca/restaurants/riad_1930/1.jpg', 'assets/images/casablanca/restaurants/riad_1930/2.jpg', 'assets/images/casablanca/restaurants/riad_1930/3.jpg', 'assets/images/casablanca/restaurants/riad_1930/4.jpg', 'assets/images/casablanca/restaurants/riad_1930/5.jpg', 'assets/images/casablanca/restaurants/riad_1930/6.jpg'],
-      price: 35, specialite: 'Cuisine Marocaine Raffinée', horaires: '12h-23h', capacite: 80,
+      images: [
+        'assets/images/casablanca/restaurants/riad_1930/1.jpg',
+        'assets/images/casablanca/restaurants/riad_1930/2.jpg',
+        'assets/images/casablanca/restaurants/riad_1930/3.jpg',
+        'assets/images/casablanca/restaurants/riad_1930/4.jpg',
+        'assets/images/casablanca/restaurants/riad_1930/5.jpg',
+        'assets/images/casablanca/restaurants/riad_1930/6.jpg',
+      ],
+      price: 350,
+      specialite: 'Cuisine Marocaine Raffinée',
+      horaires: '12h-23h',
+      capacite: 80,
     ),
     'resto_casa_004': Restaurant(
-      name: 'Kyoto Sushi Casablanca', location: 'Maarif, Casablanca',
-      rating: 4.7, reviews: 412,
-      description: 'Restaurant japonais contemporain au cœur du quartier Maarif. Sushis, sashimis et tempuras préparés avec des produits frais. Ambiance zen et design minimaliste.',
+      name: 'Kyoto Sushi Casablanca',
+      location: 'Maarif, Casablanca',
+      rating: 4.7,
+      reviews: 412,
+      description:
+          'Restaurant japonais contemporain au cœur du quartier Maarif. Sushis, sashimis et tempuras préparés avec des produits frais. Ambiance zen et design minimaliste.',
       imageUrl: 'assets/images/casablanca/restaurants/basmane/1.jpg',
-      images: ['assets/images/casablanca/restaurants/basmane/1.jpg', 'assets/images/casablanca/restaurants/basmane/2.jpg', 'assets/images/casablanca/restaurants/basmane/3.jpg', 'assets/images/casablanca/restaurants/basmane/4.jpg', 'assets/images/casablanca/restaurants/basmane/5.jpg', 'assets/images/casablanca/restaurants/basmane/6.jpg'],
-      price: 40, specialite: 'Cuisine Japonaise', horaires: '12h-23h', capacite: 60,
+      images: [
+        'assets/images/casablanca/restaurants/basmane/1.jpg',
+        'assets/images/casablanca/restaurants/basmane/2.jpg',
+        'assets/images/casablanca/restaurants/basmane/3.jpg',
+        'assets/images/casablanca/restaurants/basmane/4.jpg',
+        'assets/images/casablanca/restaurants/basmane/5.jpg',
+        'assets/images/casablanca/restaurants/basmane/6.jpg',
+      ],
+      price: 400,
+      specialite: 'Cuisine Japonaise',
+      horaires: '12h-23h',
+      capacite: 60,
     ),
     'resto_casa_005': Restaurant(
-      name: 'La Pergola', location: 'Boulevard d\'Anfa, Casablanca',
-      rating: 4.8, reviews: 389,
-      description: 'Restaurant gastronomique Art Déco sur le boulevard d\'Anfa. Cuisine franco-marocaine raffinée, terrasse élégante et ambiance feutrée digne des grandes brasseries parisiennes.',
+      name: 'La Pergola',
+      location: 'Boulevard d\'Anfa, Casablanca',
+      rating: 4.8,
+      reviews: 389,
+      description:
+          'Restaurant gastronomique Art Déco sur le boulevard d\'Anfa. Cuisine franco-marocaine raffinée, terrasse élégante et ambiance feutrée digne des grandes brasseries parisiennes.',
       imageUrl: 'assets/images/casablanca/restaurants/la_bodega/1.jpg',
-      images: ['assets/images/casablanca/restaurants/la_bodega/1.jpg', 'assets/images/casablanca/restaurants/la_bodega/2.jpg', 'assets/images/casablanca/restaurants/la_bodega/3.jpg', 'assets/images/casablanca/restaurants/la_bodega/4.jpg', 'assets/images/casablanca/restaurants/la_bodega/5.jpg', 'assets/images/casablanca/restaurants/la_bodega/6.jpg'],
-      price: 45, specialite: 'Français-Marocain', horaires: '12h-00h', capacite: 100,
+      images: [
+        'assets/images/casablanca/restaurants/la_bodega/1.jpg',
+        'assets/images/casablanca/restaurants/la_bodega/2.jpg',
+        'assets/images/casablanca/restaurants/la_bodega/3.jpg',
+        'assets/images/casablanca/restaurants/la_bodega/4.jpg',
+        'assets/images/casablanca/restaurants/la_bodega/5.jpg',
+        'assets/images/casablanca/restaurants/la_bodega/6.jpg',
+      ],
+      price: 450,
+      specialite: 'Français-Marocain',
+      horaires: '12h-00h',
+      capacite: 100,
     ),
     'resto_casa_006': Restaurant(
-      name: 'Le Doge Café & Tapas', location: 'Quartier Gauthier, Casablanca',
-      rating: 4.6, reviews: 534,
-      description: 'Café-restaurant branché au cœur du quartier Gauthier. Brunchs, tapas créatives et cocktails signature dans un cadre chic et décontracté. Terrasse ensoleillée idéale pour un déjeuner entre amis.',
+      name: 'Le Doge Café & Tapas',
+      location: 'Quartier Gauthier, Casablanca',
+      rating: 4.6,
+      reviews: 534,
+      description:
+          'Café-restaurant branché au cœur du quartier Gauthier. Brunchs, tapas créatives et cocktails signature dans un cadre chic et décontracté. Terrasse ensoleillée idéale pour un déjeuner entre amis.',
       imageUrl: 'assets/images/casablanca/restaurants/blend/1.jpg',
-      images: ['assets/images/casablanca/restaurants/blend/1.jpg', 'assets/images/casablanca/restaurants/blend/2.jpg', 'assets/images/casablanca/restaurants/blend/3.jpg', 'assets/images/casablanca/restaurants/blend/4.jpg', 'assets/images/casablanca/restaurants/blend/5.jpg', 'assets/images/casablanca/restaurants/blend/6.jpg'],
-      price: 30, specialite: 'Tapas & Cocktails', horaires: '9h-01h', capacite: 70,
+      images: [
+        'assets/images/casablanca/restaurants/blend/1.jpg',
+        'assets/images/casablanca/restaurants/blend/2.jpg',
+        'assets/images/casablanca/restaurants/blend/3.jpg',
+        'assets/images/casablanca/restaurants/blend/4.jpg',
+        'assets/images/casablanca/restaurants/blend/5.jpg',
+        'assets/images/casablanca/restaurants/blend/6.jpg',
+      ],
+      price: 300,
+      specialite: 'Tapas & Cocktails',
+      horaires: '9h-01h',
+      capacite: 70,
+    ),
+    // Agadir restaurants
+    'resto_aga_001': Restaurant(
+      name: 'El Toro', location: 'Marina d\'Agadir', rating: 4.7, reviews: 178,
+      description: 'Steakhouse premium avec viandes grillées au charbon, vue sur le port de plaisance. Ambiance chaleureuse.',
+      imageUrl: 'assets/images/agadir/restaurants/el_toro/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/agadir/restaurants/el_toro/${i + 1}.jpg'),
+      price: 450, specialite: 'Steakhouse · Grill', horaires: '12h-23h', capacite: 80,
+    ),
+    'resto_aga_002': Restaurant(
+      name: 'La Plage Restaurant', location: 'Corniche, Agadir', rating: 4.8, reviews: 210,
+      description: 'Restaurant les pieds dans le sable, spécialités de fruits de mer frais et poissons grillés face à l\'océan.',
+      imageUrl: 'assets/images/agadir/restaurants/la_plage/1.jpg',
+      images: List.generate(4, (i) => 'assets/images/agadir/restaurants/la_plage/${i + 1}.jpg'),
+      price: 550, specialite: 'Fruits de Mer · Vue Mer', horaires: '11h-22h30', capacite: 60,
+    ),
+    'resto_aga_003': Restaurant(
+      name: 'Le 20\' Restaurant', location: 'Secteur Touristique, Agadir', rating: 4.9, reviews: 195,
+      description: 'Restaurant gastronomique fusion mariant cuisine marocaine et internationale. Cadre élégant et raffiné.',
+      imageUrl: 'assets/images/agadir/restaurants/le_20/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/agadir/restaurants/le_20/${i + 1}.jpg'),
+      price: 600, specialite: 'Gastronomique · Fusion', horaires: '19h-23h30', capacite: 50,
+    ),
+    'resto_aga_004': Restaurant(
+      name: 'Little Italy', location: 'Nouveau Talborjt, Agadir', rating: 4.6, reviews: 145,
+      description: 'Authentique pizzeria italienne avec four à bois, pâtes fraîches maison et ambiance familiale.',
+      imageUrl: 'assets/images/agadir/restaurants/little_italy/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/agadir/restaurants/little_italy/${i + 1}.jpg'),
+      price: 350, specialite: 'Italien · Pizza', horaires: '12h-23h', capacite: 70,
+    ),
+    'resto_aga_005': Restaurant(
+      name: 'Restaurant Rafiq', location: 'Centre-ville, Agadir', rating: 4.5, reviews: 120,
+      description: 'Cuisine marocaine traditionnelle : tajines, couscous et grillades dans un cadre authentique avec terrasse.',
+      imageUrl: 'assets/images/agadir/restaurants/rafiq/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/agadir/restaurants/rafiq/${i + 1}.jpg'),
+      price: 300, specialite: 'Marocain · Traditionnel', horaires: '11h30-22h', capacite: 90,
+    ),
+    // Tanger restaurants
+    'resto_tan_001': Restaurant(
+      name: 'El Morocco Club', location: 'Médina, Tanger', rating: 4.9, reviews: 234,
+      description: 'Restaurant gastronomique dans un palais art déco de la médina. Cuisine fusion maroco-méditerranéenne.',
+      imageUrl: 'assets/images/tanger/restaurants/el_morocco_club/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/tanger/restaurants/el_morocco_club/${i + 1}.jpg'),
+      price: 550, specialite: 'Gastronomique · Médina', horaires: '19h-01h', capacite: 45,
+    ),
+    'resto_tan_002': Restaurant(
+      name: 'L\'Olivier Restaurant', location: 'Boulevard Pasteur, Tanger', rating: 4.7, reviews: 189,
+      description: 'Cuisine méditerranéenne raffinée sur terrasse avec vue sur le détroit de Gibraltar. Ambiance romantique.',
+      imageUrl: 'assets/images/tanger/restaurants/lolivier/1.jpg',
+      images: List.generate(5, (i) => 'assets/images/tanger/restaurants/lolivier/${i + 1}.jpg'),
+      price: 450, specialite: 'Méditerranéen · Terrasse', horaires: '12h-23h', capacite: 40,
+    ),
+    'resto_tan_003': Restaurant(
+      name: 'Macondo', location: 'Place de la Kasbah, Tanger', rating: 4.6, reviews: 145,
+      description: 'Bar-restaurant branché dans la Kasbah avec tapas internationales, cocktails créatifs et musique live.',
+      imageUrl: 'assets/images/tanger/restaurants/macondo/1.jpg',
+      images: List.generate(5, (i) => 'assets/images/tanger/restaurants/macondo/${i + 1}.jpg'),
+      price: 400, specialite: 'International · Branché', horaires: '18h-02h', capacite: 50,
+    ),
+    'resto_tan_004': Restaurant(
+      name: 'Les Huîtres', location: 'Corniche, Tanger', rating: 4.8, reviews: 167,
+      description: 'Restaurant spécialisé en fruits de mer et huîtres fraîches de la côte atlantique. Terrasse face à la mer.',
+      imageUrl: 'assets/images/tanger/restaurants/les_huitres/1.jpg',
+      images: List.generate(6, (i) => 'assets/images/tanger/restaurants/les_huitres/${i + 1}.jpg'),
+      price: 500, specialite: 'Fruits de Mer · Corniche', horaires: '12h-22h30', capacite: 55,
+    ),
+    'resto_tan_005': Restaurant(
+      name: 'Palais Zahia', location: 'Ancienne Médina, Tanger', rating: 4.8, reviews: 201,
+      description: 'Cuisine marocaine d\'exception dans un palais du 19ème siècle. Pastilla, tajines royaux et thé à la menthe.',
+      imageUrl: 'assets/images/tanger/restaurants/palais_zahia/1.jpg',
+      images: List.generate(5, (i) => 'assets/images/tanger/restaurants/palais_zahia/${i + 1}.jpg'),
+      price: 600, specialite: 'Marocain · Palais', horaires: '12h-23h', capacite: 60,
     ),
   };
 
@@ -189,9 +325,8 @@ class _RestaurantDetailScreenState
     '21:00',
   ];
 
-  Restaurant? _restoOverride;
-
-  Restaurant get _resto => _restoOverride ?? _dataMap[widget.restaurantId] ?? _dataMap['resto_001']!;
+  Restaurant get _resto =>
+      _dataMap[widget.restaurantId] ?? _dataMap['resto_001']!;
 
   @override
   void initState() {
@@ -246,7 +381,8 @@ class _RestaurantDetailScreenState
               .read(bookingProvider.notifier)
               .addBooking(
                 Reservation(
-                  idReservation: 'resto_${DateTime.now().millisecondsSinceEpoch}',
+                  idReservation:
+                      'resto_${DateTime.now().millisecondsSinceEpoch}',
                   itemId: widget.restaurantId,
                   typeOffre: 'restaurant',
                   nom: _resto.name,
@@ -270,11 +406,6 @@ class _RestaurantDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final restoAsync = ref.watch(restaurantByIdProvider(widget.restaurantId));
-    if (restoAsync.valueOrNull != null) {
-      _restoOverride = restoAsync.valueOrNull;
-    }
-
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       body: Stack(
@@ -434,22 +565,45 @@ class _RestaurantDetailScreenState
                                 const SizedBox(height: 8),
                                 GestureDetector(
                                   onTap: () => launchUrl(
-                                    Uri.parse('https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(_resto.name + ', ' + _resto.location)}'),
+                                    Uri.parse(
+                                      'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent('${_resto.name}, ${_resto.location}')}',
+                                    ),
                                     mode: LaunchMode.externalApplication,
                                   ),
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.06),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.06,
+                                      ),
                                       borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                                      border: Border.all(
+                                        color: Colors.white.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                      ),
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(Icons.navigation_rounded, size: 14, color: const Color(0xFFFF8C00)),
+                                        Icon(
+                                          Icons.navigation_rounded,
+                                          size: 14,
+                                          color: const Color(0xFFFF8C00),
+                                        ),
                                         const SizedBox(width: 6),
-                                        Text('Itinéraire', style: TextStyle(fontFamily: 'DarkerGrotesque', color: const Color(0xFFFF8C00), fontSize: 13, fontWeight: FontWeight.w700)),
+                                        Text(
+                                          'Itinéraire',
+                                          style: TextStyle(
+                                            fontFamily: 'DarkerGrotesque',
+                                            color: const Color(0xFFFF8C00),
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -527,7 +681,7 @@ class _RestaurantDetailScreenState
                           ),
                           _buildSpec(
                             Icons.attach_money_rounded,
-                            '\$${_resto.price}/moy',
+                            '${_resto.price} MAD/moy',
                           ),
                         ],
                       ),
@@ -568,7 +722,7 @@ class _RestaurantDetailScreenState
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '~\$${_resto.price}',
+                        '~${_resto.price} MAD',
                         style: const TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           color: Color(0xFFFF8C00),

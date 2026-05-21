@@ -50,22 +50,20 @@ class SupabaseService {
     return data.map((m) => Experience.fromMap(m)).toList();
   }
 
-  /// Fetch boutiques for a destination
+  /// Fetch all boutiques (global, not destination-specific)
   static Future<List<BoutiqueArtisanale>> fetchBoutiques(String destinationId) async {
     final data = await _client
         .from('boutiques_artisanales')
-        .select()
-        .eq('destination_id', destinationId)
+        .select('*, produits_boutique(*)')
         .order('rating', ascending: false);
     return data.map((m) => BoutiqueArtisanale.fromMap(m)).toList();
   }
 
-  /// Fetch vehicules for a destination
+  /// Fetch all vehicules (global, not destination-specific)
   static Future<List<Vehicule>> fetchVehicules(String destinationId) async {
     final data = await _client
         .from('vehicules')
         .select()
-        .eq('destination_id', destinationId)
         .order('rating', ascending: false);
     return data.map((m) => Vehicule.fromMap(m)).toList();
   }
@@ -100,14 +98,24 @@ class SupabaseService {
     return data != null ? Experience.fromMap(data) : null;
   }
 
-  /// Fetch a single boutique by ID
+  /// Fetch a single boutique by ID (with nested products)
   static Future<BoutiqueArtisanale?> fetchBoutiqueById(String id) async {
     final data = await _client
         .from('boutiques_artisanales')
-        .select()
+        .select('*, produits_boutique(*)')
         .eq('id', id)
         .maybeSingle();
     return data != null ? BoutiqueArtisanale.fromMap(data) : null;
+  }
+
+  /// Fetch products for a specific boutique
+  static Future<List<Produit>> fetchProduitsForBoutique(String boutiqueId) async {
+    final data = await _client
+        .from('produits_boutique')
+        .select()
+        .eq('boutique_id', boutiqueId)
+        .order('nom');
+    return data.map((m) => Produit.fromMap(m)).toList();
   }
 
   /// Fetch a single vehicule by ID
@@ -189,5 +197,16 @@ class SupabaseService {
   /// Create a review
   static Future<void> createAvis(Avis avis) async {
     await _client.from('avis').insert(avis.toMap());
+  }
+
+  // ──────────── SEMANTIC SEARCH (stub) ────────────
+  // item_embeddings table was dropped; this returns empty to keep UI working.
+  static Future<List<Map<String, dynamic>>> semanticSearch({
+    required String query,
+    String? destinationId,
+    String? itemType,
+    int limit = 10,
+  }) async {
+    return [];
   }
 }

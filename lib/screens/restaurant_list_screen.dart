@@ -423,7 +423,7 @@ class _RestaurantCard extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: '\$${restaurant.price}',
+                              text: '${restaurant.price} MAD',
                               style: const TextStyle(
                                 fontFamily: 'DarkerGrotesque',
                                 color: Color(0xFFFF8C00),

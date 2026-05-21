@@ -22,6 +22,8 @@ Future<void> main() async {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: Color(0xFF1A1A1A),
+      systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
   // Optimize image cache — limit memory to reduce RAM usage

@@ -60,12 +60,14 @@ class Destination {
       nom: 'Agadir',
       sousTitre: 'The Beach Paradise',
       imageUrl: 'assets/images/cities/agadir.png',
+      estDisponible: true,
     ),
     Destination(
       idDestination: 'dest_004',
       nom: 'Tangier',
       sousTitre: 'The Gateway to Africa',
       imageUrl: 'assets/images/cities/tangier.png',
+      estDisponible: true,
     ),
   ];
 }

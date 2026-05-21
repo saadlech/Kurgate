@@ -68,8 +68,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
     if (user != null) {
       _nameController.text = user.nom;
       _emailController.text = user.email;
-      if (user.numDeTelephone > 0) {
-        _phoneController.text = user.numDeTelephone.toString();
+      if (user.numDeTelephone.isNotEmpty) {
+        _phoneController.text = user.numDeTelephone;
       }
     }
 
@@ -104,8 +104,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
 
     final changed = _nameController.text.trim() != user.nom ||
         _emailController.text.trim() != user.email ||
-        (_phoneController.text.trim() !=
-            (user.numDeTelephone > 0 ? user.numDeTelephone.toString() : ''));
+        _phoneController.text.trim() != user.numDeTelephone;
 
     if (changed != _hasChanges) {
       setState(() => _hasChanges = changed);
@@ -134,7 +133,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
     final user = ref.read(authProvider).currentUser!;
     final newName = _nameController.text.trim();
     final newEmail = _emailController.text.trim();
-    final newPhone = int.tryParse(_phoneController.text.trim()) ?? 0;
+    final newPhone = _phoneController.text.trim();
 
     final success = await ref.read(authProvider.notifier).updateProfile(
           nom: newName != user.nom ? newName : null,
@@ -374,9 +373,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                                           if (v == null || v.trim().isEmpty) {
                                             return 'Phone number is required';
                                           }
-                                          if (!RegExp(r'^[0-9]{10}$')
-                                              .hasMatch(v)) {
-                                            return 'Enter a valid 10-digit number';
+                                          if (!RegExp(r'^\+?[0-9]{6,15}$')
+                                              .hasMatch(v.trim())) {
+                                            return 'Enter a valid phone number';
                                           }
                                           return null;
                                         },

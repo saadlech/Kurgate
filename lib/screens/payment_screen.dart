@@ -7,6 +7,7 @@ import '../providers/review_provider.dart';
 import '../providers/auth_provider.dart';
 import '../models/avis.dart';
 import '../widgets/feedback_sheet.dart';
+import '../services/local_storage_service.dart';
 
 class PaymentScreen extends ConsumerStatefulWidget {
   final String bookingId;
@@ -24,6 +25,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
 
   bool _processing = false;
   bool _success = false;
+  bool _usingSavedCard = false;
+  bool _saveCardToggle = false;
+  Map<String, String>? _savedCardData;
   late AnimationController _pulseCtrl;
   late AnimationController _successCtrl;
   late Animation<double> _successScale;
@@ -31,6 +35,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
   @override
   void initState() {
     super.initState();
+    _loadSavedCard();
     _pulseCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
@@ -45,6 +50,53 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
     );
   }
 
+  void _loadSavedCard() {
+    _savedCardData = LocalStorageService.getSavedCard();
+    if (_savedCardData != null) {
+      _usingSavedCard = true;
+      // Pre-fill with saved data (card number shown masked in UI)
+      _cardNumberCtrl.text = _savedCardData!['number'] ?? '';
+      _expiryCtrl.text = _savedCardData!['expiry'] ?? '';
+      _nameCtrl.text = _savedCardData!['holder'] ?? '';
+      // CVC is never saved — always empty
+    }
+  }
+
+  void _switchToNewCard() {
+    setState(() {
+      _usingSavedCard = false;
+      _cardNumberCtrl.clear();
+      _expiryCtrl.clear();
+      _cvvCtrl.clear();
+      _nameCtrl.clear();
+      _saveCardToggle = false;
+    });
+  }
+
+  void _switchToSavedCard() {
+    if (_savedCardData == null) return;
+    setState(() {
+      _usingSavedCard = true;
+      _cardNumberCtrl.text = _savedCardData!['number'] ?? '';
+      _expiryCtrl.text = _savedCardData!['expiry'] ?? '';
+      _nameCtrl.text = _savedCardData!['holder'] ?? '';
+      _cvvCtrl.clear();
+      _saveCardToggle = false;
+    });
+  }
+
+  Future<void> _deleteSavedCard() async {
+    await LocalStorageService.deleteCard();
+    setState(() {
+      _savedCardData = null;
+      _usingSavedCard = false;
+      _cardNumberCtrl.clear();
+      _expiryCtrl.clear();
+      _cvvCtrl.clear();
+      _nameCtrl.clear();
+    });
+  }
+
   @override
   void dispose() {
     _cardNumberCtrl.dispose();
@@ -56,12 +108,17 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
     super.dispose();
   }
 
-  bool get _formValid =>
-      _cardNumberCtrl.text.replaceAll(' ', '').length == 16 &&
-      _expiryCtrl.text.length == 5 &&
-      _isExpiryValid &&
-      _cvvCtrl.text.length == 3 &&
-      _nameCtrl.text.trim().isNotEmpty;
+  bool get _formValid {
+    if (_usingSavedCard) {
+      // Only CVC needed when using saved card
+      return _cvvCtrl.text.length == 3;
+    }
+    return _cardNumberCtrl.text.replaceAll(' ', '').length == 16 &&
+        _expiryCtrl.text.length == 5 &&
+        _isExpiryValid &&
+        _cvvCtrl.text.length == 3 &&
+        _nameCtrl.text.trim().isNotEmpty;
+  }
 
   /// Returns true if the expiry MM/YY is a real month and not in the past.
   bool get _isExpiryValid {
@@ -115,8 +172,20 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
     if (!_formValid || _processing) return;
     setState(() => _processing = true);
 
-    Future.delayed(const Duration(milliseconds: 2500), () {
+    Future.delayed(const Duration(milliseconds: 2500), () async {
       if (!mounted) return;
+
+      // Save card if toggle is checked (never saves CVC)
+      if (_saveCardToggle && !_usingSavedCard) {
+        final brand = _detectCardBrand(_cardNumberCtrl.text);
+        await LocalStorageService.saveCard(
+          cardNumber: _cardNumberCtrl.text,
+          expiry: _expiryCtrl.text,
+          holderName: _nameCtrl.text.trim(),
+          brand: brand,
+        );
+      }
+
       ref.read(bookingProvider.notifier).markAsPaid(widget.bookingId);
       setState(() {
         _processing = false;
@@ -257,7 +326,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
           ),
           const SizedBox(height: 8),
           Text(
-            '${b.nom} · \$${b.prixTotal}',
+            '${b.nom} · ${b.prixTotal} MAD',
             style: TextStyle(
               fontFamily: 'DarkerGrotesque',
               color: Colors.white.withValues(alpha: 0.4),
@@ -373,18 +442,84 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
-                'Informations de paiement',
-                style: TextStyle(
-                  fontFamily: 'DarkerGrotesque',
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
+              Expanded(
+                child: Text(
+                  _usingSavedCard ? 'Carte enregistrée' : 'Informations de paiement',
+                  style: const TextStyle(
+                    fontFamily: 'DarkerGrotesque',
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
+              // Delete saved card button
+              if (_usingSavedCard && _savedCardData != null)
+                GestureDetector(
+                  onTap: _deleteSavedCard,
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFF5252).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(Icons.delete_outline_rounded, color: Color(0xFFFF5252), size: 16),
+                  ),
+                ),
             ],
           ),
           const SizedBox(height: 20),
+
+          // ─── Saved card display ───
+          if (_usingSavedCard && _savedCardData != null) ...[
+            _buildSavedCardPreview(),
+            const SizedBox(height: 16),
+            // Only CVC field
+            _buildField(
+              label: 'Code de sécurité (CVV)',
+              hint: '•••',
+              controller: _cvvCtrl,
+              icon: Icons.lock_rounded,
+              keyboardType: TextInputType.number,
+              obscure: true,
+              formatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(3),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(Icons.info_outline_rounded, size: 12, color: Colors.white.withValues(alpha: 0.2)),
+                const SizedBox(width: 6),
+                Text(
+                  'Le CVV n\'est jamais sauvegardé',
+                  style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.2), fontSize: 11),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // Switch to manual entry
+            GestureDetector(
+              onTap: _switchToNewCard,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.credit_card_rounded, size: 14, color: const Color(0xFFFF8C00).withValues(alpha: 0.7)),
+                  const SizedBox(width: 6),
+                  Text(
+                    'Utiliser une autre carte',
+                    style: TextStyle(
+                      fontFamily: 'DarkerGrotesque',
+                      color: const Color(0xFFFF8C00).withValues(alpha: 0.7),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ] else ...[
 
           // Card number + brand detection
           AnimatedBuilder(
@@ -641,6 +776,89 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
           ),
           const SizedBox(height: 12),
 
+          // Save card toggle (only when entering new card)
+          if (!_usingSavedCard)
+            GestureDetector(
+              onTap: () => setState(() => _saveCardToggle = !_saveCardToggle),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: _saveCardToggle
+                      ? const Color(0xFFFF8C00).withValues(alpha: 0.08)
+                      : Colors.white.withValues(alpha: 0.03),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: _saveCardToggle
+                        ? const Color(0xFFFF8C00).withValues(alpha: 0.3)
+                        : Colors.white.withValues(alpha: 0.06),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      _saveCardToggle ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
+                      size: 18,
+                      color: _saveCardToggle ? const Color(0xFFFF8C00) : Colors.white.withValues(alpha: 0.3),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Sauvegarder la carte',
+                            style: TextStyle(
+                              fontFamily: 'DarkerGrotesque',
+                              color: _saveCardToggle ? Colors.white : Colors.white.withValues(alpha: 0.5),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            'Le CVV ne sera jamais enregistré',
+                            style: TextStyle(
+                              fontFamily: 'DarkerGrotesque',
+                              color: Colors.white.withValues(alpha: 0.2),
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+          // Back to saved card link
+          if (!_usingSavedCard && _savedCardData != null) ...[
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: _switchToSavedCard,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.credit_card_rounded, size: 14, color: const Color(0xFFFF8C00).withValues(alpha: 0.7)),
+                  const SizedBox(width: 6),
+                  Text(
+                    'Utiliser la carte enregistrée',
+                    style: TextStyle(
+                      fontFamily: 'DarkerGrotesque',
+                      color: const Color(0xFFFF8C00).withValues(alpha: 0.7),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
+          // Close the else block for non-saved-card form
+          ],
+
+          const SizedBox(height: 12),
+
           // Security note
           Row(
             children: [
@@ -705,7 +923,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        'Payer \$${b.prixTotal}',
+                        'Payer ${b.prixTotal} MAD',
                         style: TextStyle(
                           fontFamily: 'DarkerGrotesque',
                           fontSize: 18,
@@ -801,7 +1019,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
             ),
           ),
           Text(
-            '\$${b.prixTotal}',
+            '${b.prixTotal} MAD',
             style: const TextStyle(
               fontFamily: 'DarkerGrotesque',
               color: Color(0xFFFF8C00),
@@ -895,6 +1113,111 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
           fontSize: 12,
           fontWeight: FontWeight.w700,
         ),
+      ),
+    );
+  }
+
+  Widget _buildSavedCardPreview() {
+    final last4 = _savedCardData?['last4'] ?? '****';
+    final expiry = _savedCardData?['expiry'] ?? '';
+    final holder = _savedCardData?['holder'] ?? '';
+    final brandStr = _savedCardData?['brand'] ?? '';
+    final isVisa = brandStr == 'visa';
+    final isMastercard = brandStr == 'mastercard';
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFF2A2A2A),
+            const Color(0xFF1E1E1E),
+            const Color(0xFF2A2A2A).withValues(alpha: 0.8),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: const Color(0xFFFF8C00).withValues(alpha: 0.15),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Top row: chip + brand
+          Row(
+            children: [
+              // Card chip
+              Container(
+                width: 36,
+                height: 26,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD4AF37).withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: const Color(0xFFD4AF37).withValues(alpha: 0.3)),
+                ),
+                child: const Center(
+                  child: Icon(Icons.memory_rounded, size: 14, color: Color(0xFFF5E6B8)),
+                ),
+              ),
+              const Spacer(),
+              // Brand
+              if (isVisa)
+                const Text('VISA', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Color(0xFF4A6CF7), fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 2))
+              else if (isMastercard)
+                Row(mainAxisSize: MainAxisSize.min, children: [
+                  Container(width: 16, height: 16, decoration: BoxDecoration(shape: BoxShape.circle, color: const Color(0xFFEB001B).withValues(alpha: 0.8))),
+                  Transform.translate(offset: const Offset(-6, 0), child: Container(width: 16, height: 16, decoration: BoxDecoration(shape: BoxShape.circle, color: const Color(0xFFF79E1B).withValues(alpha: 0.8)))),
+                ])
+              else
+                Icon(Icons.credit_card_rounded, color: Colors.white.withValues(alpha: 0.3), size: 20),
+            ],
+          ),
+          const SizedBox(height: 20),
+          // Masked card number
+          Text(
+            '••••  ••••  ••••  $last4',
+            style: TextStyle(
+              fontFamily: 'DarkerGrotesque',
+              color: Colors.white.withValues(alpha: 0.8),
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 2.5,
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Bottom row: holder + expiry
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('TITULAIRE', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.25), fontSize: 9, fontWeight: FontWeight.w600, letterSpacing: 1)),
+                    const SizedBox(height: 2),
+                    Text(holder.toUpperCase(), style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.7), fontSize: 13, fontWeight: FontWeight.w700, letterSpacing: 0.5), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text('EXPIRE', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.25), fontSize: 9, fontWeight: FontWeight.w600, letterSpacing: 1)),
+                  const SizedBox(height: 2),
+                  Text(expiry, style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.7), fontSize: 13, fontWeight: FontWeight.w700)),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

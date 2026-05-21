@@ -152,7 +152,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           id: response.user!.id,
           nom: response.user!.userMetadata?['nom'] ?? '',
           email: email,
-          numDeTelephone: (response.user!.userMetadata?['numDeTelephone'] as num?)?.toInt() ?? 0,
+          numDeTelephone: (response.user!.userMetadata?['numDeTelephone'] ?? '').toString(),
         );
 
         // Persist or clear credentials based on Remember Me
@@ -210,7 +210,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String nom,
     required String email,
     required String password,
-    required int numDeTelephone,
+    required String numDeTelephone,
   }) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
@@ -334,7 +334,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<bool> updateProfile({
     String? nom,
     String? email,
-    int? numDeTelephone,
+    String? numDeTelephone,
   }) async {
     final currentUser = state.currentUser;
     if (currentUser == null) return false;
