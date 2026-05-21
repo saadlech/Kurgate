@@ -24,7 +24,7 @@
 
 **Kurgate** est une application mobile de tourisme intelligente conçue comme Projet de Fin d'Études (PFE). Elle offre une expérience complète de découverte et de réservation touristique au Maroc, avec une interface premium sombre et des interactions fluides.
 
-L'application couvre **deux villes** — **Marrakech** et **Casablanca** — et permet aux utilisateurs d'explorer des hôtels, louer des véhicules, découvrir des expériences locales, trouver des restaurants authentiques et acheter des produits artisanaux — le tout depuis une interface unifiée et élégante.
+L'application couvre **quatre villes** — **Marrakech**, **Casablanca**, **Agadir** et **Tanger** — et permet aux utilisateurs d'explorer des hôtels, louer des véhicules, découvrir des expériences locales, trouver des restaurants authentiques et acheter des produits artisanaux — le tout depuis une interface unifiée et élégante. Tous les prix sont affichés en **Dirham Marocain (MAD)**.
 
 ---
 
@@ -39,9 +39,12 @@ L'application couvre **deux villes** — **Marrakech** et **Casablanca** — et 
 - **Suppression de compte** — Suppression irréversible avec confirmation par saisie
 - **Modification du profil** — Mise à jour nom, email et téléphone
 
-### 🌍 Multi-Destinations
-- **Marrakech** — Catalogue complet (hôtels, véhicules, expériences, restaurants, boutiques)
-- **Casablanca** — Catalogue complet (hôtels, expériences, restaurants, boutiques)
+### 🌍 Multi-Destinations (4 villes)
+- **Marrakech** — 6 hôtels, 6 expériences, 5 restaurants, 5 attractions
+- **Casablanca** — 6 hôtels, 6 expériences, 5 restaurants, 6 attractions
+- **Agadir** — 5 hôtels, 6 expériences, 5 restaurants, 2 attractions
+- **Tanger** — 5 hôtels, 2 expériences, 5 restaurants, 5 attractions
+- **6 véhicules** et **10 boutiques artisanales** (globaux, toutes villes)
 - Sélection de ville via un écran dédié avec cartes visuelles
 - Données et assets séparés par destination
 
@@ -53,7 +56,7 @@ L'application couvre **deux villes** — **Marrakech** et **Casablanca** — et 
 - Catégories interactives avec navigation directe
 
 ### 🏨 Hôtels
-- 6 hôtels premium par ville (Royal Mansour, La Mamounia, La Sultana, Mandarin Oriental…)
+- 22 hôtels premium au total (Royal Mansour, La Mamounia, Four Seasons, Mandarin Oriental…)
 - Galerie photo swipeable (6 images par hôtel)
 - Système de réservation avec sélection de dates et nombre de personnes
 - Fiches détaillées avec descriptions, équipements, types de chambres et avis
@@ -98,13 +101,10 @@ L'application couvre **deux villes** — **Marrakech** et **Casablanca** — et 
 - Prévention des avis doubles par utilisateur
 - **Persistance cloud** — Avis sauvegardés dans la table `avis` via Supabase
 
-### 🧠 Recherche Sémantique (pgvector)
-- **Recherche IA** — Recherche par intention ("dîner romantique avec vue" → restaurants rooftop)
-- **Cross-catégorie** — "journée relaxante" → hôtels spa + expériences hammam
-- **pgvector + HNSW** — Index de similarité cosinus pour des résultats instantanés
-- **Embeddings OpenAI** — `text-embedding-3-small` (1536 dimensions)
-- **Edge Function** — Génération d'embeddings via Supabase Edge Functions
-- **UI hybride** — Résultats locaux instantanés + résultats IA avec badge de similarité
+### 🔍 Recherche
+- **Recherche locale** — Filtrage en temps réel par nom, localisation et catégorie
+- **7 barres de recherche** — Home, Hôtels, Restaurants, Expériences, Attractions, Véhicules, Boutiques
+- **Cross-catégorie** — La recherche du Home couvre toutes les catégories simultanément
 
 ### 🔧 Performance
 - **Cache images optimisé** — `cacheWidth`/`cacheHeight` sur tous les `Image.asset` (400px listes, 500px détails)
@@ -117,8 +117,8 @@ L'application couvre **deux villes** — **Marrakech** et **Casablanca** — et 
 
 | Composant | Technologie |
 |-----------|------------|
-| **Framework** | Flutter 3.41 |
-| **Langage** | Dart 3.7 |
+| **Framework** | Flutter 3.x |
+| **Langage** | Dart 3.x |
 | **State Management** | Riverpod (`flutter_riverpod`) |
 | **Navigation** | GoRouter (`go_router`) |
 | **Backend** | Supabase (Auth + PostgreSQL + pgvector + Edge Functions) |
@@ -135,7 +135,7 @@ L'application couvre **deux villes** — **Marrakech** et **Casablanca** — et 
 kurgate/
 ├── lib/
 │   ├── main.dart                    # Point d'entrée (init Hive + Supabase + cache)
-│   ├── models/                      # 16 modèles de données
+│   ├── models/                      # 15 modèles de données
 │   │   ├── offre_touristique.dart   # Classe de base (id, name, price, rating…)
 │   │   ├── hotel.dart               # extends OffreTouristique + stars, imageAssets
 │   │   ├── restaurant.dart          # extends OffreTouristique + specialite, capacite
@@ -152,7 +152,7 @@ kurgate/
 │   │   ├── chambre.dart             # Modèle chambre d'hôtel
 │   │   ├── attraction.dart          # Modèle point d'intérêt
 │   │   └── chatbot.dart             # Modèle chatbot (réservé)
-│   ├── providers/                   # 9 providers Riverpod
+│   ├── providers/                   # 8 providers Riverpod
 │   │   ├── auth_provider.dart       # AuthNotifier (login, signup, delete, update)
 │   │   ├── booking_provider.dart    # ReservationNotifier (add, cancel, pay, feedback → Supabase)
 │   │   ├── cart_provider.dart       # CartNotifier (add, remove, checkout → Supabase commandes)
@@ -162,18 +162,20 @@ kurgate/
 │   │   ├── destination_provider.dart # FutureProvider → Supabase with static fallback
 │   │   └── onboarding_provider.dart # hasSeenOnboarding, splashComplete
 │   ├── services/
-│   │   ├── supabase_service.dart     # Centralized Supabase data operations (16 methods)
-│   │   └── local_storage_service.dart # Hive (credentials, remember me)
+│   │   ├── supabase_service.dart     # Centralized Supabase data operations (18 methods)
+│   │   ├── connectivity_service.dart # Network connectivity monitoring
+│   │   └── local_storage_service.dart # Hive (credentials, remember me, saved cards)
 │   ├── router/
-│   │   └── app_router.dart          # GoRouter (20 routes avec transitions)
-│   ├── screens/                     # 24 écrans
+│   │   └── app_router.dart          # GoRouter (21 routes avec transitions)
+│   ├── screens/                     # 27 écrans
 │   │   ├── splash_screen.dart       # Splash animé + auto-login
 │   │   ├── onboarding_screen.dart   # Onboarding (3 pages)
 │   │   ├── login_screen.dart        # Connexion + Remember Me
 │   │   ├── signup_screen.dart       # Inscription
 │   │   ├── forgot_password_screen.dart
-│   │   ├── destination_screen.dart  # Sélection de ville (Marrakech/Casablanca)
+│   │   ├── destination_screen.dart  # Sélection de ville (4 villes)
 │   │   ├── main_shell.dart          # Shell avec bottom navigation (5 onglets)
+│   │   ├── no_connection_screen.dart # Écran hors connexion
 │   │   ├── home_screen.dart         # Hub principal + recherche + 5 sections
 │   │   ├── map_screen.dart          # Carte interactive OpenStreetMap
 │   │   ├── hotel_list_screen.dart   # Liste hôtels (import Hotel)
@@ -198,19 +200,15 @@ kurgate/
 │       ├── reviews_section.dart     # Section avis intégrée
 │       ├── feedback_sheet.dart      # Bottom sheet de feedback
 │       └── auth_error_snackbar.dart
-├── assets/
+├── assets/                          # ~237 MB, 101 répertoires
 │   ├── fonts/                       # Darker Grotesque (7 weights)
 │   └── images/
-│       ├── hotels/                  # Marrakech — 6 hôtels × 6 photos
-│       ├── vehicules/               # 6 véhicules × 4 photos
-│       ├── experiences/             # Marrakech — 6 expériences × 6 photos
-│       ├── restaurants/             # Marrakech — 6 restaurants × 6 photos
-│       ├── boutiques/               # Marrakech — 6 boutiques × 6 photos
-│       └── casablanca/              # Casablanca
-│           ├── hotels/              # 6 hôtels × 6 photos
-│           ├── experiences/         # 4 expériences × 6 photos
-│           ├── restaurants/         # 6 restaurants × 6 photos
-│           └── boutiques/           # 6 boutiques × 6 photos
+│       ├── marrakech/               # Hôtels, expériences, restaurants, attractions
+│       ├── casablanca/              # Hôtels, expériences, restaurants, attractions
+│       ├── agadir/                  # Hôtels, expériences, restaurants, attractions
+│       ├── tanger/                  # Hôtels, expériences, restaurants, attractions
+│       ├── vehicules/               # 6 véhicules × 4-6 photos
+│       └── boutiques/               # 10 boutiques × 3-6 photos
 ├── docs/
 │   └── class_diagram.puml           # Diagramme de classes PlantUML
 └── pubspec.yaml
@@ -236,8 +234,8 @@ Vehicule             (autonome — agence, transmission, carburant, places)
 Utilisateur          (modifierProfil, toMap, fromMap)
 Reservation          (payer, annuler, copyWith)
 Avis                 (note, commentaire, datePublication)
-Destination          (cities: Marrakech, Casablanca)
-Commande, Chambre, Attraction, ChatBot
+Destination          (cities: Marrakech, Casablanca, Agadir, Tanger)
+Attraction           (nom, location, horaires, entree)
 ```
 
 ---
@@ -246,8 +244,8 @@ Commande, Chambre, Attraction, ChatBot
 
 ### Prérequis
 
-- [Flutter SDK](https://docs.flutter.dev/get-started/install) ≥ 3.41
-- [Dart SDK](https://dart.dev/get-dart) ≥ 3.7
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) ≥ 3.x
+- [Dart SDK](https://dart.dev/get-dart) ≥ 3.x
 - Android Studio / VS Code avec extensions Flutter
 - Un appareil Android/iOS ou un émulateur
 
@@ -333,21 +331,22 @@ L'application est **entièrement synchronisée** avec Supabase. Toutes les opér
 | `reservations` | SELECT, INSERT, UPDATE (status + feedback) | ✅ Own user only |
 | `avis` | SELECT, INSERT | ✅ Public read, own insert |
 | `commandes` | SELECT, INSERT, UPDATE | ✅ Own user only |
-| `item_embeddings` | SELECT + RPC `match_items()` | ✅ Public read |
+| `produits_boutique` | SELECT | ✅ Public read |
+| `chambres` | SELECT | ✅ Public read |
+| `attractions` | SELECT | ✅ Public read |
 
 - **Authentication** — Email/password avec vérification, reset password
 - **Row Level Security** — Sécurité au niveau des lignes sur toutes les tables
-- **RPC** — Fonctions `delete_user()` et `match_items()` (recherche sémantique)
-- **pgvector** — Extension vectorielle pour la recherche par similarité cosinus (HNSW)
-- **Edge Functions** — `embed()` pour génération d'embeddings OpenAI
+- **RPC** — Fonction `delete_user()` pour suppression de compte
 - **Offline-First** — Fallback local si Supabase est indisponible
+- **Devise** — Tous les prix en **Dirham Marocain (MAD)**
 
 ### Architecture de Synchronisation
 
 ```
 ┌──────────────┐     FutureProvider      ┌──────────────────┐
 │  UI Screens  │ ◄──────────────────────► │  SupabaseService │
-│  (Riverpod)  │                         │  (14 methods)    │
+│  (Riverpod)  │                         │  (18 methods)    │
 └──────────────┘                         └────────┬─────────┘
        │                                          │
        │  Fire-and-forget                          ▼
@@ -381,7 +380,7 @@ Splash Screen (animation + auto-login check)
     └── [Remember Me OFF] → Onboarding → Login/Signup
                                               │
                                     Destination Screen
-                                    (Marrakech / Casablanca)
+                            (Marrakech / Casablanca / Agadir / Tanger)
                                               │
                                          Home Screen
                                     ┌────┬────┬────┬────┐
@@ -413,6 +412,7 @@ dependencies:
   latlong2: ^0.9.1             # Coordonnées géographiques
   url_launcher: ^6.3.2         # Liens externes
   google_fonts: ^6.2.1         # Polices Google
+  connectivity_plus: ^7.1.1    # Détection réseau
 ```
 
 ---
@@ -425,7 +425,7 @@ dependencies:
 
 | Accueil | Carte | Destinations |
 |---------|-------|-------------|
-| Hub avec 5 sections | Carte OpenStreetMap | Marrakech / Casablanca |
+| Hub avec 5 sections | Carte OpenStreetMap | 4 villes marocaines |
 
 | Hôtels | Détail Hôtel | Véhicules |
 |--------|-------------|-----------| 
