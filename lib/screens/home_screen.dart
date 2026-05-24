@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../providers/destination_provider.dart';
-import '../providers/catalog_providers.dart';
+import 'chat_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final VoidCallback? onProfileTap;
@@ -28,7 +28,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   late Animation<Offset> _headerSlide, _searchSlide, _aiSlide, _catSlide;
   late Animation<double> _sectionFade;
   late Animation<Offset> _sectionSlide;
-  late Animation<double> _fabFade;
 
   final _categories = const [
     _Cat(Icons.hotel_rounded, 'Hotels', '/hotels'),
@@ -41,42 +40,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   // ── Data ──
   static const _hotels = [
-    _Item(
-      'La Mamounia',
-      'Hivernage',
-      350,
-      4.9,
-      'assets/images/marrakech/hotels/la_mamounia/1.png',
-      '/hotel/hotel_002',
-      'hotel',
-    ),
-    _Item(
-      'Riad Yasmine',
-      'Medina',
-      95,
-      4.6,
-      'assets/images/marrakech/hotels/riad_yasmine/1.png',
-      '/hotel/hotel_003',
-      'hotel',
-    ),
-    _Item(
-      'La Sultana',
-      'Kasbah',
-      280,
-      4.8,
-      'assets/images/marrakech/hotels/la_sultana/1.png',
-      '/hotel/hotel_005',
-      'hotel',
-    ),
-    _Item(
-      'Royal Mansour',
-      'Médina',
-      550,
-      4.9,
-      'assets/images/marrakech/hotels/royal_mansour/1.png',
-      '/hotel/hotel_008',
-      'hotel',
-    ),
+    _Item('La Mamounia', 'Hivernage', 350, 4.9, 'assets/images/marrakech/hotels/la_mamounia/1.png', '/hotel/hotel_002', 'hotel'),
+    _Item('Riad Yasmine', 'Medina', 95, 4.6, 'assets/images/marrakech/hotels/riad_yasmine/1.png', '/hotel/hotel_003', 'hotel'),
+    _Item('La Sultana', 'Kasbah', 280, 4.8, 'assets/images/marrakech/hotels/la_sultana/1.png', '/hotel/hotel_005', 'hotel'),
+    _Item('Mandarin Oriental', 'Palmeraie', 420, 4.9, 'assets/images/marrakech/hotels/mandarin_oriental/1.png', '/hotel/hotel_006', 'hotel'),
+    _Item('Riad Kniza', 'Médina', 200, 4.7, 'assets/images/marrakech/hotels/riad_kniza/1.png', '/hotel/hotel_007', 'hotel'),
+    _Item('Royal Mansour', 'Médina', 550, 4.9, 'assets/images/marrakech/hotels/royal_mansour/1.png', '/hotel/hotel_008', 'hotel'),
   ];
   static const _vehicles = [
     _Item(
@@ -237,6 +206,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item('ONE Hotel Casablanca', 'Quartier Gauthier', 2000, 4.7, 'assets/images/casablanca/hotels/le_doge_casa/1.jpg', '/hotel/hotel_casa_002', 'hotel'),
     _Item('Marriott Casablanca', 'Place des Nations Unies', 2200, 4.7, 'assets/images/casablanca/hotels/hyatt_casa/1.jpg', '/hotel/hotel_casa_003', 'hotel'),
     _Item('Kenzi Tower Hotel', 'Twin Center', 1600, 4.6, 'assets/images/casablanca/hotels/kenzi_tower/1.jpg', '/hotel/hotel_casa_004', 'hotel'),
+    _Item('Sofitel Casablanca', 'Tour Blanche', 2500, 4.8, 'assets/images/casablanca/hotels/sofitel_casa/1.jpg', '/hotel/hotel_casa_005', 'hotel'),
+    _Item('Barceló Anfa', 'Corniche', 1800, 4.5, 'assets/images/casablanca/hotels/transatlantique/1.jpg', '/hotel/hotel_casa_006', 'hotel'),
   ];
 
   static const _experiencesCasa = [
@@ -248,7 +219,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   static const _restaurantsCasa = [
     _Item('Dar El Kaid', 'Quartier Habous', 350, 4.8, 'assets/images/casablanca/restaurants/ricks_cafe/1.jpg', '/restaurant/resto_casa_001', 'restaurant'),
     _Item('Riad 1930', 'Ancienne Médina', 350, 4.8, 'assets/images/casablanca/restaurants/riad_1930/1.jpg', '/restaurant/resto_casa_002', 'restaurant'),
-    _Item('La Pergola', 'Boulevard d\'Anfa', 45, 4.8, 'assets/images/casablanca/restaurants/la_bodega/1.jpg', '/restaurant/resto_casa_005', 'restaurant'),
+    _Item('Kyoto Sushi', 'Maarif · Japonais', 400, 4.7, 'assets/images/casablanca/restaurants/basmane/1.jpg', '/restaurant/resto_casa_004', 'restaurant'),
+    _Item('La Pergola', 'Boulevard d\'Anfa', 450, 4.8, 'assets/images/casablanca/restaurants/la_bodega/1.jpg', '/restaurant/resto_casa_005', 'restaurant'),
+    _Item('Le Doge Café & Tapas', 'Quartier Gauthier', 300, 4.6, 'assets/images/casablanca/restaurants/blend/1.jpg', '/restaurant/resto_casa_006', 'restaurant'),
   ];
 
 
@@ -299,6 +272,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item('Palais Zahia', 'Marocain · Palais', 600, 4.8, 'assets/images/tanger/restaurants/palais_zahia/1.jpg', '/restaurant/resto_tan_005', 'restaurant'),
   ];
 
+  // ── Attractions Data ──
+  static const _attractionsMarrakech = [
+    _Item('Jardin Majorelle', 'Guéliz', 0, 4.7, 'assets/images/marrakech/attractions/jardin_majorelle/1.jpg', '/attraction/attr_002', 'attraction'),
+    _Item('Palais Bahia', 'Mellah', 0, 4.6, 'assets/images/marrakech/attractions/bahia_palace/1.jpg', '/attraction/attr_003', 'attraction'),
+    _Item('Mosquée Koutoubia', 'Médina', 0, 4.9, 'assets/images/marrakech/attractions/koutoubia/1.jpg', '/attraction/attr_004', 'attraction'),
+    _Item('Tombeaux Saadiens', 'Kasbah', 0, 4.5, 'assets/images/marrakech/attractions/tombeaux_saadiens/1.jpg', '/attraction/attr_005', 'attraction'),
+    _Item('Jardins de la Ménara', 'Hivernage', 0, 4.3, 'assets/images/marrakech/attractions/menara/1.jpg', '/attraction/attr_008', 'attraction'),
+  ];
+  static const _attractionsCasa = [
+    _Item('Mosquée Hassan II', 'Corniche', 0, 4.9, 'assets/images/casablanca/attractions/hassan_ii/1.jpg', '/attraction/attr_casa_001', 'attraction'),
+    _Item('Place Mohammed V', 'Centre-ville', 0, 4.5, 'assets/images/casablanca/attractions/mohammed_v/1.jpg', '/attraction/attr_casa_002', 'attraction'),
+    _Item('Morocco Mall', 'Corniche', 0, 4.4, 'assets/images/casablanca/attractions/morocco_mall/1.jpg', '/attraction/attr_casa_003', 'attraction'),
+    _Item('Église Notre-Dame', 'Quartier des Hôpitaux', 0, 4.3, 'assets/images/casablanca/attractions/notre_dame/1.jpg', '/attraction/attr_casa_004', 'attraction'),
+    _Item('Quartier Habous', 'Habous', 0, 4.6, 'assets/images/casablanca/attractions/quartier_habous/1.jpg', '/attraction/attr_casa_005', 'attraction'),
+    _Item('Palais Royal', 'Mechouar', 0, 4.2, 'assets/images/casablanca/attractions/royal_palace/1.jpg', '/attraction/attr_casa_006', 'attraction'),
+  ];
+  static const _attractionsAgadir = [
+    _Item('Kasbah Oufella', 'Colline Oufella', 0, 4.6, 'assets/images/agadir/attractions/kasbah_oufella/1.jpg', '/attraction/attr_aga_001', 'attraction'),
+    _Item('Marina d\'Agadir', 'Front de Mer', 0, 4.5, 'assets/images/agadir/attractions/marina_agadir/1.jpg', '/attraction/attr_aga_002', 'attraction'),
+  ];
+  static const _attractionsTangier = [
+    _Item('Cap Spartel', 'Cap Spartel', 0, 4.8, 'assets/images/tanger/attractions/cap_spartel/1.jpg', '/attraction/attr_tan_001', 'attraction'),
+    _Item('Grottes d\'Hercule', 'Cap Spartel', 0, 4.7, 'assets/images/tanger/attractions/caves_hercules/1.jpg', '/attraction/attr_tan_002', 'attraction'),
+    _Item('Musée Légation Américaine', 'Médina', 0, 4.5, 'assets/images/tanger/attractions/legation_museum/1.jpg', '/attraction/attr_tan_003', 'attraction'),
+    _Item('Parc Perdicaris', 'Cap Spartel', 0, 4.4, 'assets/images/tanger/attractions/parc_perdicaris/1.jpg', '/attraction/attr_tan_004', 'attraction'),
+    _Item('Église Saint-André', 'Centre-ville', 0, 4.3, 'assets/images/tanger/attractions/st_andrew/1.jpg', '/attraction/attr_tan_005', 'attraction'),
+  ];
 
   String get _destId => ref.watch(selectedDestinationProvider).idDestination;
 
@@ -328,9 +328,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     }
   }
   List<_Item> _boutiquesForDest() => _boutiques;
+  List<_Item> _attractionsForDest() {
+    switch (_destId) {
+      case 'dest_002': return _attractionsCasa;
+      case 'dest_003': return _attractionsAgadir;
+      case 'dest_004': return _attractionsTangier;
+      default: return _attractionsMarrakech;
+    }
+  }
 
   List<_Item> get _activeItems {
-    return [..._hotelsForDest(), ..._vehiclesForDest(), ..._experiencesForDest(), ..._restaurantsForDest(), ..._boutiquesForDest()];
+    return [..._hotelsForDest(), ..._vehiclesForDest(), ..._experiencesForDest(), ..._restaurantsForDest(), ..._boutiquesForDest(), ..._attractionsForDest()];
   }
 
   List<_Item> get _searchResults {
@@ -363,13 +371,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _headerSlide = _s(0.0, 0.25);
     _searchFade = _f(0.1, 0.35);
     _searchSlide = _s(0.1, 0.35);
-    _aiFade = _f(0.15, 0.45);
-    _aiSlide = _s(0.15, 0.45);
     _catFade = _f(0.25, 0.55);
     _catSlide = _s(0.25, 0.55);
+    _aiFade = _f(0.15, 0.45);
+    _aiSlide = _s(0.15, 0.45);
     _sectionFade = _f(0.35, 0.7);
     _sectionSlide = _s(0.35, 0.7);
-    _fabFade = _f(0.7, 1.0);
     _searchController.addListener(() {
       setState(() => _searchQuery = _searchController.text);
     });
@@ -440,11 +447,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 : _buildMainContent(),
           ),
         ),
-        Positioned(
-          bottom: 24,
-          right: 20,
-          child: FadeTransition(opacity: _fabFade, child: _buildFab()),
-        ),
       ],
     );
   }
@@ -480,6 +482,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     _buildAsyncRestaurants(),
                     const SizedBox(height: 24),
                     _buildAsyncBoutiques(),
+                    const SizedBox(height: 24),
+                    _buildAttractionsSection(),
                   ],
                 ),
               ),
@@ -772,67 +776,89 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         position: _aiSlide,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color(0xFFFF8C00).withValues(alpha: 0.18),
-                  const Color(0xFFE77728).withValues(alpha: 0.08),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => const ChatScreen(),
+                  transitionsBuilder: (_, animation, __, child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, 1),
+                        end: Offset.zero,
+                      ).animate(CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeOutCubic,
+                      )),
+                      child: child,
+                    );
+                  },
+                  transitionDuration: const Duration(milliseconds: 400),
+                ),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFFFF8C00).withValues(alpha: 0.18),
+                    const Color(0xFFE77728).withValues(alpha: 0.08),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: const Color(0xFFFF8C00).withValues(alpha: 0.2),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFF8C00).withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.auto_awesome_rounded,
+                      color: Color(0xFFFF8C00),
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Ask our AI Travel Assistant',
+                          style: TextStyle(
+                            fontFamily: 'DarkerGrotesque',
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          'Get personalized recommendations instantly',
+                          style: TextStyle(
+                            fontFamily: 'DarkerGrotesque',
+                            color: Colors.white.withValues(alpha: 0.45),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    Icons.chat_bubble_outline_rounded,
+                    color: Colors.white.withValues(alpha: 0.3),
+                    size: 20,
+                  ),
                 ],
               ),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: const Color(0xFFFF8C00).withValues(alpha: 0.2),
-              ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFF8C00).withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.auto_awesome_rounded,
-                    color: Color(0xFFFF8C00),
-                    size: 22,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Ask our AI Travel Assistant',
-                        style: TextStyle(
-                          fontFamily: 'DarkerGrotesque',
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Text(
-                        'Get personalized recommendations instantly',
-                        style: TextStyle(
-                          fontFamily: 'DarkerGrotesque',
-                          color: Colors.white.withValues(alpha: 0.45),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(
-                  Icons.chat_bubble_outline_rounded,
-                  color: Colors.white.withValues(alpha: 0.3),
-                  size: 20,
-                ),
-              ],
             ),
           ),
         ),
@@ -940,63 +966,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   // ── Async Section Builders — fetch from Supabase, fallback to static ──
 
   Widget _buildAsyncHotels() {
-    final destId = ref.watch(selectedDestinationProvider).idDestination;
-    final async = ref.watch(hotelsProvider(destId));
-    final remote = async.valueOrNull;
-    final items = (remote != null && remote.isNotEmpty)
-        ? remote.take(4).map((h) => _Item(
-            h.name, h.location, h.price.toDouble(), h.rating, h.imageUrl, '/hotel/${h.id}', 'hotel',
-          )).toList()
-        : _hotelsForDest();
-    return _buildSection('🏨  Popular Hotels', '/hotels', items, '/night');
+    return _buildSection('🏨  Popular Hotels', '/hotels', _hotelsForDest(), '/night');
   }
 
   Widget _buildAsyncVehicles() {
-    final destId = ref.watch(selectedDestinationProvider).idDestination;
-    final async = ref.watch(vehiculesProvider(destId));
-    final remote = async.valueOrNull;
-    final items = (remote != null && remote.isNotEmpty)
-        ? remote.take(4).map((v) => _Item(
-            v.name, '${v.category} · ${v.carburant}', v.price.toDouble(), v.rating, v.imageUrl, '/vehicule/${v.id}', 'vehicle',
-          )).toList()
-        : _vehiclesForDest();
-    return _buildSection('🚗  Rent a Car', '/vehicules', items, '/day');
+    return _buildSection('🚗  Rent a Car', '/vehicules', _vehiclesForDest(), '/day');
   }
 
   Widget _buildAsyncExperiences() {
-    final destId = ref.watch(selectedDestinationProvider).idDestination;
-    final async = ref.watch(experiencesProvider(destId));
-    final remote = async.valueOrNull;
-    final items = (remote != null && remote.isNotEmpty)
-        ? remote.take(4).map((e) => _Item(
-            e.name, '${e.category} · ${e.duree}', e.price.toDouble(), e.rating, e.imageUrl, '/experience/${e.id}', 'experience',
-          )).toList()
-        : _experiencesForDest();
-    return _buildSection('🌟  Top Experiences', '/experiences', items, '/pers');
+    return _buildSection('🌟  Top Experiences', '/experiences', _experiencesForDest(), '/pers');
   }
 
   Widget _buildAsyncRestaurants() {
-    final destId = ref.watch(selectedDestinationProvider).idDestination;
-    final async = ref.watch(restaurantsProvider(destId));
-    final remote = async.valueOrNull;
-    final items = (remote != null && remote.isNotEmpty)
-        ? remote.take(4).map((r) => _Item(
-            r.name, r.specialite, r.price.toDouble(), r.rating, r.imageUrl, '/restaurant/${r.id}', 'restaurant',
-          )).toList()
-        : _restaurantsForDest();
-    return _buildSection('🍽️  Restaurants', '/restaurants', items, '/avg');
+    return _buildSection('🍽️  Restaurants', '/restaurants', _restaurantsForDest(), '/avg');
   }
 
   Widget _buildAsyncBoutiques() {
-    final destId = ref.watch(selectedDestinationProvider).idDestination;
-    final async = ref.watch(boutiquesProvider(destId));
-    final remote = async.valueOrNull;
-    final items = (remote != null && remote.isNotEmpty)
-        ? remote.take(4).map((b) => _Item(
-            b.name, '${b.category} · Fait main', 0, b.rating, b.imageUrl, '/boutique/${b.id}', 'boutique',
-          )).toList()
-        : _boutiquesForDest();
-    return _buildSection('🛍️  Artisan Shops', '/boutiques', items, '');
+    return _buildSection('🛍️  Artisan Shops', '/boutiques', _boutiquesForDest(), '');
+  }
+
+  Widget _buildAttractionsSection() {
+    return _buildSection('🏛️  Attractions', '/attractions', _attractionsForDest(), '');
   }
 
   // ── Section with horizontal scroll ──
@@ -1200,40 +1190,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     );
   }
 
-  // ── FAB ──
-  Widget _buildFab() {
-    return Container(
-      width: 56,
-      height: 56,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFFF8C00), Color(0xFFE77728)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFFFF8C00).withValues(alpha: 0.4),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(28),
-          onTap: () {},
-          child: const Icon(
-            Icons.auto_awesome_rounded,
-            color: Colors.black,
-            size: 26,
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _orb(double size, double alpha) => Container(
     width: size,

@@ -20,13 +20,14 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
   late AnimationController _sheetCtrl;
   late Animation<Offset> _sheetSlide;
 
-  static const String _geoapifyKey = '8ea6bd7dfb8e4ff19946ba5b6cc14934';
+  static const String _azureMapsKey = '7KdYnJAdCSHushwoVDqQD1G6tc84R46nN5pkSEwitHSGmDLjLWCQJQQJ99CEACYeBjF3fBr5AAAgAZMP23Qz';
 
   final _filters = const [
     _FilterItem(label: 'Tous', icon: Icons.layers_rounded),
     _FilterItem(label: 'Hôtels', icon: Icons.hotel_rounded),
     _FilterItem(label: 'Restaurants', icon: Icons.restaurant_rounded),
     _FilterItem(label: 'Expériences', icon: Icons.explore_rounded),
+    _FilterItem(label: 'Attractions', icon: Icons.account_balance_rounded),
   ];
 
   static final _centerMarrakech = LatLng(31.6295, -7.9811);
@@ -65,7 +66,12 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
     _MapPOI(id: 'exp_004', name: 'Cours de Cuisine Marocaine', category: 'Expériences', location: 'Riad Cooking, Médina', rating: 4.8, price: '500 MAD/pers', lat: 31.6315, lng: -7.9875, icon: Icons.explore_rounded, route: '/experience/exp_004', images: ['assets/images/marrakech/experiences/cours_cuisine/1.png','assets/images/marrakech/experiences/cours_cuisine/2.png','assets/images/marrakech/experiences/cours_cuisine/3.png']),
     _MapPOI(id: 'exp_005', name: 'Vol en Montgolfière', category: 'Expériences', location: 'Palmeraie, Marrakech', rating: 4.9, price: '1800 MAD/pers', lat: 31.6700, lng: -8.0100, icon: Icons.explore_rounded, route: '/experience/exp_005', images: ['assets/images/marrakech/experiences/vol_montgolfiere/1.png','assets/images/marrakech/experiences/vol_montgolfiere/2.png','assets/images/marrakech/experiences/vol_montgolfiere/3.png']),
     _MapPOI(id: 'exp_006', name: 'Jardin Majorelle & YSL', category: 'Expériences', location: 'Guéliz, Marrakech', rating: 4.7, price: '150 MAD/pers', lat: 31.6418, lng: -8.0033, icon: Icons.explore_rounded, route: '/experience/exp_006', images: ['assets/images/marrakech/experiences/jardin_majorelle/1.png','assets/images/marrakech/experiences/jardin_majorelle/2.png','assets/images/marrakech/experiences/jardin_majorelle/3.png']),
-
+    // Attractions
+    _MapPOI(id: 'attr_002', name: 'Jardin Majorelle', category: 'Attractions', location: 'Guéliz, Marrakech', rating: 4.7, price: 'Gratuit', lat: 31.6418, lng: -8.0032, icon: Icons.account_balance_rounded, route: '/attraction/attr_002', images: ['assets/images/marrakech/attractions/jardin_majorelle/1.jpg','assets/images/marrakech/attractions/jardin_majorelle/2.jpg','assets/images/marrakech/attractions/jardin_majorelle/3.jpg']),
+    _MapPOI(id: 'attr_003', name: 'Palais Bahia', category: 'Attractions', location: 'Mellah, Marrakech', rating: 4.6, price: 'Gratuit', lat: 31.6217, lng: -7.9823, icon: Icons.account_balance_rounded, route: '/attraction/attr_003', images: ['assets/images/marrakech/attractions/bahia_palace/1.jpg','assets/images/marrakech/attractions/bahia_palace/2.jpg','assets/images/marrakech/attractions/bahia_palace/3.jpg']),
+    _MapPOI(id: 'attr_004', name: 'Mosquée Koutoubia', category: 'Attractions', location: 'Médina, Marrakech', rating: 4.9, price: 'Gratuit', lat: 31.6237, lng: -7.9939, icon: Icons.account_balance_rounded, route: '/attraction/attr_004', images: ['assets/images/marrakech/attractions/koutoubia/1.jpg','assets/images/marrakech/attractions/koutoubia/2.jpg','assets/images/marrakech/attractions/koutoubia/3.jpg']),
+    _MapPOI(id: 'attr_005', name: 'Tombeaux Saadiens', category: 'Attractions', location: 'Kasbah, Marrakech', rating: 4.5, price: 'Gratuit', lat: 31.6178, lng: -7.9901, icon: Icons.account_balance_rounded, route: '/attraction/attr_005', images: ['assets/images/marrakech/attractions/tombeaux_saadiens/1.jpg','assets/images/marrakech/attractions/tombeaux_saadiens/2.jpg','assets/images/marrakech/attractions/tombeaux_saadiens/3.jpg']),
+    _MapPOI(id: 'attr_008', name: 'Jardins de la Ménara', category: 'Attractions', location: 'Hivernage, Marrakech', rating: 4.3, price: 'Gratuit', lat: 31.6138, lng: -8.0225, icon: Icons.account_balance_rounded, route: '/attraction/attr_008', images: ['assets/images/marrakech/attractions/menara/1.jpg','assets/images/marrakech/attractions/menara/2.jpg','assets/images/marrakech/attractions/menara/3.jpg']),
   ];
 
   final List<_MapPOI> _casaPOIs = const [
@@ -80,12 +86,71 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
     _MapPOI(id: 'exp_casa_002', name: 'Excursion Tanger en TGV', category: 'Expériences', location: 'Gare Casa Voyageurs', rating: 4.7, price: '950 MAD/pers', lat: 33.5880, lng: -7.6680, icon: Icons.explore_rounded, route: '/experience/exp_casa_002', images: ['assets/images/casablanca/experiences/corniche_casa/1.jpg','assets/images/casablanca/experiences/corniche_casa/2.jpg','assets/images/casablanca/experiences/corniche_casa/3.jpg']),
     _MapPOI(id: 'exp_casa_003', name: 'Session Surf Atlantique', category: 'Expériences', location: 'Côte Atlantique', rating: 4.8, price: '400 MAD/pers', lat: 33.6020, lng: -7.6120, icon: Icons.explore_rounded, route: '/experience/exp_casa_003', images: ['assets/images/casablanca/experiences/medina_casa/1.jpeg','assets/images/casablanca/experiences/medina_casa/2.jpg','assets/images/casablanca/experiences/medina_casa/3.jpg']),
     _MapPOI(id: 'exp_casa_006', name: 'Coucher de soleil en Yacht', category: 'Expériences', location: 'Marina', rating: 4.9, price: '2000 MAD/pers', lat: 33.5950, lng: -7.6350, icon: Icons.explore_rounded, route: '/experience/exp_casa_006', images: ['assets/images/casablanca/experiences/yacht_casa/1.png','assets/images/casablanca/experiences/yacht_casa/2.png','assets/images/casablanca/experiences/yacht_casa/3.png']),
-
+    // Missing Hotels
+    _MapPOI(id: 'hotel_casa_005', name: 'Sofitel Casablanca', category: 'Hôtels', location: 'Tour Blanche', rating: 4.8, price: '2500 MAD/nuit', lat: 33.5860, lng: -7.6250, icon: Icons.hotel_rounded, route: '/hotel/hotel_casa_005', images: ['assets/images/casablanca/hotels/sofitel_casa/1.jpg','assets/images/casablanca/hotels/sofitel_casa/2.jpg','assets/images/casablanca/hotels/sofitel_casa/3.jpg']),
+    _MapPOI(id: 'hotel_casa_006', name: 'Barceló Anfa', category: 'Hôtels', location: 'Corniche', rating: 4.5, price: '1800 MAD/nuit', lat: 33.5810, lng: -7.6580, icon: Icons.hotel_rounded, route: '/hotel/hotel_casa_006', images: ['assets/images/casablanca/hotels/transatlantique/1.jpg','assets/images/casablanca/hotels/transatlantique/2.jpg','assets/images/casablanca/hotels/transatlantique/3.jpg']),
+    // Missing Restaurants
+    _MapPOI(id: 'resto_casa_004', name: 'Kyoto Sushi', category: 'Restaurants', location: 'Maarif', rating: 4.7, price: '400 MAD/moy', lat: 33.5850, lng: -7.6280, icon: Icons.restaurant_rounded, route: '/restaurant/resto_casa_004', images: ['assets/images/casablanca/restaurants/basmane/1.jpg','assets/images/casablanca/restaurants/basmane/2.jpg','assets/images/casablanca/restaurants/basmane/3.jpg']),
+    _MapPOI(id: 'resto_casa_006', name: 'Le Doge Café & Tapas', category: 'Restaurants', location: 'Quartier Gauthier', rating: 4.6, price: '300 MAD/moy', lat: 33.5915, lng: -7.6210, icon: Icons.restaurant_rounded, route: '/restaurant/resto_casa_006', images: ['assets/images/casablanca/restaurants/blend/1.jpg','assets/images/casablanca/restaurants/blend/2.jpg','assets/images/casablanca/restaurants/blend/3.jpg']),
+    // Attractions
+    _MapPOI(id: 'attr_casa_001', name: 'Mosquée Hassan II', category: 'Attractions', location: 'Corniche, Casablanca', rating: 4.9, price: 'Gratuit', lat: 33.6087, lng: -7.6322, icon: Icons.account_balance_rounded, route: '/attraction/attr_casa_001', images: ['assets/images/casablanca/attractions/hassan_ii/1.jpg','assets/images/casablanca/attractions/hassan_ii/2.jpg','assets/images/casablanca/attractions/hassan_ii/3.jpg']),
+    _MapPOI(id: 'attr_casa_002', name: 'Place Mohammed V', category: 'Attractions', location: 'Centre-ville, Casablanca', rating: 4.5, price: 'Gratuit', lat: 33.5912, lng: -7.6186, icon: Icons.account_balance_rounded, route: '/attraction/attr_casa_002', images: ['assets/images/casablanca/attractions/mohammed_v/1.jpg','assets/images/casablanca/attractions/mohammed_v/2.jpg','assets/images/casablanca/attractions/mohammed_v/3.jpg']),
+    _MapPOI(id: 'attr_casa_003', name: 'Morocco Mall', category: 'Attractions', location: 'Corniche, Casablanca', rating: 4.4, price: 'Gratuit', lat: 33.5767, lng: -7.6608, icon: Icons.account_balance_rounded, route: '/attraction/attr_casa_003', images: ['assets/images/casablanca/attractions/morocco_mall/1.jpg','assets/images/casablanca/attractions/morocco_mall/2.jpg','assets/images/casablanca/attractions/morocco_mall/3.jpg']),
+    _MapPOI(id: 'attr_casa_004', name: 'Église Notre-Dame de Lourdes', category: 'Attractions', location: 'Quartier des Hôpitaux', rating: 4.3, price: 'Gratuit', lat: 33.5876, lng: -7.6254, icon: Icons.account_balance_rounded, route: '/attraction/attr_casa_004', images: ['assets/images/casablanca/attractions/notre_dame/1.jpg','assets/images/casablanca/attractions/notre_dame/2.jpg','assets/images/casablanca/attractions/notre_dame/3.jpg']),
+    _MapPOI(id: 'attr_casa_005', name: 'Quartier Habous', category: 'Attractions', location: 'Habous, Casablanca', rating: 4.6, price: 'Gratuit', lat: 33.5751, lng: -7.6078, icon: Icons.account_balance_rounded, route: '/attraction/attr_casa_005', images: ['assets/images/casablanca/attractions/quartier_habous/1.jpg','assets/images/casablanca/attractions/quartier_habous/2.jpg','assets/images/casablanca/attractions/quartier_habous/3.jpg']),
+    _MapPOI(id: 'attr_casa_006', name: 'Palais Royal', category: 'Attractions', location: 'Mechouar, Casablanca', rating: 4.2, price: 'Gratuit', lat: 33.5839, lng: -7.6175, icon: Icons.account_balance_rounded, route: '/attraction/attr_casa_006', images: ['assets/images/casablanca/attractions/royal_palace/1.jpg','assets/images/casablanca/attractions/royal_palace/2.jpg','assets/images/casablanca/attractions/royal_palace/3.jpg']),
   ];
 
-  // Agadir & Tangier — empty until items are provided
-  final List<_MapPOI> _agadirPOIs = const [];
-  final List<_MapPOI> _tangierPOIs = const [];
+  // ── Agadir POIs ──
+  final List<_MapPOI> _agadirPOIs = const [
+    // Hotels
+    _MapPOI(id: 'hotel_aga_001', name: 'Sofitel Royal Bay Resort', category: 'Hôtels', location: 'Baie d\'Agadir', rating: 4.8, price: '2800 MAD/nuit', lat: 30.4150, lng: -9.6050, icon: Icons.hotel_rounded, route: '/hotel/hotel_aga_001', images: ['assets/images/agadir/hotels/sofitel_royal_bay/1.jpg','assets/images/agadir/hotels/sofitel_royal_bay/2.jpg','assets/images/agadir/hotels/sofitel_royal_bay/3.jpg']),
+    _MapPOI(id: 'hotel_aga_002', name: 'Sofitel Thalassa Sea & Spa', category: 'Hôtels', location: 'Bord de Mer', rating: 4.9, price: '3200 MAD/nuit', lat: 30.4200, lng: -9.6100, icon: Icons.hotel_rounded, route: '/hotel/hotel_aga_002', images: ['assets/images/agadir/hotels/sofitel_thalassa/1.jpg','assets/images/agadir/hotels/sofitel_thalassa/2.jpg','assets/images/agadir/hotels/sofitel_thalassa/3.jpg']),
+    _MapPOI(id: 'hotel_aga_003', name: 'Riu Palace Tikida', category: 'Hôtels', location: 'Secteur Balnéaire', rating: 4.7, price: '1800 MAD/nuit', lat: 30.4120, lng: -9.5980, icon: Icons.hotel_rounded, route: '/hotel/hotel_aga_003', images: ['assets/images/agadir/hotels/riu_palace_tikida/1.jpg','assets/images/agadir/hotels/riu_palace_tikida/2.jpg','assets/images/agadir/hotels/riu_palace_tikida/3.jpg']),
+    _MapPOI(id: 'hotel_aga_004', name: 'The View Agadir', category: 'Hôtels', location: 'Colline Oufella', rating: 4.6, price: '1500 MAD/nuit', lat: 30.4338, lng: -9.6168, icon: Icons.hotel_rounded, route: '/hotel/hotel_aga_004', images: ['assets/images/agadir/hotels/the_view/1.jpg','assets/images/agadir/hotels/the_view/2.jpg','assets/images/agadir/hotels/the_view/3.jpg']),
+    _MapPOI(id: 'hotel_aga_005', name: 'Dunes d\'Or Ocean Club', category: 'Hôtels', location: 'Secteur Balnéaire', rating: 4.5, price: '1200 MAD/nuit', lat: 30.4080, lng: -9.5950, icon: Icons.hotel_rounded, route: '/hotel/hotel_aga_005', images: ['assets/images/agadir/hotels/dunes_dor/1.jpg','assets/images/agadir/hotels/dunes_dor/2.jpg','assets/images/agadir/hotels/dunes_dor/3.jpg']),
+    // Restaurants
+    _MapPOI(id: 'resto_aga_001', name: 'El Toro', category: 'Restaurants', location: 'Marina d\'Agadir', rating: 4.7, price: '450 MAD/moy', lat: 30.4167, lng: -9.5989, icon: Icons.restaurant_rounded, route: '/restaurant/resto_aga_001', images: ['assets/images/agadir/restaurants/el_toro/1.jpg','assets/images/agadir/restaurants/el_toro/2.jpg','assets/images/agadir/restaurants/el_toro/3.jpg']),
+    _MapPOI(id: 'resto_aga_002', name: 'La Plage Restaurant', category: 'Restaurants', location: 'Corniche, Agadir', rating: 4.8, price: '550 MAD/moy', lat: 30.4220, lng: -9.6120, icon: Icons.restaurant_rounded, route: '/restaurant/resto_aga_002', images: ['assets/images/agadir/restaurants/la_plage/1.jpg','assets/images/agadir/restaurants/la_plage/2.jpg','assets/images/agadir/restaurants/la_plage/3.jpg']),
+    _MapPOI(id: 'resto_aga_003', name: 'Le 20\' Restaurant', category: 'Restaurants', location: 'Secteur Touristique', rating: 4.9, price: '600 MAD/moy', lat: 30.4190, lng: -9.6030, icon: Icons.restaurant_rounded, route: '/restaurant/resto_aga_003', images: ['assets/images/agadir/restaurants/le_20/1.jpg','assets/images/agadir/restaurants/le_20/2.jpg','assets/images/agadir/restaurants/le_20/3.jpg']),
+    _MapPOI(id: 'resto_aga_004', name: 'Little Italy', category: 'Restaurants', location: 'Nouveau Talborjt', rating: 4.6, price: '350 MAD/moy', lat: 30.4260, lng: -9.5970, icon: Icons.restaurant_rounded, route: '/restaurant/resto_aga_004', images: ['assets/images/agadir/restaurants/little_italy/1.jpg','assets/images/agadir/restaurants/little_italy/2.jpg','assets/images/agadir/restaurants/little_italy/3.jpg']),
+    _MapPOI(id: 'resto_aga_005', name: 'Restaurant Rafiq', category: 'Restaurants', location: 'Centre-ville, Agadir', rating: 4.5, price: '300 MAD/moy', lat: 30.4300, lng: -9.5920, icon: Icons.restaurant_rounded, route: '/restaurant/resto_aga_005', images: ['assets/images/agadir/restaurants/rafiq/1.jpg','assets/images/agadir/restaurants/rafiq/2.jpg','assets/images/agadir/restaurants/rafiq/3.jpg']),
+    // Experiences
+    _MapPOI(id: 'exp_aga_001', name: 'City Tour Kasbah & Souk', category: 'Expériences', location: 'Centre, Agadir', rating: 4.7, price: '350 MAD/pers', lat: 30.4338, lng: -9.6168, icon: Icons.explore_rounded, route: '/experience/exp_aga_001', images: ['assets/images/agadir/experiences/city_tour/1.jpg','assets/images/agadir/experiences/city_tour/2.jpg','assets/images/agadir/experiences/city_tour/3.jpg']),
+    _MapPOI(id: 'exp_aga_002', name: 'Sandboarding & Quad Bike', category: 'Expériences', location: 'Dunes, Agadir', rating: 4.8, price: '650 MAD/pers', lat: 30.3800, lng: -9.5500, icon: Icons.explore_rounded, route: '/experience/exp_aga_002', images: ['assets/images/agadir/experiences/sandboarding/1.jpg','assets/images/agadir/experiences/sandboarding/2.jpg','assets/images/agadir/experiences/sandboarding/3.jpg']),
+    _MapPOI(id: 'exp_aga_003', name: 'Yacht Cruise & Fishing', category: 'Expériences', location: 'Marina, Agadir', rating: 4.9, price: '1200 MAD/pers', lat: 30.4167, lng: -9.5989, icon: Icons.explore_rounded, route: '/experience/exp_aga_003', images: ['assets/images/agadir/experiences/yacht_cruise/1.jpg','assets/images/agadir/experiences/yacht_cruise/2.jpg','assets/images/agadir/experiences/yacht_cruise/3.jpg']),
+    _MapPOI(id: 'exp_aga_004', name: 'Téléphérique & City Tour', category: 'Expériences', location: 'Oufella, Agadir', rating: 4.6, price: '400 MAD/pers', lat: 30.4310, lng: -9.6140, icon: Icons.explore_rounded, route: '/experience/exp_aga_004', images: ['assets/images/agadir/experiences/cable_car/1.jpg','assets/images/agadir/experiences/cable_car/2.jpg','assets/images/agadir/experiences/cable_car/3.jpg']),
+    _MapPOI(id: 'exp_aga_005', name: 'Paradise Valley & Atlas', category: 'Expériences', location: 'Vallée du Paradis', rating: 4.8, price: '550 MAD/pers', lat: 30.5200, lng: -9.4800, icon: Icons.explore_rounded, route: '/experience/exp_aga_005', images: ['assets/images/agadir/experiences/paradise_valley/1.jpg','assets/images/agadir/experiences/paradise_valley/2.jpg','assets/images/agadir/experiences/paradise_valley/3.jpg']),
+    _MapPOI(id: 'exp_aga_006', name: 'Crocoparc Agadir', category: 'Expériences', location: 'Route de Drarga', rating: 4.5, price: '250 MAD/pers', lat: 30.3600, lng: -9.5300, icon: Icons.explore_rounded, route: '/experience/exp_aga_006', images: ['assets/images/agadir/experiences/crocoparc/1.jpg','assets/images/agadir/experiences/crocoparc/2.jpg','assets/images/agadir/experiences/crocoparc/3.jpg']),
+    // Attractions
+    _MapPOI(id: 'attr_aga_001', name: 'Kasbah Oufella', category: 'Attractions', location: 'Colline Oufella, Agadir', rating: 4.6, price: 'Gratuit', lat: 30.4338, lng: -9.6168, icon: Icons.account_balance_rounded, route: '/attraction/attr_aga_001', images: ['assets/images/agadir/attractions/kasbah_oufella/1.jpg','assets/images/agadir/attractions/kasbah_oufella/2.jpg','assets/images/agadir/attractions/kasbah_oufella/3.jpg']),
+    _MapPOI(id: 'attr_aga_002', name: 'Marina d\'Agadir', category: 'Attractions', location: 'Front de Mer, Agadir', rating: 4.5, price: 'Gratuit', lat: 30.4167, lng: -9.5989, icon: Icons.account_balance_rounded, route: '/attraction/attr_aga_002', images: ['assets/images/agadir/attractions/marina_agadir/1.jpg','assets/images/agadir/attractions/marina_agadir/2.jpg','assets/images/agadir/attractions/marina_agadir/3.jpg']),
+  ];
+
+  // ── Tangier POIs ──
+  final List<_MapPOI> _tangierPOIs = const [
+    // Hotels
+    _MapPOI(id: 'hotel_tan_001', name: 'Hilton Al Houara Resort', category: 'Hôtels', location: 'Al Houara', rating: 4.9, price: '3500 MAD/nuit', lat: 35.6673, lng: -5.9658, icon: Icons.hotel_rounded, route: '/hotel/hotel_tan_001', images: ['assets/images/tanger/hotels/hilton_al_houara/1.jpg','assets/images/tanger/hotels/hilton_al_houara/2.jpg','assets/images/tanger/hotels/hilton_al_houara/3.jpg']),
+    _MapPOI(id: 'hotel_tan_002', name: 'Hilton Tangier City Center', category: 'Hôtels', location: 'Centre Ville', rating: 4.8, price: '2200 MAD/nuit', lat: 35.7729, lng: -5.7862, icon: Icons.hotel_rounded, route: '/hotel/hotel_tan_002', images: ['assets/images/tanger/hotels/hilton_city_center/1.jpg','assets/images/tanger/hotels/hilton_city_center/2.jpg','assets/images/tanger/hotels/hilton_city_center/3.jpg']),
+    _MapPOI(id: 'hotel_tan_003', name: 'Barceló Tanger', category: 'Hôtels', location: 'Avenue Mohammed VI', rating: 4.7, price: '1800 MAD/nuit', lat: 35.7825, lng: -5.8058, icon: Icons.hotel_rounded, route: '/hotel/hotel_tan_003', images: ['assets/images/tanger/hotels/barcelo/1.jpg','assets/images/tanger/hotels/barcelo/2.jpg','assets/images/tanger/hotels/barcelo/3.jpg']),
+    _MapPOI(id: 'hotel_tan_004', name: 'Hilton Garden Inn', category: 'Hôtels', location: 'Centre Ville', rating: 4.6, price: '1400 MAD/nuit', lat: 35.7738, lng: -5.7871, icon: Icons.hotel_rounded, route: '/hotel/hotel_tan_004', images: ['assets/images/tanger/hotels/hilton_garden_inn/1.jpg','assets/images/tanger/hotels/hilton_garden_inn/2.jpg','assets/images/tanger/hotels/hilton_garden_inn/3.jpg']),
+    _MapPOI(id: 'hotel_tan_005', name: 'Pestana Tanger', category: 'Hôtels', location: 'Place du Maghreb Arabe', rating: 4.7, price: '1600 MAD/nuit', lat: 35.7778, lng: -5.7995, icon: Icons.hotel_rounded, route: '/hotel/hotel_tan_005', images: ['assets/images/tanger/hotels/pestana/1.jpg','assets/images/tanger/hotels/pestana/2.jpg','assets/images/tanger/hotels/pestana/3.jpg']),
+    // Restaurants
+    _MapPOI(id: 'resto_tan_001', name: 'El Morocco Club', category: 'Restaurants', location: 'Médina, Tanger', rating: 4.9, price: '550 MAD/moy', lat: 35.7867, lng: -5.8117, icon: Icons.restaurant_rounded, route: '/restaurant/resto_tan_001', images: ['assets/images/tanger/restaurants/el_morocco_club/1.jpg','assets/images/tanger/restaurants/el_morocco_club/2.jpg','assets/images/tanger/restaurants/el_morocco_club/3.jpg']),
+    _MapPOI(id: 'resto_tan_002', name: 'L\'Olivier Restaurant', category: 'Restaurants', location: 'Boulevard Pasteur', rating: 4.7, price: '450 MAD/moy', lat: 35.7730, lng: -5.8130, icon: Icons.restaurant_rounded, route: '/restaurant/resto_tan_002', images: ['assets/images/tanger/restaurants/lolivier/1.jpg','assets/images/tanger/restaurants/lolivier/2.jpg','assets/images/tanger/restaurants/lolivier/3.jpg']),
+    _MapPOI(id: 'resto_tan_003', name: 'Macondo', category: 'Restaurants', location: 'Place de la Kasbah', rating: 4.6, price: '400 MAD/moy', lat: 35.7890, lng: -5.8090, icon: Icons.restaurant_rounded, route: '/restaurant/resto_tan_003', images: ['assets/images/tanger/restaurants/macondo/1.jpg','assets/images/tanger/restaurants/macondo/2.jpg','assets/images/tanger/restaurants/macondo/3.jpg']),
+    _MapPOI(id: 'resto_tan_004', name: 'Les Huîtres', category: 'Restaurants', location: 'Corniche, Tanger', rating: 4.8, price: '500 MAD/moy', lat: 35.7650, lng: -5.8200, icon: Icons.restaurant_rounded, route: '/restaurant/resto_tan_004', images: ['assets/images/tanger/restaurants/les_huitres/1.jpg','assets/images/tanger/restaurants/les_huitres/2.jpg','assets/images/tanger/restaurants/les_huitres/3.jpg']),
+    _MapPOI(id: 'resto_tan_005', name: 'Palais Zahia', category: 'Restaurants', location: 'Ancienne Médina', rating: 4.8, price: '600 MAD/moy', lat: 35.7860, lng: -5.8100, icon: Icons.restaurant_rounded, route: '/restaurant/resto_tan_005', images: ['assets/images/tanger/restaurants/palais_zahia/1.jpg','assets/images/tanger/restaurants/palais_zahia/2.jpg','assets/images/tanger/restaurants/palais_zahia/3.jpg']),
+    // Experiences
+    _MapPOI(id: 'exp_tan_001', name: 'Luxury Tangier Tour', category: 'Expériences', location: 'Tanger Privé', rating: 4.9, price: '950 MAD/pers', lat: 35.7750, lng: -5.8100, icon: Icons.explore_rounded, route: '/experience/exp_tan_001', images: ['assets/images/tanger/experiences/luxury_tour/1.jpg','assets/images/tanger/experiences/luxury_tour/2.jpg','assets/images/tanger/experiences/luxury_tour/3.jpg']),
+    _MapPOI(id: 'exp_tan_002', name: 'Grand Tour de Tanger', category: 'Expériences', location: 'Tanger Premium', rating: 4.8, price: '850 MAD/pers', lat: 35.7925, lng: -5.9267, icon: Icons.explore_rounded, route: '/experience/exp_tan_002', images: ['assets/images/tanger/experiences/grand_tour/1.jpg','assets/images/tanger/experiences/grand_tour/2.jpg','assets/images/tanger/experiences/grand_tour/3.jpg']),
+    // Attractions
+    _MapPOI(id: 'attr_tan_001', name: 'Cap Spartel', category: 'Attractions', location: 'Cap Spartel, Tanger', rating: 4.8, price: 'Gratuit', lat: 35.7925, lng: -5.9267, icon: Icons.account_balance_rounded, route: '/attraction/attr_tan_001', images: ['assets/images/tanger/attractions/cap_spartel/1.jpg','assets/images/tanger/attractions/cap_spartel/2.jpg','assets/images/tanger/attractions/cap_spartel/3.jpg']),
+    _MapPOI(id: 'attr_tan_002', name: 'Grottes d\'Hercule', category: 'Attractions', location: 'Cap Spartel, Tanger', rating: 4.7, price: 'Gratuit', lat: 35.7617, lng: -5.9386, icon: Icons.account_balance_rounded, route: '/attraction/attr_tan_002', images: ['assets/images/tanger/attractions/caves_hercules/1.jpg','assets/images/tanger/attractions/caves_hercules/2.jpg','assets/images/tanger/attractions/caves_hercules/3.jpg']),
+    _MapPOI(id: 'attr_tan_003', name: 'Musée Légation Américaine', category: 'Attractions', location: 'Médina, Tanger', rating: 4.5, price: 'Gratuit', lat: 35.7867, lng: -5.8117, icon: Icons.account_balance_rounded, route: '/attraction/attr_tan_003', images: ['assets/images/tanger/attractions/legation_museum/1.jpg','assets/images/tanger/attractions/legation_museum/2.jpg','assets/images/tanger/attractions/legation_museum/3.jpg']),
+    _MapPOI(id: 'attr_tan_004', name: 'Parc Perdicaris', category: 'Attractions', location: 'Cap Spartel, Tanger', rating: 4.4, price: 'Gratuit', lat: 35.7722, lng: -5.9142, icon: Icons.account_balance_rounded, route: '/attraction/attr_tan_004', images: ['assets/images/tanger/attractions/parc_perdicaris/1.jpg','assets/images/tanger/attractions/parc_perdicaris/2.jpg','assets/images/tanger/attractions/parc_perdicaris/3.jpg']),
+    _MapPOI(id: 'attr_tan_005', name: 'Église Saint-André', category: 'Attractions', location: 'Centre-ville, Tanger', rating: 4.3, price: 'Gratuit', lat: 35.7764, lng: -5.8097, icon: Icons.account_balance_rounded, route: '/attraction/attr_tan_005', images: ['assets/images/tanger/attractions/st_andrew/1.jpg','assets/images/tanger/attractions/st_andrew/2.jpg','assets/images/tanger/attractions/st_andrew/3.jpg']),
+  ];
 
   @override
   void initState() {
@@ -130,6 +195,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
       case 'Hôtels': return const Color(0xFFFF8C00);
       case 'Restaurants': return const Color(0xFFE91E63);
       case 'Expériences': return const Color(0xFF4CAF50);
+      case 'Attractions': return const Color(0xFF2196F3);
       default: return const Color(0xFFFF8C00);
     }
   }
@@ -154,7 +220,12 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
           mapController: _mapController,
           options: MapOptions(initialCenter: _center, initialZoom: 13.0, onTap: (_, _) => _dismiss(), backgroundColor: const Color(0xFF1A1A1A)),
           children: [
-            TileLayer(urlTemplate: 'https://maps.geoapify.com/v1/tile/dark-matter/{z}/{x}/{y}.png?apiKey=$_geoapifyKey', userAgentPackageName: 'com.kurgate.app', retinaMode: true),
+            TileLayer(
+              urlTemplate: 'https://atlas.microsoft.com/map/tile?api-version=2022-08-01&tilesetId=microsoft.base.road&zoom={z}&x={x}&y={y}&tileSize=512&subscription-key=$_azureMapsKey',
+              userAgentPackageName: 'com.kurgate.app',
+              tileDimension: 512,
+              zoomOffset: -1,
+            ),
             MarkerLayer(markers: _filtered.map((poi) {
               final color = _catColor(poi.category);
               final sel = _selectedPOI?.id == poi.id;
@@ -210,6 +281,29 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
               Text(f.label, style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.6), fontSize: 11, fontWeight: FontWeight.w500)),
             ])),
           ]),
+        )),
+        // Zoom controls
+        Positioned(bottom: 76, right: 16, child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              onTap: () {
+                final zoom = _mapController.camera.zoom + 1;
+                _mapController.move(_mapController.camera.center, zoom.clamp(3.0, 18.0));
+              },
+              child: Container(width: 40, height: 40, decoration: BoxDecoration(color: const Color(0xFF2A2A2A).withValues(alpha: 0.92), borderRadius: const BorderRadius.vertical(top: Radius.circular(12)), border: Border.all(color: Colors.white.withValues(alpha: 0.1))),
+                child: Icon(Icons.add_rounded, color: Colors.white.withValues(alpha: 0.7), size: 22)),
+            ),
+            Container(height: 1, width: 40, color: Colors.white.withValues(alpha: 0.08)),
+            GestureDetector(
+              onTap: () {
+                final zoom = _mapController.camera.zoom - 1;
+                _mapController.move(_mapController.camera.center, zoom.clamp(3.0, 18.0));
+              },
+              child: Container(width: 40, height: 40, decoration: BoxDecoration(color: const Color(0xFF2A2A2A).withValues(alpha: 0.92), borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)), border: Border.all(color: Colors.white.withValues(alpha: 0.1))),
+                child: Icon(Icons.remove_rounded, color: Colors.white.withValues(alpha: 0.7), size: 22)),
+            ),
+          ],
         )),
         // Recenter
         Positioned(bottom: 16, right: 16, child: GestureDetector(
