@@ -20,6 +20,10 @@ class AiChatService {
   /// Local history sent with each request (role: user|assistant).
   final List<Map<String, String>> _history = [];
 
+  /// Full booking data from all create_booking tool calls (for sync)
+  List<Map<String, dynamic>> _lastBookingsData = [];
+  List<Map<String, dynamic>> get lastBookingsData => _lastBookingsData;
+
   void setUserId(String? id) => _userId = id;
 
   /// Send a user message, add both sides to local history, return AI reply.
@@ -46,7 +50,7 @@ class AiChatService {
               if (_userId != null) 'userId': _userId,
             }),
           )
-          .timeout(const Duration(seconds: 90));
+          .timeout(const Duration(seconds: 180));
 
       if (res.statusCode != 200) throw Exception('${res.statusCode}: ${res.body}');
 
@@ -54,6 +58,40 @@ class AiChatService {
       final reply = (data['text'] as String?) ?? 'Désolé, une erreur est survenue.';
 
       if (data['sessionId'] != null) _sessionId = data['sessionId'] as String;
+
+      // Parse structured items (hotels, restaurants, etc.) with images
+      final rawItems = (data['items'] as List<dynamic>?) ?? [];
+      final items = rawItems
+          .map((e) => ChatItem.fromMap(e as Map<String, dynamic>))
+          .toList();
+
+      // Detect ALL bookings created from _debug tool results
+      final List<BookingInfo> bookings = [];
+      _lastBookingsData = [];
+      final debugList = (data['_debug'] as List<dynamic>?) ?? [];
+      for (final d in debugList) {
+        if (d is Map<String, dynamic> && d['name'] == 'create_booking') {
+          try {
+            final result = d['result'] is String
+                ? jsonDecode(d['result'] as String) as Map<String, dynamic>
+                : d['result'] as Map<String, dynamic>;
+            if (result['success'] == true && result['booking'] != null) {
+              final booking = result['booking'] as Map<String, dynamic>;
+              final bId = booking['id'] as String?;
+              final bAmount = (booking['prix_total'] as num?)?.toInt();
+              final bName = booking['nom'] as String?;
+              if (bId != null) {
+                bookings.add(BookingInfo(
+                  id: bId,
+                  amount: bAmount ?? 0,
+                  name: bName ?? '',
+                ));
+                _lastBookingsData.add(booking);
+              }
+            }
+          } catch (_) {}
+        }
+      }
 
       // Keep history bounded to 20 entries
       _history.add({'role': 'assistant', 'content': reply});
@@ -64,6 +102,8 @@ class AiChatService {
         content: reply,
         isUser: false,
         timestamp: DateTime.now(),
+        items: items,
+        bookings: bookings,
       );
     } catch (e) {
       debugPrint('[AiChatService] $e');

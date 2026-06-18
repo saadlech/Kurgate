@@ -30,6 +30,30 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     Text('${notifier.totalItems} article${notifier.totalItems != 1 ? 's' : ''}', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.4), fontSize: 14)),
                   ]),
                   const Spacer(),
+                  // Refresh button
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {});
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Panier actualisé', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white)),
+                          backgroundColor: Color(0xFF2A2A2A),
+                          behavior: SnackBarBehavior.floating,
+                          duration: Duration(seconds: 5),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                      ),
+                      child: const Icon(Icons.refresh_rounded, color: Color(0xFFFF8C00), size: 22),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   if (cart.isNotEmpty)
                     GestureDetector(
                       onTap: () => _showClearDialog(context, notifier),
@@ -126,7 +150,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             onPressed: () {
               Navigator.pop(ctx);
               notifier.removeItem(item.id);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${item.productName} retiré', style: const TextStyle(fontFamily: 'DarkerGrotesque')), backgroundColor: const Color(0xFF2A2A2A), action: SnackBarAction(label: 'Annuler', textColor: const Color(0xFFFF8C00), onPressed: () => notifier.addItem(item))));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: const Duration(seconds: 5), content: Text('${item.productName} retiré', style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white)), backgroundColor: const Color(0xFF2A2A2A), behavior: SnackBarBehavior.floating, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), action: SnackBarAction(label: 'Annuler', textColor: const Color(0xFFFF8C00), onPressed: () => notifier.addItem(item))));
             },
             child: const Text('Retirer', style: TextStyle(fontFamily: 'DarkerGrotesque', color: Color(0xFFFF5252), fontWeight: FontWeight.w700)),
           ),

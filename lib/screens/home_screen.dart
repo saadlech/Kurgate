@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 import '../providers/auth_provider.dart';
 import '../providers/destination_provider.dart';
 import 'chat_screen.dart';
@@ -19,6 +21,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   String _searchQuery = '';
   final _searchController = TextEditingController();
   final _searchFocusNode = FocusNode();
+
+  // Weather state
+  Map<String, dynamic>? _weatherData;
+  bool _weatherLoading = true;
+  String _lastWeatherCity = '';
 
 
   late AnimationController _entryController;
@@ -380,6 +387,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _searchController.addListener(() {
       setState(() => _searchQuery = _searchController.text);
     });
+    // Fetch weather after first frame (when ref is available)
+    WidgetsBinding.instance.addPostFrameCallback((_) => _fetchWeather());
   }
 
   Animation<double> _f(double a, double b) =>
@@ -463,7 +472,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             const SizedBox(height: 18),
             _buildSearchBar(),
             const SizedBox(height: 16),
-            _buildAiBanner(),
+
+            _buildWeatherForecast(),
             const SizedBox(height: 24),
             _buildCategories(),
             const SizedBox(height: 24),
@@ -863,6 +873,287 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ),
         ),
       ),
+    );
+  }
+
+  // ── Weather Forecast ──
+  static final _cityCoords = {
+    'Marrakech': {'lat': 31.63, 'lon': -8.00},
+    'Casablanca': {'lat': 33.57, 'lon': -7.59},
+    'Agadir': {'lat': 30.43, 'lon': -9.60},
+    'Tangier': {'lat': 35.76, 'lon': -5.83},
+  };
+
+  static final _wmoWeather = <int, Map<String, dynamic>>{
+    0: {'label': 'Ensoleillé', 'icon': Icons.wb_sunny_rounded},
+    1: {'label': 'Dégagé', 'icon': Icons.wb_sunny_rounded},
+    2: {'label': 'Partiellement nuageux', 'icon': Icons.cloud_queue_rounded},
+    3: {'label': 'Nuageux', 'icon': Icons.cloud_rounded},
+    45: {'label': 'Brouillard', 'icon': Icons.foggy},
+    48: {'label': 'Brouillard givrant', 'icon': Icons.foggy},
+    51: {'label': 'Bruine légère', 'icon': Icons.grain_rounded},
+    53: {'label': 'Bruine', 'icon': Icons.grain_rounded},
+    55: {'label': 'Bruine forte', 'icon': Icons.grain_rounded},
+    61: {'label': 'Pluie légère', 'icon': Icons.water_drop_rounded},
+    63: {'label': 'Pluie', 'icon': Icons.water_drop_rounded},
+    65: {'label': 'Pluie forte', 'icon': Icons.water_drop_rounded},
+    80: {'label': 'Averses', 'icon': Icons.shower_rounded},
+    81: {'label': 'Averses', 'icon': Icons.shower_rounded},
+    82: {'label': 'Averses fortes', 'icon': Icons.thunderstorm_rounded},
+    95: {'label': 'Orage', 'icon': Icons.thunderstorm_rounded},
+    96: {'label': 'Orage grêle', 'icon': Icons.thunderstorm_rounded},
+    99: {'label': 'Orage grêle fort', 'icon': Icons.thunderstorm_rounded},
+  };
+
+  Future<void> _fetchWeather() async {
+    final cityName = ref.read(selectedDestinationProvider).nom;
+    if (cityName == _lastWeatherCity && _weatherData != null) return;
+    _lastWeatherCity = cityName;
+
+    setState(() {
+      _weatherData = null;
+      _weatherLoading = true;
+    });
+
+    final coords = _cityCoords[cityName] ?? _cityCoords['Marrakech']!;
+    final url = Uri.parse(
+      'https://api.open-meteo.com/v1/forecast'
+      '?latitude=${coords['lat']}&longitude=${coords['lon']}'
+      '&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m'
+      '&daily=weather_code,temperature_2m_max,temperature_2m_min'
+      '&timezone=auto&forecast_days=5',
+    );
+
+    try {
+      final res = await http.get(url);
+      if (res.statusCode == 200) {
+        setState(() {
+          _weatherData = jsonDecode(res.body) as Map<String, dynamic>;
+          _weatherLoading = false;
+        });
+      } else {
+        setState(() => _weatherLoading = false);
+      }
+    } catch (_) {
+      setState(() => _weatherLoading = false);
+    }
+  }
+
+  Widget _buildWeatherForecast() {
+    // Refresh if destination changed
+    final cityName = ref.watch(selectedDestinationProvider).nom;
+    if (cityName != _lastWeatherCity) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _fetchWeather());
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF1E3A5F).withValues(alpha: 0.6),
+              const Color(0xFF0D1B2A).withValues(alpha: 0.8),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        ),
+        child: _weatherLoading
+            ? const SizedBox(
+                height: 80,
+                child: Center(
+                  child: SizedBox(
+                    width: 20, height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Color(0xFFFF8C00),
+                    ),
+                  ),
+                ),
+              )
+            : _weatherData == null
+                ? SizedBox(
+                    height: 80,
+                    child: Center(
+                      child: Text(
+                        'Météo indisponible',
+                        style: TextStyle(
+                          fontFamily: 'DarkerGrotesque',
+                          color: Colors.white.withValues(alpha: 0.4),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  )
+                : _buildWeatherContent(cityName),
+      ),
+    );
+  }
+
+  Widget _buildWeatherContent(String cityName) {
+    final current = _weatherData!['current'] as Map<String, dynamic>;
+    final daily = _weatherData!['daily'] as Map<String, dynamic>;
+    final temp = (current['temperature_2m'] as num).round();
+    final weatherCode = current['weather_code'] as int? ?? 0;
+    final wind = (current['wind_speed_10m'] as num?)?.round() ?? 0;
+    final humidity = (current['relative_humidity_2m'] as num?)?.round() ?? 0;
+    final wmo = _wmoWeather[weatherCode] ?? _wmoWeather[0]!;
+
+    final dailyCodes = (daily['weather_code'] as List?) ?? [];
+    final dailyMax = (daily['temperature_2m_max'] as List?) ?? [];
+    final dailyMin = (daily['temperature_2m_min'] as List?) ?? [];
+    final dailyDates = (daily['time'] as List?) ?? [];
+
+    const dayNames = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header row
+        Row(
+          children: [
+            Icon(
+              wmo['icon'] as IconData,
+              color: const Color(0xFFFFD700),
+              size: 36,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        '$temp°C',
+                        style: const TextStyle(
+                          fontFamily: 'DarkerGrotesque',
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          height: 1.1,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Flexible(
+                        child: Text(
+                          wmo['label'] as String,
+                          style: TextStyle(
+                            fontFamily: 'DarkerGrotesque',
+                            color: Colors.white.withValues(alpha: 0.6),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on_rounded, size: 12, color: Colors.white.withValues(alpha: 0.35)),
+                      const SizedBox(width: 3),
+                      Text(
+                        cityName,
+                        style: TextStyle(
+                          fontFamily: 'DarkerGrotesque',
+                          color: Colors.white.withValues(alpha: 0.4),
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Icon(Icons.air_rounded, size: 12, color: Colors.white.withValues(alpha: 0.3)),
+                      const SizedBox(width: 3),
+                      Text(
+                        '$wind km/h',
+                        style: TextStyle(
+                          fontFamily: 'DarkerGrotesque',
+                          color: Colors.white.withValues(alpha: 0.35),
+                          fontSize: 11,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Icon(Icons.water_drop_outlined, size: 12, color: Colors.white.withValues(alpha: 0.3)),
+                      const SizedBox(width: 3),
+                      Text(
+                        '$humidity%',
+                        style: TextStyle(
+                          fontFamily: 'DarkerGrotesque',
+                          color: Colors.white.withValues(alpha: 0.35),
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        Divider(color: Colors.white.withValues(alpha: 0.08), height: 1),
+        const SizedBox(height: 12),
+        // 4-day forecast (skip today = index 0)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(
+            (dailyCodes.length - 1).clamp(0, 4),
+            (i) {
+              final idx = i + 1;
+              final code = (dailyCodes[idx] as num?)?.toInt() ?? 0;
+              final max = (dailyMax[idx] as num?)?.round() ?? 0;
+              final min = (dailyMin[idx] as num?)?.round() ?? 0;
+              final dayWmo = _wmoWeather[code] ?? _wmoWeather[0]!;
+              final date = DateTime.tryParse(dailyDates[idx]?.toString() ?? '');
+              final dayLabel = date != null ? dayNames[date.weekday - 1] : '---';
+
+              return Column(
+                children: [
+                  Text(
+                    dayLabel,
+                    style: TextStyle(
+                      fontFamily: 'DarkerGrotesque',
+                      color: Colors.white.withValues(alpha: 0.45),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Icon(
+                    dayWmo['icon'] as IconData,
+                    color: Colors.white.withValues(alpha: 0.6),
+                    size: 20,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '$max°',
+                    style: const TextStyle(
+                      fontFamily: 'DarkerGrotesque',
+                      color: Colors.white,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Text(
+                    '$min°',
+                    style: TextStyle(
+                      fontFamily: 'DarkerGrotesque',
+                      color: Colors.white.withValues(alpha: 0.3),
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 

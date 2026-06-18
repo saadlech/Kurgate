@@ -145,7 +145,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       if (response.user != null) {
         // Fetch profile from the utilisateurs table
-        final user = await _fetchUserProfile(response.user!.id);
+        var user = await _fetchUserProfile(response.user!.id);
+
+        if (user == null) {
+          // Profile doesn't exist yet (e.g. signup created auth user but no trigger ran).
+          // Since we are authenticated now, we can insert it.
+          final newProfile = {
+            'id': response.user!.id,
+            'nom': response.user!.userMetadata?['nom'] ?? '',
+            'email': email,
+            'num_de_telephone': (response.user!.userMetadata?['numDeTelephone'] ?? '').toString(),
+          };
+          try {
+            await _supabase.from('utilisateurs').insert(newProfile);
+            user = Utilisateur.fromMap(newProfile);
+          } catch (e) {
+            // Log and allow minimal fallback to prevent blocking login
+            print('Failed to create profile during login: $e');
+          }
+        }
 
         // Even if profile fetch fails, auth succeeded — create a minimal user
         final resolvedUser = user ?? Utilisateur(
@@ -222,14 +240,51 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
 
       if (response.user != null) {
-        // Insert user profile into the utilisateurs table
-        final userData = {
-          'id': response.user!.id,
-          'nom': nom,
-          'email': email,
-          'num_de_telephone': numDeTelephone,
-        };
-        await _supabase.from('utilisateurs').insert(userData);
+        // If email confirmation is enabled, no session is established yet.
+        // The client is unauthenticated (anon) and cannot select or insert into 'utilisateurs' due to RLS.
+        // We rely on the database trigger to handle profile creation.
+        if (response.session == null) {
+          state = state.copyWith(
+            isAuthenticated: false,
+            isLoading: false,
+            currentUser: null,
+          );
+          return true;
+        }
+
+        // Check if the profile was already created via a trigger on auth.users
+        final existingProfile = await _supabase
+            .from('utilisateurs')
+            .select()
+            .eq('id', response.user!.id)
+            .maybeSingle();
+
+        Map<String, dynamic> userData;
+        if (existingProfile == null) {
+          userData = {
+            'id': response.user!.id,
+            'nom': nom,
+            'email': email,
+            'num_de_telephone': numDeTelephone,
+          };
+          try {
+            await _supabase.from('utilisateurs').insert(userData);
+          } catch (e) {
+            // Check again if it was created in the meantime (race condition / async trigger)
+            final retryProfile = await _supabase
+                .from('utilisateurs')
+                .select()
+                .eq('id', response.user!.id)
+                .maybeSingle();
+            if (retryProfile != null) {
+              userData = retryProfile;
+            } else {
+              rethrow;
+            }
+          }
+        } else {
+          userData = existingProfile;
+        }
 
         final user = Utilisateur.fromMap(userData);
 

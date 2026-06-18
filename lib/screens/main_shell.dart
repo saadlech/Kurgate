@@ -89,7 +89,8 @@ class _MainShellState extends State<MainShell> {
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6,
+                      horizontal: 12,
+                      vertical: 6,
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -113,8 +114,9 @@ class _MainShellState extends State<MainShell> {
                                 ? const Color(0xFFFF8C00)
                                 : Colors.white.withValues(alpha: 0.3),
                             fontSize: 11,
-                            fontWeight:
-                                active ? FontWeight.w700 : FontWeight.w500,
+                            fontWeight: active
+                                ? FontWeight.w700
+                                : FontWeight.w500,
                           ),
                         ),
                       ],
@@ -136,16 +138,19 @@ class _MainShellState extends State<MainShell> {
         onTap: () {
           Navigator.of(context).push(
             PageRouteBuilder(
-              pageBuilder: (_, __, ___) => const ChatScreen(),
-              transitionsBuilder: (_, animation, __, child) {
+              pageBuilder: (_, _, _) => const ChatScreen(),
+              transitionsBuilder: (_, animation, _, child) {
                 return SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, 1),
-                    end: Offset.zero,
-                  ).animate(CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOutCubic,
-                  )),
+                  position:
+                      Tween<Offset>(
+                        begin: const Offset(0, 1),
+                        end: Offset.zero,
+                      ).animate(
+                        CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.easeOutCubic,
+                        ),
+                      ),
                   child: child,
                 );
               },
@@ -172,10 +177,18 @@ class _MainShellState extends State<MainShell> {
               ),
             ],
           ),
-          child: const Icon(
-            Icons.auto_awesome_rounded,
-            color: Colors.white,
-            size: 26,
+          child: ClipOval(
+            child: Image.asset(
+              'assets/images/ai_assistant.png',
+              width: 56,
+              height: 56,
+              fit: BoxFit.cover,
+              errorBuilder: (_, _, _) => const Icon(
+                Icons.auto_awesome_rounded,
+                color: Colors.white,
+                size: 26,
+              ),
+            ),
           ),
         ),
       ),

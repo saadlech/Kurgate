@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/destination.dart';
 import '../models/hotel.dart';
@@ -137,29 +139,113 @@ class SupabaseService {
     await _client.from('reservations').insert(map);
   }
 
-  /// Fetch current user's reservations
+  /// Fetch current user's reservations via Edge Function (bypasses RLS)
   static Future<List<Reservation>> fetchUserReservations() async {
     final userId = _client.auth.currentUser?.id;
+    print('[SupabaseService] fetchUserReservations userId=$userId');
     if (userId == null) return [];
-    final data = await _client
-        .from('reservations')
-        .select()
-        .eq('user_id', userId)
-        .order('created_at', ascending: false);
-    return data.map((m) => Reservation.fromMap(m)).toList();
+
+    try {
+      final uri = Uri.parse(
+        'https://aurxykjqywoaiezwkvff.supabase.co/functions/v1/ai-agent',
+      );
+      final res = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'sb_publishable_VwBR1xse_Z2Zgs4b0kjYhA_w54eXJP8',
+        },
+        body: jsonEncode({
+          'question': '__get_bookings',
+          'userId': userId,
+        }),
+      );
+
+      if (res.statusCode != 200) {
+        print('[SupabaseService] Edge Function error: ${res.statusCode}');
+        return [];
+      }
+
+      final data = jsonDecode(res.body) as Map<String, dynamic>;
+      final list = (data['reservations'] as List<dynamic>?) ?? [];
+      print('[SupabaseService] Got ${list.length} reservations from Edge Function');
+      return list
+          .map((m) => Reservation.fromMap(m as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print('[SupabaseService] fetchUserReservations error: $e');
+      return [];
+    }
   }
 
-  /// Update reservation status
+  /// Update reservation status via Edge Function (bypasses RLS)
   static Future<void> updateReservationStatus(String id, String statut) async {
-    await _client.from('reservations').update({'statut': statut}).eq('id', id);
+    try {
+      final uri = Uri.parse(
+        'https://aurxykjqywoaiezwkvff.supabase.co/functions/v1/ai-agent',
+      );
+      await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'sb_publishable_VwBR1xse_Z2Zgs4b0kjYhA_w54eXJP8',
+        },
+        body: jsonEncode({
+          'question': '__update_booking',
+          'bookingId': id,
+          'statut': statut,
+        }),
+      );
+    } catch (e) {
+      print('[SupabaseService] updateReservationStatus error: $e');
+    }
+  }
+
+  /// Delete reservation from DB via Edge Function (bypasses RLS)
+  static Future<void> deleteReservation(String id) async {
+    try {
+      final uri = Uri.parse(
+        'https://aurxykjqywoaiezwkvff.supabase.co/functions/v1/ai-agent',
+      );
+      await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'sb_publishable_VwBR1xse_Z2Zgs4b0kjYhA_w54eXJP8',
+        },
+        body: jsonEncode({
+          'question': '__delete_booking',
+          'bookingId': id,
+        }),
+      );
+    } catch (e) {
+      print('[SupabaseService] deleteReservation error: $e');
+    }
   }
 
   /// Update reservation feedback (note + commentaire)
   static Future<void> updateReservationFeedback(String id, int note, String commentaire) async {
-    await _client
-        .from('reservations')
-        .update({'note': note, 'commentaire': commentaire})
-        .eq('id', id);
+    try {
+      final uri = Uri.parse(
+        'https://aurxykjqywoaiezwkvff.supabase.co/functions/v1/ai-agent',
+      );
+      await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'sb_publishable_VwBR1xse_Z2Zgs4b0kjYhA_w54eXJP8',
+        },
+        body: jsonEncode({
+          'question': '__update_booking',
+          'bookingId': id,
+          'statut': 'Terminée',
+          'note': note,
+          'commentaire': commentaire,
+        }),
+      );
+    } catch (e) {
+      print('[SupabaseService] updateReservationFeedback error: $e');
+    }
   }
 
   // ──────────── COMMANDES (Cart Orders) ────────────
@@ -180,6 +266,18 @@ class SupabaseService {
         .eq('user_id', userId)
         .order('created_at', ascending: false);
     return List<Map<String, dynamic>>.from(data);
+  }
+
+  /// Delete a single commande by ID
+  static Future<void> deleteCommande(String id) async {
+    await _client.from('commandes').delete().eq('id', id);
+  }
+
+  /// Delete all commandes for the current user
+  static Future<void> deleteAllCommandes() async {
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) return;
+    await _client.from('commandes').delete().eq('user_id', userId);
   }
 
   // ──────────── AVIS (Reviews) ────────────

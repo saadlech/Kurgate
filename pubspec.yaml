@@ -44,6 +44,7 @@ dependencies:
   latlong2: ^0.9.1
   url_launcher: ^6.3.2
   connectivity_plus: ^7.1.1
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,7 @@ flutter:
   assets:
     # Branding & Common
     - assets/images/branding/
+    - assets/images/ai_assistant.png
     - assets/images/cities/
     - assets/images/onboarding/
     # Marrakech Hotels

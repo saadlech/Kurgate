@@ -13,22 +13,26 @@ class ReservationNotifier extends StateNotifier<List<Reservation>> {
   /// Load existing reservations from Supabase on init
   Future<void> _loadFromSupabase() async {
     try {
+      print('[BookingProvider] Loading reservations...');
       final remote = await SupabaseService.fetchUserReservations();
+      print('[BookingProvider] Fetched ${remote.length} reservations');
       if (remote.isNotEmpty) {
         state = remote;
       }
-    } catch (_) {
-      // Silently fail — local state will still work
+    } catch (e) {
+      print('[BookingProvider] Error loading reservations: $e');
     }
   }
 
   /// Refresh from Supabase (pull-to-refresh, etc.)
   Future<void> refresh() async {
     try {
+      print('[BookingProvider] Refreshing reservations...');
       final remote = await SupabaseService.fetchUserReservations();
+      print('[BookingProvider] Refresh got ${remote.length} reservations');
       state = remote;
-    } catch (_) {
-      // keep current local state
+    } catch (e) {
+      print('[BookingProvider] Refresh error: $e');
     }
   }
 
@@ -38,10 +42,15 @@ class ReservationNotifier extends StateNotifier<List<Reservation>> {
     _createRemote(r);
   }
 
+  /// Add a booking to local state only (already persisted by Edge Function)
+  void addBookingLocal(Reservation r) {
+    state = [...state, r];
+  }
+
   void removeBooking(String id) {
     state = state.where((r) => r.idReservation != id).toList();
-    // Optionally delete from Supabase
-    _updateStatusRemote(id, 'Supprimée');
+    // Actually delete from Supabase DB
+    _deleteRemote(id);
   }
 
   void markAsPaid(String id) {
@@ -73,8 +82,11 @@ class ReservationNotifier extends StateNotifier<List<Reservation>> {
   }
 
 
-  void clearAll() {
+  Future<void> clearAll() async {
+    final ids = state.map((r) => r.idReservation).toList();
     state = [];
+    // Delete all from DB in parallel
+    await Future.wait(ids.map((id) => _deleteRemote(id)));
   }
 
   Reservation? getBookingById(String id) {
@@ -95,16 +107,24 @@ class ReservationNotifier extends StateNotifier<List<Reservation>> {
   Future<void> _updateStatusRemote(String id, String statut) async {
     try {
       await SupabaseService.updateReservationStatus(id, statut);
-    } catch (_) {
-      // Local state is source of truth during session
+    } catch (e) {
+      print('[BookingProvider] _updateStatusRemote error: $e');
+    }
+  }
+
+  Future<void> _deleteRemote(String id) async {
+    try {
+      await SupabaseService.deleteReservation(id);
+    } catch (e) {
+      print('[BookingProvider] _deleteRemote error: $e');
     }
   }
 
   Future<void> _updateFeedbackRemote(String id, int note, String commentaire) async {
     try {
       await SupabaseService.updateReservationFeedback(id, note, commentaire);
-    } catch (_) {
-      // Local state is source of truth during session
+    } catch (e) {
+      print('[BookingProvider] _updateFeedbackRemote error: $e');
     }
   }
 }

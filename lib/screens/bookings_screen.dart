@@ -13,6 +13,7 @@ class BookingsScreen extends ConsumerStatefulWidget {
 class _BookingsScreenState extends ConsumerState<BookingsScreen>
     with TickerProviderStateMixin {
   int _selectedFilter = 0;
+  bool _isRefreshing = false;
   final _filters = const [
     'Tous',
     'Hôtels',
@@ -27,6 +28,15 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
     'experience',
     'restaurant',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Refresh reservations from Supabase every time this screen is shown
+    Future.microtask(() {
+      ref.read(bookingProvider.notifier).refresh();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +82,38 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
                     ],
                   ),
                   const Spacer(),
+                  // Refresh button
+                  GestureDetector(
+                    onTap: _isRefreshing ? null : () async {
+                      setState(() => _isRefreshing = true);
+                      await ref.read(bookingProvider.notifier).refresh();
+                      if (mounted) setState(() => _isRefreshing = false);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.08),
+                        ),
+                      ),
+                      child: _isRefreshing
+                          ? const SizedBox(
+                              width: 22, height: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Color(0xFFFF8C00),
+                              ),
+                            )
+                          : Icon(
+                              Icons.refresh_rounded,
+                              color: const Color(0xFFFF8C00),
+                              size: 22,
+                            ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   if (bookings.isNotEmpty)
                     GestureDetector(
                       onTap: () => _showClearDialog(context),
@@ -282,11 +324,14 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
               ref.read(bookingProvider.notifier).removeBooking(booking.idReservation);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
+                  duration: const Duration(seconds: 5),
                   content: Text(
                     '${booking.nom} supprimé',
-                    style: const TextStyle(fontFamily: 'DarkerGrotesque'),
+                    style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white),
                   ),
                   backgroundColor: const Color(0xFF2A2A2A),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   action: SnackBarAction(
                     label: 'Annuler',
                     textColor: const Color(0xFFFF8C00),
@@ -374,6 +419,7 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
               ref.read(bookingProvider.notifier).cancelBooking(booking.idReservation);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
+                  duration: const Duration(seconds: 5),
                   content: Row(
                     children: [
                       const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
@@ -381,7 +427,7 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
                       Expanded(
                         child: Text(
                           '${booking.nom} annulée — Remboursement en cours',
-                          style: const TextStyle(fontFamily: 'DarkerGrotesque'),
+                          style: const TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white),
                         ),
                       ),
                     ],
@@ -566,22 +612,7 @@ class _BookingCard extends StatelessWidget {
                 ),
                 child: AspectRatio(
                   aspectRatio: 16 / 8,
-                  child: Image.asset(
-                    booking.imageUrl,
-                    fit: BoxFit.cover,
-                    cacheWidth: 400,
-                    gaplessPlayback: true,
-                    errorBuilder: (_, _, _) => Container(
-                      color: const Color(0xFF2A2A2A),
-                      child: Center(
-                        child: Icon(
-                          _icon,
-                          size: 40,
-                          color: Colors.white.withValues(alpha: 0.15),
-                        ),
-                      ),
-                    ),
-                  ),
+                  child: _buildImage(),
                 ),
               ),
               // Type badge
@@ -724,7 +755,7 @@ class _BookingCard extends StatelessWidget {
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: booking.details.entries
+                  children: _orderedDetails()
                       .map(
                         (e) => Container(
                           padding: const EdgeInsets.symmetric(
@@ -882,6 +913,70 @@ class _BookingCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// Build the image widget — handles network URLs, asset paths, and empty
+  Widget _buildImage() {
+    final url = booking.imageUrl;
+    if (url.isNotEmpty && (url.startsWith('http://') || url.startsWith('https://'))) {
+      return Image.network(
+        url,
+        fit: BoxFit.cover,
+        cacheWidth: 400,
+        errorBuilder: (_, _, _) => _imagePlaceholder(),
+        loadingBuilder: (_, child, progress) {
+          if (progress == null) return child;
+          return Container(
+            color: const Color(0xFF2A2A2A),
+            child: const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Color(0xFFFF8C00),
+              ),
+            ),
+          );
+        },
+      );
+    }
+    if (url.isNotEmpty) {
+      return Image.asset(
+        url,
+        fit: BoxFit.cover,
+        cacheWidth: 400,
+        gaplessPlayback: true,
+        errorBuilder: (_, _, _) => _imagePlaceholder(),
+      );
+    }
+    return _imagePlaceholder();
+  }
+
+  Widget _imagePlaceholder() => Container(
+    color: const Color(0xFF2A2A2A),
+    child: Center(
+      child: Icon(
+        _icon,
+        size: 40,
+        color: Colors.white.withValues(alpha: 0.15),
+      ),
+    ),
+  );
+
+  /// Return detail entries in a logical display order
+  List<MapEntry<String, String>> _orderedDetails() {
+    const order = ['Arrivée', 'Départ', 'Nuits', 'Personnes'];
+    final result = <MapEntry<String, String>>[];
+    for (final key in order) {
+      if (booking.details.containsKey(key)) {
+        result.add(MapEntry(key, booking.details[key]!));
+      }
+    }
+    // Add any extra keys not in the predefined order
+    for (final entry in booking.details.entries) {
+      if (!order.contains(entry.key)) {
+        result.add(entry);
+      }
+    }
+    return result;
   }
 
   Widget _actionBtn({

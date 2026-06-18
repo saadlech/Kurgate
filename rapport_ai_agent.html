@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Agent IA Kurgate — Documentation Technique PFE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; color: #1a1a2e; line-height: 1.7; padding: 40px 60px; max-width: 900px; margin: 0 auto; font-size: 13px; }
+  @media print { body { padding: 20px 30px; } }
+  h1 { font-size: 26px; font-weight: 700; color: #FF8C00; margin-bottom: 8px; border-bottom: 3px solid #FF8C00; padding-bottom: 10px; }
+  h2 { font-size: 19px; font-weight: 700; color: #1a1a2e; margin-top: 32px; margin-bottom: 12px; border-left: 4px solid #FF8C00; padding-left: 12px; }
+  h3 { font-size: 15px; font-weight: 600; color: #333; margin-top: 20px; margin-bottom: 8px; }
+  p { margin-bottom: 10px; text-align: justify; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 12.5px; }
+  th { background: #1a1a2e; color: white; padding: 8px 10px; text-align: left; font-weight: 600; }
+  td { padding: 7px 10px; border-bottom: 1px solid #e0e0e0; }
+  tr:nth-child(even) { background: #f8f8fc; }
+  code { background: #f0f0f5; padding: 2px 5px; border-radius: 3px; font-size: 12px; font-family: 'Courier New', monospace; }
+  .note { background: #fff3e0; border-left: 4px solid #FF8C00; padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 12.5px; }
+  .note strong { color: #e07020; }
+  .important { background: #e8f5e9; border-left: 4px solid #3ECF8E; padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 12.5px; }
+  .diagram { background: #f5f5fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; margin: 14px 0; text-align: center; font-family: 'Courier New', monospace; font-size: 11.5px; line-height: 1.5; white-space: pre; }
+  .subtitle { font-size: 14px; color: #666; margin-bottom: 24px; }
+  ul, ol { margin: 8px 0 12px 20px; }
+  li { margin-bottom: 4px; }
+  .page-break { page-break-before: always; }
+  hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+  .flow-box { display: inline-block; background: #1a1a2e; color: white; padding: 4px 10px; border-radius: 4px; margin: 2px; font-size: 11px; }
+  .flow-arrow { display: inline-block; margin: 0 4px; color: #FF8C00; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>Agent IA Kurgate</h1>
+<p class="subtitle">Documentation Technique — Projet de Fin d'Études</p>
+
+<h2>1. Introduction et Contexte</h2>
+<p>L'agent IA de Kurgate est un <strong>assistant conversationnel intelligent</strong> intégré dans une application mobile de tourisme au Maroc. Il ne se limite pas à un simple chatbot de questions-réponses : c'est un <strong>agent autonome</strong> capable d'exécuter des actions concrètes (recherche, réservation, paiement, avis) en interagissant directement avec la base de données de l'application.</p>
+
+<div class="important">
+  <strong>Distinction clé :</strong> Un <em>chatbot</em> répond à des questions. Un <em>agent IA</em> <strong>agit</strong> — il prend des décisions, appelle des outils, et modifie l'état du système de manière autonome.
+</div>
+
+<h2>2. Stack Technologique</h2>
+<table>
+  <tr><th>Composant</th><th>Technologie</th><th>Rôle</th></tr>
+  <tr><td><strong>Modèle LLM</strong></td><td>Azure OpenAI — o4-mini</td><td>Raisonnement, compréhension du langage naturel, prise de décision</td></tr>
+  <tr><td><strong>Backend (Serverless)</strong></td><td>Supabase Edge Functions (Deno/TypeScript)</td><td>Orchestration de l'agent, exécution des outils</td></tr>
+  <tr><td><strong>Base de données</strong></td><td>Supabase (PostgreSQL)</td><td>Stockage des données (hôtels, restaurants, réservations, etc.)</td></tr>
+  <tr><td><strong>Frontend</strong></td><td>Flutter (Dart) + Riverpod</td><td>Interface utilisateur mobile, gestion d'état</td></tr>
+  <tr><td><strong>Protocole API</strong></td><td>REST (HTTP POST + JSON)</td><td>Communication Flutter ↔ Edge Function</td></tr>
+  <tr><td><strong>Sécurité DB</strong></td><td>Row Level Security (RLS) + Service Role Key</td><td>Contrôle d'accès aux données</td></tr>
+</table>
+
+<h2>3. Architecture Globale</h2>
+
+<div class="diagram">
+┌─────────────────────────────────────────────────┐
+│              📱 Client Flutter                   │
+│                                                  │
+│  ChatScreen UI ──▶ ChatProvider ──▶ AiChatService│
+└──────────────────────────┬───────────────────────┘
+                           │ HTTP POST + JSON
+                           ▼
+┌─────────────────────────────────────────────────┐
+│           ☁️ Supabase Cloud                      │
+│                                                  │
+│  Edge Function: ai-agent                         │
+│       │                    │                     │
+│       ▼                    ▼                     │
+│  Azure OpenAI         PostgreSQL DB              │
+│  (o4-mini)        ┌────────────────────┐         │
+│       │           │ hotels             │         │
+│  Function ◄──────▶│ restaurants        │         │
+│  Calling          │ experiences        │         │
+│                   │ vehicules          │         │
+│                   │ boutiques          │         │
+│                   │ reservations       │         │
+│                   │ commandes          │         │
+│                   │ avis               │         │
+│                   │ attractions        │         │
+│                   └────────────────────┘         │
+└─────────────────────────────────────────────────┘</div>
+
+<h3>3.1 Flux de Communication</h3>
+<p>
+<span class="flow-box">Utilisateur</span><span class="flow-arrow">→</span>
+<span class="flow-box">Flutter UI</span><span class="flow-arrow">→</span>
+<span class="flow-box">AiChatService (HTTP)</span><span class="flow-arrow">→</span>
+<span class="flow-box">Edge Function</span><span class="flow-arrow">→</span>
+<span class="flow-box">Azure OpenAI</span><span class="flow-arrow">⇄</span>
+<span class="flow-box">PostgreSQL DB</span>
+</p>
+
+<h2 class="page-break">4. Concepts Clés d'IA Utilisés</h2>
+
+<h3>4.1 Large Language Model (LLM)</h3>
+<p>Le modèle utilisé est <strong>o4-mini</strong> d'OpenAI, déployé via <strong>Azure OpenAI Service</strong>. C'est un modèle de type <em>reasoning</em> (raisonnement) qui :</p>
+<ul>
+  <li>Comprend le langage naturel en français, arabe et darija</li>
+  <li>Raisonne sur les intentions de l'utilisateur</li>
+  <li>Décide quels outils appeler et dans quel ordre</li>
+  <li>Synthétise les résultats en réponse naturelle</li>
+</ul>
+<p><strong>Paramètres de configuration :</strong></p>
+<ul>
+  <li><code>max_completion_tokens: 16000</code> — Limite de tokens pour la réponse</li>
+  <li><code>tool_choice: "auto"</code> — Le modèle décide autonomement quand appeler un outil</li>
+</ul>
+
+<h3>4.2 Function Calling (Appel de Fonctions)</h3>
+<p>C'est le mécanisme central qui transforme un LLM en <strong>agent autonome</strong>. Le principe :</p>
+<ol>
+  <li>On définit des <strong>schémas d'outils</strong> (JSON Schema) qui décrivent les fonctions disponibles</li>
+  <li>Le LLM analyse la requête et <strong>décide</strong> quel(s) outil(s) appeler</li>
+  <li>Le LLM génère les <strong>arguments</strong> structurés (JSON) pour chaque outil</li>
+  <li>Le backend <strong>exécute</strong> les outils et retourne les résultats au LLM</li>
+  <li>Le LLM <strong>synthétise</strong> les résultats en réponse naturelle</li>
+</ol>
+
+<div class="note">
+  <strong>Référence académique :</strong> Le Function Calling correspond au paradigme <strong>ReAct</strong> (Reasoning + Acting) décrit par Yao et al. (2022) — "ReAct: Synergizing Reasoning and Acting in Language Models".
+</div>
+
+<h3>4.3 Prompt Engineering (Ingénierie de Prompt)</h3>
+<p>Le <strong>System Prompt</strong> est un texte d'instructions qui cadre le comportement de l'agent. Dans Kurgate, il définit :</p>
+<ul>
+  <li><strong>L'identité</strong> : "Tu es l'agent Kurgate, assistant de tourisme au Maroc"</li>
+  <li><strong>Les règles métier</strong> : processus de réservation en 4 étapes (A→D), confirmation obligatoire</li>
+  <li><strong>Les contraintes</strong> : ne jamais inventer de données, toujours appeler les outils</li>
+  <li><strong>Le format</strong> : répondre en français avec emojis, prix en MAD</li>
+  <li><strong>Les capacités</strong> : liste exhaustive de ce que l'agent peut faire</li>
+  <li><strong>Les interdictions</strong> : ne jamais prétendre envoyer des emails/SMS</li>
+</ul>
+
+<h3>4.4 Boucle Agentique (Agentic Loop)</h3>
+<p>L'agent fonctionne en <strong>boucle itérative</strong> (max 10 itérations) :</p>
+
+<div class="diagram">
+   ┌──────────────────┐
+   │ Message           │
+   │ Utilisateur       │
+   └────────┬─────────┘
+            ▼
+   ┌──────────────────┐
+   │ Envoyer au LLM    │◄──────────────────┐
+   └────────┬─────────┘                    │
+            ▼                              │
+   ┌──────────────────┐                    │
+   │ Le LLM veut       │── Oui ──▶ Exécuter les outils
+   │ appeler des outils?│          en parallèle ──────┘
+   └────────┬─────────┘
+            │ Non
+            ▼
+   ┌──────────────────┐
+   │ Réponse finale    │
+   │ au client         │
+   └──────────────────┘</div>
+
+<p><strong>Points clés :</strong></p>
+<ul>
+  <li><strong>Exécution parallèle</strong> : Plusieurs outils peuvent être appelés simultanément (<code>Promise.all</code>)</li>
+  <li><strong>Itérations multiples</strong> : Le LLM peut chaîner des appels (recherche → détails → réservation)</li>
+  <li><strong>Garde-fou</strong> : Maximum 10 itérations pour éviter les boucles infinies</li>
+</ul>
+
+<h3>4.5 Gestion de la Mémoire Conversationnelle</h3>
+<p>La mémoire est gérée <strong>côté client</strong> (Flutter) :</p>
+<ul>
+  <li>Historique limité à <strong>20 messages</strong> (fenêtre glissante)</li>
+  <li>Les 16 derniers messages sont envoyés au LLM pour garder le contexte</li>
+  <li>Session identifiée par un <code>sessionId</code> unique</li>
+</ul>
+
+<div class="diagram">
+Utilisateur        Flutter           Edge Function      Azure OpenAI
+    │                 │                    │                  │
+    │─ "Hôtels à     │                    │                  │
+    │  Marrakech" ──▶│                    │                  │
+    │                 │── {question,       │                  │
+    │                 │   history, userId}▶│                  │
+    │                 │                    │── [system,       │
+    │                 │                    │   ...history,    │
+    │                 │                    │   user_msg] ────▶│
+    │                 │                    │                  │
+    │                 │                    │◀─ tool_call:     │
+    │                 │                    │   search_hotels  │
+    │                 │                    │                  │
+    │                 │                    │── execute tool ──│
+    │                 │                    │                  │
+    │                 │                    │── [résultats] ──▶│
+    │                 │                    │                  │
+    │                 │                    │◀─ Texte + items  │
+    │                 │◀─ {text, items,    │                  │
+    │                 │    sessionId}      │                  │
+    │◀── Afficher     │                    │                  │
+    │    bulle+cartes │                    │                  │</div>
+
+<h2 class="page-break">5. Les 17 Outils de l'Agent</h2>
+<p>L'agent dispose de <strong>17 outils</strong> regroupés en 5 catégories :</p>
+
+<h3>5.1 Outils de Recherche (7 outils)</h3>
+<table>
+  <tr><th>Outil</th><th>Description</th><th>Paramètres</th></tr>
+  <tr><td><code>search_hotels</code></td><td>Recherche hôtels par ville</td><td><code>city</code></td></tr>
+  <tr><td><code>search_restaurants</code></td><td>Recherche restaurants par ville</td><td><code>city</code></td></tr>
+  <tr><td><code>search_experiences</code></td><td>Recherche expériences par ville</td><td><code>city</code></td></tr>
+  <tr><td><code>search_vehicles</code></td><td>Recherche véhicules</td><td>aucun</td></tr>
+  <tr><td><code>search_boutiques</code></td><td>Recherche boutiques artisanales</td><td>aucun</td></tr>
+  <tr><td><code>search_attractions</code></td><td>Recherche attractions par ville</td><td><code>city</code></td></tr>
+  <tr><td><code>search_products</code></td><td>Recherche produits artisanaux</td><td><code>boutique_id</code> (opt.)</td></tr>
+</table>
+
+<h3>5.2 Outils de Réservation (5 outils)</h3>
+<table>
+  <tr><th>Outil</th><th>Description</th><th>Paramètres clés</th></tr>
+  <tr><td><code>create_booking</code></td><td>Créer une réservation</td><td><code>item_id, type_offre, nom, nb_personnes, date_debut, date_fin, prix_total</code></td></tr>
+  <tr><td><code>get_bookings</code></td><td>Consulter les réservations</td><td><code>user_id</code></td></tr>
+  <tr><td><code>cancel_booking</code></td><td>Annuler une réservation</td><td><code>booking_id</code></td></tr>
+  <tr><td><code>cancel_all_bookings</code></td><td>Annuler toutes les réservations en attente</td><td><code>user_id</code></td></tr>
+  <tr><td><code>delete_booking</code></td><td>Supprimer une réservation</td><td><code>booking_id</code></td></tr>
+</table>
+
+<h3>5.3 Outils de Paiement et Panier (4 outils)</h3>
+<table>
+  <tr><th>Outil</th><th>Description</th><th>Paramètres clés</th></tr>
+  <tr><td><code>pay_booking</code></td><td>Payer/confirmer une réservation</td><td><code>booking_id</code></td></tr>
+  <tr><td><code>add_to_cart</code></td><td>Ajouter un produit au panier</td><td><code>boutique_name, product_name, unit_price, quantity</code></td></tr>
+  <tr><td><code>get_cart</code></td><td>Consulter le panier</td><td><code>user_id</code></td></tr>
+  <tr><td><code>checkout_cart</code></td><td>Finaliser l'achat</td><td><code>items[], address</code></td></tr>
+</table>
+
+<h3>5.4 Outils Divers (2 outils)</h3>
+<table>
+  <tr><th>Outil</th><th>Description</th><th>Paramètres</th></tr>
+  <tr><td><code>add_review</code></td><td>Laisser un avis (1-5 étoiles)</td><td><code>item_id, note, commentaire</code></td></tr>
+  <tr><td><code>get_item_details</code></td><td>Détails complets d'un item</td><td><code>item_id, item_type</code></td></tr>
+</table>
+
+<h2 class="page-break">6. Sécurité et Contrôle d'Accès</h2>
+
+<h3>6.1 Double clé d'accès</h3>
+<table>
+  <tr><th>Opération</th><th>Clé utilisée</th><th>Justification</th></tr>
+  <tr><td><strong>Lecture</strong> (recherche, détails)</td><td>Anon Key (publique)</td><td>RLS autorise la lecture publique des tables catalogue</td></tr>
+  <tr><td><strong>Écriture</strong> (réservation, avis)</td><td>Service Role Key (secrète)</td><td>Nécessaire pour écrire en tant qu'utilisateur authentifié</td></tr>
+</table>
+
+<h3>6.2 Validation des données</h3>
+<ul>
+  <li>Le <code>user_id</code> est validé par regex UUID (<code>/^[0-9a-f-]{36}$/i</code>) avant toute insertion</li>
+  <li>Les champs obligatoires sont vérifiés avant chaque écriture</li>
+  <li>Le <code>user_id</code> est injecté côté serveur (pas confié au LLM)</li>
+</ul>
+
+<h2>7. Processus de Réservation</h2>
+
+<div class="diagram">
+┌─────────────┐    ┌──────────────┐    ┌───────────────┐
+│ Recherche    │───▶│ Identification│───▶│ Collecte Infos │
+│ (search_*)   │    │ de l'item     │    │ (dates, nb)    │
+└─────────────┘    └──────────────┘    └───────┬───────┘
+                                               ▼
+                                      ┌───────────────┐
+                                      │ Récapitulatif  │
+                                      │ "Confirmez?"   │
+                                      └───────┬───────┘
+                                    Oui ──────┼────── Non
+                                       ▼                ▼
+                              ┌──────────────┐  ┌───────────┐
+                              │ create_booking│  │ Annulation │
+                              │ ✅ Succès     │  └───────────┘
+                              └──────────────┘</div>
+
+<h2>8. Diagramme de Composants Flutter</h2>
+
+<div class="diagram">
+┌──── 🎨 Couche Présentation ────┐   ┌─── 📦 Couche État ───┐
+│                                 │   │                      │
+│  ChatScreen ──▶ _Bubble         │   │  ChatProvider        │
+│                _ItemCard        │   │  (StateNotifier)     │
+│                _Typing          │   │                      │
+└────────────────┬────────────────┘   │  AuthProvider        │
+                 │                    └──────────┬───────────┘
+                 ▼                               │
+┌──── 🔧 Couche Service ─────────┐              │
+│                                 │◄─────────────┘
+│  AiChatService (Singleton)      │
+│  - sendMessage()                │
+│  - clearHistory()               │
+└────────────────┬────────────────┘
+                 ▼
+┌──── 📄 Couche Modèle ──────────┐
+│                                 │
+│  ChatMessage { content, items } │
+│  ChatItem { id, name, imageUrl, │
+│             price, rating }     │
+└─────────────────────────────────┘</div>
+
+<h2 class="page-break">9. Justification des Choix Technologiques</h2>
+
+<h3>9.1 Pourquoi Azure OpenAI (et non OpenAI directement) ?</h3>
+<ul>
+  <li><strong>Conformité entreprise</strong> : Azure offre des certifications (ISO 27001, SOC 2)</li>
+  <li><strong>Résidence des données</strong> : Contrôle de la région de déploiement</li>
+  <li><strong>SLA garanti</strong> : 99.9% de disponibilité</li>
+  <li><strong>Intégration</strong> : Compatible avec l'écosystème Microsoft</li>
+</ul>
+
+<h3>9.2 Pourquoi Supabase Edge Functions ?</h3>
+<ul>
+  <li><strong>Serverless</strong> : Pas de serveur à gérer, mise à l'échelle automatique</li>
+  <li><strong>Deno Runtime</strong> : Sécurité par défaut (sandbox), TypeScript natif</li>
+  <li><strong>Proximité DB</strong> : Co-localisée avec PostgreSQL (latence minimale)</li>
+  <li><strong>Coût</strong> : Facturation à l'utilisation</li>
+</ul>
+
+<h3>9.3 Pourquoi le modèle o4-mini ?</h3>
+<ul>
+  <li><strong>Raisonnement avancé</strong> : Modèle optimisé pour les tâches complexes multi-étapes</li>
+  <li><strong>Function Calling</strong> : Support natif des appels de fonctions structurés</li>
+  <li><strong>Rapport qualité/coût</strong> : Performances élevées à coût réduit</li>
+  <li><strong>Multilingue</strong> : Excellent support du français, arabe et darija</li>
+</ul>
+
+<h3>9.4 Pourquoi la mémoire côté client ?</h3>
+<ul>
+  <li><strong>Simplicité</strong> : Pas de stockage serveur nécessaire</li>
+  <li><strong>Vie privée</strong> : Les conversations ne sont pas persistées sur le serveur</li>
+  <li><strong>Fenêtre glissante</strong> : Limite à 20 messages (contrôle des coûts tokens)</li>
+</ul>
+
+<h2>10. Références Académiques</h2>
+<table>
+  <tr><th>Concept</th><th>Référence</th></tr>
+  <tr><td>ReAct (Reasoning + Acting)</td><td>Yao, S. et al. (2022). "ReAct: Synergizing Reasoning and Acting in Language Models." <em>arXiv:2210.03629</em></td></tr>
+  <tr><td>Function Calling / Tool Use</td><td>Schick, T. et al. (2023). "Toolformer: Language Models Can Teach Themselves to Use Tools." <em>NeurIPS 2023</em></td></tr>
+  <tr><td>Prompt Engineering</td><td>White, J. et al. (2023). "A Prompt Pattern Catalog to Enhance Prompt Engineering with ChatGPT." <em>arXiv:2302.11382</em></td></tr>
+  <tr><td>LLM Agents</td><td>Wang, L. et al. (2024). "A Survey on Large Language Model Based Autonomous Agents." <em>Frontiers of Computer Science</em></td></tr>
+  <tr><td>Conversational AI</td><td>Ni, J. et al. (2023). "Recent Advances in Deep Learning Based Dialogue Systems." <em>Artificial Intelligence Review</em></td></tr>
+  <tr><td>Serverless Architecture</td><td>Eismann, S. et al. (2021). "Serverless Applications: Why, When, and How?" <em>IEEE Software</em></td></tr>
+  <tr><td>Transformer Architecture</td><td>Vaswani, A. et al. (2017). "Attention Is All You Need." <em>NeurIPS 2017</em></td></tr>
+</table>
+
+<h2>11. Glossaire</h2>
+<table>
+  <tr><th>Terme</th><th>Définition</th></tr>
+  <tr><td><strong>LLM</strong></td><td>Large Language Model — Modèle de langage de grande taille entraîné sur de vastes corpus textuels</td></tr>
+  <tr><td><strong>Function Calling</strong></td><td>Mécanisme permettant au LLM de générer des appels structurés à des fonctions externes</td></tr>
+  <tr><td><strong>Edge Function</strong></td><td>Fonction serverless exécutée au plus près de l'utilisateur (faible latence)</td></tr>
+  <tr><td><strong>Prompt Engineering</strong></td><td>Technique de conception des instructions données au LLM pour optimiser ses réponses</td></tr>
+  <tr><td><strong>Boucle Agentique</strong></td><td>Cycle itératif Raisonnement → Action → Observation qui permet au LLM d'agir de manière autonome</td></tr>
+  <tr><td><strong>RLS</strong></td><td>Row Level Security — Mécanisme PostgreSQL de contrôle d'accès au niveau des lignes</td></tr>
+  <tr><td><strong>Token</strong></td><td>Unité de texte (≈ 4 caractères en français) utilisée pour le traitement par le LLM</td></tr>
+  <tr><td><strong>Tool Choice</strong></td><td>Paramètre qui définit si le LLM peut/doit appeler des outils (auto, required, none)</td></tr>
+  <tr><td><strong>System Prompt</strong></td><td>Instructions initiales définissant le comportement, les règles et les limites de l'agent</td></tr>
+  <tr><td><strong>Deno</strong></td><td>Runtime JavaScript/TypeScript sécurisé utilisé par Supabase Edge Functions</td></tr>
+</table>
+
+</body>
+</html>

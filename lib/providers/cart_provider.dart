@@ -73,6 +73,7 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
 
   void removeItem(String id) {
     state = state.where((i) => i.id != id).toList();
+    _deleteRemote(id);
   }
 
   void updateQuantity(String id, int quantity) {
@@ -102,8 +103,17 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
     state = [];
   }
 
-  void clearAll() {
+  Future<void> clearAll() async {
     state = [];
+    try {
+      await SupabaseService.deleteAllCommandes();
+    } catch (_) {}
+  }
+
+  Future<void> _deleteRemote(String id) async {
+    try {
+      await SupabaseService.deleteCommande(id);
+    } catch (_) {}
   }
 
   int get totalItems => state.fold(0, (sum, item) => sum + item.quantity);
