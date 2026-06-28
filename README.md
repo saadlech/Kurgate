@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/saadlech/Kurgate/main/assets/images/logo_full.png" alt="Kurgate Logo" width="280"/>
+  <img src="assets/images/branding/logo_full.png" alt="Kurgate Logo" width="280"/>
 </p>
 
 <h1 align="center">Kurgate</h1>
@@ -22,9 +22,9 @@
 
 ## 📖 À Propos
 
-**Kurgate** est une application mobile de tourisme intelligente conçue comme Projet de Fin d'Études (PFE). Elle offre une expérience complète de découverte et de réservation touristique au Maroc, avec une interface premium sombre et des interactions fluides.
+**Kurgate** est une application mobile de tourisme intelligente conçue comme Projet de Fin d'Études (PFE). Elle offre une expérience complète de découverte et de réservation touristique au Maroc, avec une interface premium sombre, un **assistant IA conversationnel** et des interactions fluides.
 
-L'application couvre **quatre villes** — **Marrakech**, **Casablanca**, **Agadir** et **Tanger** — et permet aux utilisateurs d'explorer des hôtels, louer des véhicules, découvrir des expériences locales, trouver des restaurants authentiques et acheter des produits artisanaux — le tout depuis une interface unifiée et élégante. Tous les prix sont affichés en **Dirham Marocain (MAD)**.
+L'application couvre **quatre villes** — **Marrakech**, **Casablanca**, **Agadir** et **Tanger** — et permet aux utilisateurs d'explorer des hôtels, louer des véhicules, découvrir des expériences locales, trouver des restaurants authentiques et acheter des produits artisanaux — le tout depuis une interface unifiée et élégante. Un **agent IA** propulsé par Azure OpenAI assiste l'utilisateur dans la recherche, la comparaison et la réservation. Tous les prix sont affichés en **Dirham Marocain (MAD)**.
 
 ---
 
@@ -90,10 +90,24 @@ L'application couvre **quatre villes** — **Marrakech**, **Casablanca**, **Agad
 - Historique des réservations avec statuts (En attente, Payée, Annulée)
 - **Synchronisation cloud** — Réservations, paiements et avis sauvegardés dans PostgreSQL
 
+### 🤖 Assistant IA (Agent Conversationnel)
+- **Agent IA** propulsé par Azure OpenAI (GPT) via Supabase Edge Functions
+- Recherche multi-catégories en langage naturel (hôtels, restaurants, véhicules, expériences)
+- **Recherche sémantique** — Requêtes en langage naturel via pgvector (similarité cosinus)
+- Résultats enrichis avec carrousel d'images, prix, notes et localisation
+- **Réservation assistée** — Création de réservations directement depuis le chat
+- **Paiement intégré** — Vérification de carte et paiement consolidé multi-réservations
+- Bouton flottant (FAB) avec mascotte animée
+
 ### 🗺️ Carte Interactive
 - Carte OpenStreetMap avec points d'intérêt par destination
 - Filtrage des POI par catégorie
 - Navigation vers les lieux
+
+### 🌤️ Météo en Temps Réel
+- Widget météo dynamique sur l'écran d'accueil
+- Données via l'API Open-Meteo (température, conditions)
+- Synchronisation automatique au changement de destination
 
 ### ⭐ Avis & Notes
 - Système d'avis intégré sur tous les écrans de détail
@@ -103,6 +117,7 @@ L'application couvre **quatre villes** — **Marrakech**, **Casablanca**, **Agad
 
 ### 🔍 Recherche
 - **Recherche locale** — Filtrage en temps réel par nom, localisation et catégorie
+- **Recherche sémantique** — Recherche par similarité vectorielle via pgvector et Edge Function `embed`
 - **7 barres de recherche** — Home, Hôtels, Restaurants, Expériences, Attractions, Véhicules, Boutiques
 - **Cross-catégorie** — La recherche du Home couvre toutes les catégories simultanément
 
@@ -122,8 +137,10 @@ L'application couvre **quatre villes** — **Marrakech**, **Casablanca**, **Agad
 | **State Management** | Riverpod (`flutter_riverpod`) |
 | **Navigation** | GoRouter (`go_router`) |
 | **Backend** | Supabase (Auth + PostgreSQL + pgvector + Edge Functions) |
+| **IA** | Azure OpenAI (GPT) via Supabase Edge Functions |
 | **Stockage Local** | Hive (`hive_flutter`) |
 | **Cartographie** | flutter_map + latlong2 (OpenStreetMap) |
+| **Météo** | Open-Meteo API |
 | **Typographie** | Darker Grotesque (7 weights) |
 | **Design System** | Dark theme, accent orange `#FF8C00` |
 
@@ -151,23 +168,25 @@ kurgate/
 │   │   ├── commande.dart            # Modèle commande
 │   │   ├── chambre.dart             # Modèle chambre d'hôtel
 │   │   ├── attraction.dart          # Modèle point d'intérêt
-│   │   └── chatbot.dart             # Modèle chatbot (réservé)
-│   ├── providers/                   # 8 providers Riverpod
+│   │   └── chat_message.dart        # Modèle message IA (texte, items, bookings)
+│   ├── providers/                   # 9 providers Riverpod
 │   │   ├── auth_provider.dart       # AuthNotifier (login, signup, delete, update)
 │   │   ├── booking_provider.dart    # ReservationNotifier (add, cancel, pay, feedback → Supabase)
 │   │   ├── cart_provider.dart       # CartNotifier (add, remove, checkout → Supabase commandes)
 │   │   ├── review_provider.dart     # ReviewNotifier (add, average, check → Supabase avis)
 │   │   ├── search_provider.dart     # SemanticSearchNotifier (pgvector cosine similarity)
+│   │   ├── chat_provider.dart       # ChatNotifier (AI agent conversation state)
 │   │   ├── catalog_providers.dart   # FutureProviders for all catalog entities (Supabase)
 │   │   ├── destination_provider.dart # FutureProvider → Supabase with static fallback
 │   │   └── onboarding_provider.dart # hasSeenOnboarding, splashComplete
 │   ├── services/
 │   │   ├── supabase_service.dart     # Centralized Supabase data operations (18 methods)
+│   │   ├── ai_chat_service.dart      # Azure OpenAI agent communication
 │   │   ├── connectivity_service.dart # Network connectivity monitoring
 │   │   └── local_storage_service.dart # Hive (credentials, remember me, saved cards)
 │   ├── router/
 │   │   └── app_router.dart          # GoRouter (21 routes avec transitions)
-│   ├── screens/                     # 27 écrans
+│   ├── screens/                     # 28 écrans
 │   │   ├── splash_screen.dart       # Splash animé + auto-login
 │   │   ├── onboarding_screen.dart   # Onboarding (3 pages)
 │   │   ├── login_screen.dart        # Connexion + Remember Me
@@ -176,8 +195,9 @@ kurgate/
 │   │   ├── destination_screen.dart  # Sélection de ville (4 villes)
 │   │   ├── main_shell.dart          # Shell avec bottom navigation (5 onglets)
 │   │   ├── no_connection_screen.dart # Écran hors connexion
-│   │   ├── home_screen.dart         # Hub principal + recherche + 5 sections
+│   │   ├── home_screen.dart         # Hub principal + recherche + météo + 5 sections
 │   │   ├── map_screen.dart          # Carte interactive OpenStreetMap
+│   │   ├── chat_screen.dart         # Assistant IA conversationnel
 │   │   ├── hotel_list_screen.dart   # Liste hôtels (import Hotel)
 │   │   ├── hotel_detail_screen.dart # Détail hôtel + réservation
 │   │   ├── vehicule_list_screen.dart    # Liste véhicules (import Vehicule)
@@ -186,6 +206,8 @@ kurgate/
 │   │   ├── experience_detail_screen.dart
 │   │   ├── restaurant_list_screen.dart  # Liste restaurants (import Restaurant)
 │   │   ├── restaurant_detail_screen.dart
+│   │   ├── attraction_list_screen.dart  # Liste attractions
+│   │   ├── attraction_detail_screen.dart # Détail attraction
 │   │   ├── boutique_list_screen.dart    # Liste boutiques (import BoutiqueArtisanale)
 │   │   ├── boutique_detail_screen.dart
 │   │   ├── bookings_screen.dart     # Mes réservations
@@ -203,22 +225,26 @@ kurgate/
 ├── assets/                          # ~237 MB, 101 répertoires
 │   ├── fonts/                       # Darker Grotesque (7 weights)
 │   └── images/
+│       ├── branding/                # Logo, icônes (app_icon, logo_full)
+│       ├── onboarding/              # 3 illustrations onboarding
+│       ├── cities/                  # 4 images de villes (sélection destination)
 │       ├── marrakech/               # Hôtels, expériences, restaurants, attractions
 │       ├── casablanca/              # Hôtels, expériences, restaurants, attractions
 │       ├── agadir/                  # Hôtels, expériences, restaurants, attractions
 │       ├── tanger/                  # Hôtels, expériences, restaurants, attractions
 │       ├── vehicules/               # 6 véhicules × 4-6 photos
-│       └── boutiques/               # 10 boutiques × 3-6 photos
-├── docs/
-│   └── class_diagram.puml           # Diagramme de classes PlantUML
+│       ├── boutiques/               # 10 boutiques × 3-6 photos
+│       └── produits/                # Images produits artisanaux
+├── supabase/
+│   └── functions/
+│       ├── ai-agent/index.ts        # Edge Function : Agent IA (Azure OpenAI)
+│       └── embed/index.ts           # Edge Function : Embedding vectoriel
 └── pubspec.yaml
 ```
 
 ---
 
 ## 🏛️ Diagramme de Classes
-
-Le diagramme de classes complet est disponible en PlantUML : [`docs/class_diagram.puml`](docs/class_diagram.puml)
 
 ### Hiérarchie des modèles
 
@@ -413,6 +439,7 @@ dependencies:
   url_launcher: ^6.3.2         # Liens externes
   google_fonts: ^6.2.1         # Polices Google
   connectivity_plus: ^7.1.1    # Détection réseau
+  http: ^1.2.1                 # Requêtes HTTP (météo, IA)
 ```
 
 ---
