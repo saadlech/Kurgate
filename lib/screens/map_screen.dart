@@ -20,7 +20,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
   late AnimationController _sheetCtrl;
   late Animation<Offset> _sheetSlide;
 
-  static const String _azureMapsKey = '7KdYnJAdCSHushwoVDqQD1G6tc84R46nN5pkSEwitHSGmDLjLWCQJQQJ99CEACYeBjF3fBr5AAAgAZMP23Qz';
+  static const String _azureMapsKey = 'DbWkJSbzVNaSrplE4yX0VQDDbt1VgBZW5KCoAG78I1evY51ql0Q7JQQJ99CFACYeBjFp4wt7AAAgAZMP2iFL';
 
   final _filters = const [
     _FilterItem(label: 'Tous', icon: Icons.layers_rounded),
@@ -273,7 +273,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
           },
         ))))),
         // Legend
-        Positioned(bottom: 16, left: 16, child: Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: const Color(0xFF2A2A2A).withValues(alpha: 0.92), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white.withValues(alpha: 0.08))),
+        Positioned(top: 120, right: 16, child: Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: const Color(0xFF2A2A2A).withValues(alpha: 0.92), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white.withValues(alpha: 0.08))),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
             for (final f in _filters.skip(1)) Padding(padding: const EdgeInsets.symmetric(vertical: 2), child: Row(mainAxisSize: MainAxisSize.min, children: [
               Container(width: 10, height: 10, decoration: BoxDecoration(color: _catColor(f.label), shape: BoxShape.circle)),
@@ -283,7 +283,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
           ]),
         )),
         // Zoom controls
-        Positioned(bottom: 76, right: 16, child: Column(
+        Positioned(bottom: 76, left: 16, child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             GestureDetector(
@@ -305,12 +305,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
             ),
           ],
         )),
-        // Recenter
-        Positioned(bottom: 16, right: 16, child: GestureDetector(
-          onTap: () => _mapController.move(_center, 13.0),
-          child: Container(width: 44, height: 44, decoration: BoxDecoration(color: const Color(0xFF2A2A2A).withValues(alpha: 0.92), shape: BoxShape.circle, border: Border.all(color: Colors.white.withValues(alpha: 0.1))),
-            child: Icon(Icons.my_location_rounded, color: Colors.white.withValues(alpha: 0.7), size: 20)),
-        )),
+
         // Detail sheet
         if (_selectedPOI != null) Positioned(bottom: 0, left: 0, right: 0, child: SlideTransition(position: _sheetSlide, child: _DetailSheet(poi: _selectedPOI!, color: _catColor(_selectedPOI!.category), onClose: _dismiss))),
       ]),

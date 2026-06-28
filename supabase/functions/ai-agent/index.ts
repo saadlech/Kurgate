@@ -8,11 +8,11 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // ── Config ─────────────────────────────────────────────────────────────────
-const AZURE_ENDPOINT  = "https://kurgate-ai-resource.services.ai.azure.com";
+const AZURE_ENDPOINT  = "https://kurgate-resource.services.ai.azure.com";
 const AZURE_DEPLOY    = "o4-mini";
 const AZURE_API_VER   = "2024-12-01-preview";
 const AZURE_KEY       = Deno.env.get("AZURE_OPENAI_KEY") ??
-  "5YS78po4VoIwyHaPLF9givztdnzfNnGEVKrDQ9mjUO2yBUcGlffSJQQJ99CEACfhMk5XJ3w3AAAAACOGZju5";
+  "DVZ7LZr7y0PyHieaAuNdyuKs0m92iwxX4xYvrW2zMvOdttWzowGhJQQJ99CFACHYHv6XJ3w3AAAAACOGQwpL";
 
 // Supabase — anon key works for all reads (RLS allows public access to catalog tables)
 // Service role is auto-injected by Supabase runtime for write operations

@@ -158,37 +158,53 @@ class _MainShellState extends State<MainShell> {
             ),
           );
         },
-        child: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFFFF8C00), Color(0xFFE77728)],
-            ),
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFFFF8C00).withValues(alpha: 0.35),
-                blurRadius: 20,
-                spreadRadius: 2,
-                offset: const Offset(0, 4),
+        child: SizedBox(
+          width: 64,
+          height: 72,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Glow effect behind the mascot
+              Positioned(
+                bottom: 2,
+                child: Container(
+                  width: 40,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFFF8C00).withValues(alpha: 0.4),
+                        blurRadius: 18,
+                        spreadRadius: 4,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Full mascot image
+              Image.asset(
+                'assets/images/ai_assistant.png',
+                width: 64,
+                height: 72,
+                fit: BoxFit.contain,
+                errorBuilder: (_, _, _) => Container(
+                  width: 56,
+                  height: 56,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFFFF8C00), Color(0xFFE77728)],
+                    ),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.auto_awesome_rounded,
+                    color: Colors.white,
+                    size: 26,
+                  ),
+                ),
               ),
             ],
-          ),
-          child: ClipOval(
-            child: Image.asset(
-              'assets/images/ai_assistant.png',
-              width: 56,
-              height: 56,
-              fit: BoxFit.cover,
-              errorBuilder: (_, _, _) => const Icon(
-                Icons.auto_awesome_rounded,
-                color: Colors.white,
-                size: 26,
-              ),
-            ),
           ),
         ),
       ),
