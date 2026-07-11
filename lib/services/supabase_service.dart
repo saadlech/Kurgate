@@ -307,4 +307,131 @@ class SupabaseService {
   }) async {
     return [];
   }
+
+  // ──────────── SAVED CARDS ────────────
+
+  /// Save a bank card to the database via Edge Function (bypasses RLS).
+  /// CVC is NEVER sent or stored.
+  static Future<bool> saveCard({
+    required String cardNumber,
+    required String cardLast4,
+    required String cardExpiry,
+    required String cardHolder,
+    String? cardBrand,
+  }) async {
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) return false;
+
+    try {
+      final uri = Uri.parse(
+        'https://aurxykjqywoaiezwkvff.supabase.co/functions/v1/ai-agent',
+      );
+      final res = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'sb_publishable_VwBR1xse_Z2Zgs4b0kjYhA_w54eXJP8',
+        },
+        body: jsonEncode({
+          'question': '__save_card',
+          'userId': userId,
+          'cardNumber': cardNumber,
+          'cardLast4': cardLast4,
+          'cardExpiry': cardExpiry,
+          'cardHolder': cardHolder,
+          'cardBrand': cardBrand,
+        }),
+      );
+
+      if (res.statusCode != 200) {
+        print('[SupabaseService] saveCard error: ${res.statusCode} ${res.body}');
+        return false;
+      }
+
+      final data = jsonDecode(res.body) as Map<String, dynamic>;
+      print('[SupabaseService] saveCard result: ${data['success']}');
+      return data['success'] == true;
+    } catch (e) {
+      print('[SupabaseService] saveCard error: $e');
+      return false;
+    }
+  }
+
+  /// Fetch the user's saved card from the database via Edge Function.
+  /// Returns null if no card is saved.
+  static Future<Map<String, String>?> getSavedCard() async {
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) return null;
+
+    try {
+      final uri = Uri.parse(
+        'https://aurxykjqywoaiezwkvff.supabase.co/functions/v1/ai-agent',
+      );
+      final res = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'sb_publishable_VwBR1xse_Z2Zgs4b0kjYhA_w54eXJP8',
+        },
+        body: jsonEncode({
+          'question': '__get_card',
+          'userId': userId,
+        }),
+      );
+
+      if (res.statusCode != 200) {
+        print('[SupabaseService] getSavedCard error: ${res.statusCode}');
+        return null;
+      }
+
+      final data = jsonDecode(res.body) as Map<String, dynamic>;
+      final card = data['card'] as Map<String, dynamic>?;
+      if (card == null) return null;
+
+      return {
+        'number': (card['card_number'] ?? '') as String,
+        'last4': (card['card_last4'] ?? '') as String,
+        'expiry': (card['card_expiry'] ?? '') as String,
+        'holder': (card['card_holder'] ?? '') as String,
+        'brand': (card['card_brand'] ?? '') as String,
+      };
+    } catch (e) {
+      print('[SupabaseService] getSavedCard error: $e');
+      return null;
+    }
+  }
+
+  /// Delete the user's saved card from the database via Edge Function.
+  static Future<bool> deleteCard() async {
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) return false;
+
+    try {
+      final uri = Uri.parse(
+        'https://aurxykjqywoaiezwkvff.supabase.co/functions/v1/ai-agent',
+      );
+      final res = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'sb_publishable_VwBR1xse_Z2Zgs4b0kjYhA_w54eXJP8',
+        },
+        body: jsonEncode({
+          'question': '__delete_card',
+          'userId': userId,
+        }),
+      );
+
+      if (res.statusCode != 200) {
+        print('[SupabaseService] deleteCard error: ${res.statusCode}');
+        return false;
+      }
+
+      final data = jsonDecode(res.body) as Map<String, dynamic>;
+      return data['success'] == true;
+    } catch (e) {
+      print('[SupabaseService] deleteCard error: $e');
+      return false;
+    }
+  }
 }

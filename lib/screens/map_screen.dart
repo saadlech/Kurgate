@@ -273,7 +273,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
           },
         ))))),
         // Legend
-        Positioned(top: 120, right: 16, child: Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: const Color(0xFF2A2A2A).withValues(alpha: 0.92), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white.withValues(alpha: 0.08))),
+        Positioned(top: 0, right: 16, child: SafeArea(child: Padding(padding: const EdgeInsets.only(top: 118), child: Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: const Color(0xFF2A2A2A).withValues(alpha: 0.92), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white.withValues(alpha: 0.08))),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
             for (final f in _filters.skip(1)) Padding(padding: const EdgeInsets.symmetric(vertical: 2), child: Row(mainAxisSize: MainAxisSize.min, children: [
               Container(width: 10, height: 10, decoration: BoxDecoration(color: _catColor(f.label), shape: BoxShape.circle)),
@@ -281,7 +281,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with TickerProviderStateM
               Text(f.label, style: TextStyle(fontFamily: 'DarkerGrotesque', color: Colors.white.withValues(alpha: 0.6), fontSize: 11, fontWeight: FontWeight.w500)),
             ])),
           ]),
-        )),
+        )))),
         // Zoom controls
         Positioned(bottom: 76, left: 16, child: Column(
           mainAxisSize: MainAxisSize.min,

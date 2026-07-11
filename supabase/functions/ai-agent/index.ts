@@ -75,7 +75,7 @@ C) Quand tu as toutes les infos (nom, dates/heures, nb_personnes) -> Affiche ce 
 D) Quand l'utilisateur dit OUI/oui/confirmer/ok:
    -> Appelle immédiatement create_booking avec toutes les infos. Ne pose aucune question et annonce le succès.
 
-Prix en MAD. Réponds en français avec emojis. Si l'utilisateur parle arabe/darija → réponds pareil.
+Prix en MAD. LANGUE: Détecte la langue du PREMIER message de l'utilisateur et réponds TOUJOURS dans cette même langue pour toute la conversation. Exemples: si l'utilisateur écrit en anglais → réponds en anglais, en français → en français, en arabe/darija → en arabe/darija, en espagnol → en espagnol, etc. Utilise des emojis dans toutes les langues.
 
 CAPACITÉS COMPLÈTES (tu peux faire TOUT ce qu'un utilisateur fait dans l'app):
 - Rechercher: hôtels, restaurants, expériences, véhicules, boutiques, attractions, produits artisanaux
@@ -777,6 +777,74 @@ serve(async (req) => {
       const { error } = await svcDb.from("reservations")
         .update(updatePayload)
         .eq("id", bookingId);
+      return new Response(
+        JSON.stringify({ success: !error, error: error?.message }),
+        { headers: { ...CORS, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ── Save bank card (service role, bypasses RLS) ──
+    if (question === "__save_card") {
+      const { cardNumber, cardLast4, cardExpiry, cardHolder, cardBrand } = body;
+      if (!userId || !cardNumber) {
+        return new Response(
+          JSON.stringify({ success: false, error: "userId and cardNumber required" }),
+          { headers: { ...CORS, "Content-Type": "application/json" } }
+        );
+      }
+      const svcDb = createClient(SB_URL, SB_SVC);
+      // Upsert: insert or update if user already has a card
+      const { data, error } = await svcDb.from("saved_cards")
+        .upsert({
+          user_id: userId,
+          card_number: cardNumber,
+          card_last4: cardLast4 ?? cardNumber.slice(-4),
+          card_expiry: cardExpiry,
+          card_holder: cardHolder,
+          card_brand: cardBrand ?? null,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: "user_id" })
+        .select("id, card_last4, card_expiry, card_holder, card_brand")
+        .single();
+      console.log("[__save_card]", error ? `error: ${error.message}` : `saved for user ${userId}`);
+      return new Response(
+        JSON.stringify({ success: !error, card: data, error: error?.message }),
+        { headers: { ...CORS, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ── Get saved card (service role, bypasses RLS) ──
+    if (question === "__get_card") {
+      if (!userId) {
+        return new Response(
+          JSON.stringify({ card: null, error: "userId required" }),
+          { headers: { ...CORS, "Content-Type": "application/json" } }
+        );
+      }
+      const svcDb = createClient(SB_URL, SB_SVC);
+      const { data, error } = await svcDb.from("saved_cards")
+        .select("card_number, card_last4, card_expiry, card_holder, card_brand")
+        .eq("user_id", userId)
+        .maybeSingle();
+      return new Response(
+        JSON.stringify({ card: data, error: error?.message }),
+        { headers: { ...CORS, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ── Delete saved card (service role, bypasses RLS) ──
+    if (question === "__delete_card") {
+      if (!userId) {
+        return new Response(
+          JSON.stringify({ success: false, error: "userId required" }),
+          { headers: { ...CORS, "Content-Type": "application/json" } }
+        );
+      }
+      const svcDb = createClient(SB_URL, SB_SVC);
+      const { error } = await svcDb.from("saved_cards")
+        .delete()
+        .eq("user_id", userId);
+      console.log("[__delete_card]", error ? `error: ${error.message}` : `deleted for user ${userId}`);
       return new Response(
         JSON.stringify({ success: !error, error: error?.message }),
         { headers: { ...CORS, "Content-Type": "application/json" } }

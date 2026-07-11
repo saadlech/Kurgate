@@ -61,6 +61,20 @@ class ReservationNotifier extends StateNotifier<List<Reservation>> {
     _updateStatusRemote(id, 'Payée');
   }
 
+  /// Mark multiple reservations as paid in one shot.
+  void markMultipleAsPaid(List<String> ids) {
+    final idSet = ids.toSet();
+    state = [
+      for (final r in state)
+        if (idSet.contains(r.idReservation)) r.payer() else r,
+    ];
+    // Sync all to Supabase in parallel
+    for (final id in ids) {
+      _updateStatusRemote(id, 'Payée');
+    }
+  }
+
+
   void cancelBooking(String id) {
     state = [
       for (final r in state)

@@ -8,6 +8,7 @@ import '../providers/auth_provider.dart';
 import '../models/avis.dart';
 import '../widgets/feedback_sheet.dart';
 import '../services/local_storage_service.dart';
+import '../services/supabase_service.dart';
 
 class PaymentScreen extends ConsumerStatefulWidget {
   final String bookingId;
@@ -50,15 +51,42 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
     );
   }
 
-  void _loadSavedCard() {
-    _savedCardData = LocalStorageService.getSavedCard();
-    if (_savedCardData != null) {
-      _usingSavedCard = true;
-      // Pre-fill with saved data (card number shown masked in UI)
-      _cardNumberCtrl.text = _savedCardData!['number'] ?? '';
-      _expiryCtrl.text = _savedCardData!['expiry'] ?? '';
-      _nameCtrl.text = _savedCardData!['holder'] ?? '';
-      // CVC is never saved — always empty
+  void _loadSavedCard() async {
+    // Try loading from DB first, fall back to local cache
+    try {
+      final dbCard = await SupabaseService.getSavedCard();
+      if (dbCard != null) {
+        if (!mounted) return;
+        setState(() {
+          _savedCardData = dbCard;
+          _usingSavedCard = true;
+          _cardNumberCtrl.text = dbCard['number'] ?? '';
+          _expiryCtrl.text = dbCard['expiry'] ?? '';
+          _nameCtrl.text = dbCard['holder'] ?? '';
+        });
+        // Also update local cache
+        await LocalStorageService.saveCard(
+          cardNumber: dbCard['number'] ?? '',
+          expiry: dbCard['expiry'] ?? '',
+          holderName: dbCard['holder'] ?? '',
+          brand: dbCard['brand']?.isNotEmpty == true ? dbCard['brand'] : null,
+        );
+        return;
+      }
+    } catch (e) {
+      print('[PaymentScreen] DB card load failed, trying local: $e');
+    }
+
+    // Fall back to local storage
+    final localCard = LocalStorageService.getSavedCard();
+    if (localCard != null && mounted) {
+      setState(() {
+        _savedCardData = localCard;
+        _usingSavedCard = true;
+        _cardNumberCtrl.text = localCard['number'] ?? '';
+        _expiryCtrl.text = localCard['expiry'] ?? '';
+        _nameCtrl.text = localCard['holder'] ?? '';
+      });
     }
   }
 
@@ -86,7 +114,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
   }
 
   Future<void> _deleteSavedCard() async {
-    await LocalStorageService.deleteCard();
+    // Delete from both DB and local storage
+    await Future.wait([
+      SupabaseService.deleteCard(),
+      LocalStorageService.deleteCard(),
+    ]);
     setState(() {
       _savedCardData = null;
       _usingSavedCard = false;
@@ -178,12 +210,26 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen>
       // Save card if toggle is checked (never saves CVC)
       if (_saveCardToggle && !_usingSavedCard) {
         final brand = _detectCardBrand(_cardNumberCtrl.text);
-        await LocalStorageService.saveCard(
-          cardNumber: _cardNumberCtrl.text,
-          expiry: _expiryCtrl.text,
-          holderName: _nameCtrl.text.trim(),
-          brand: brand,
-        );
+        final digitsOnly = _cardNumberCtrl.text.replaceAll(' ', '');
+        final last4 = digitsOnly.length >= 4
+            ? digitsOnly.substring(digitsOnly.length - 4)
+            : digitsOnly;
+        // Save to both DB and local storage
+        await Future.wait([
+          SupabaseService.saveCard(
+            cardNumber: digitsOnly,
+            cardLast4: last4,
+            cardExpiry: _expiryCtrl.text,
+            cardHolder: _nameCtrl.text.trim(),
+            cardBrand: brand,
+          ),
+          LocalStorageService.saveCard(
+            cardNumber: _cardNumberCtrl.text,
+            expiry: _expiryCtrl.text,
+            holderName: _nameCtrl.text.trim(),
+            brand: brand,
+          ),
+        ]);
       }
 
       ref.read(bookingProvider.notifier).markAsPaid(widget.bookingId);

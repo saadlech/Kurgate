@@ -47,18 +47,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   // ── Data ──
   static const _hotels = [
-    _Item('La Mamounia', 'Hivernage', 350, 4.9, 'assets/images/marrakech/hotels/la_mamounia/1.png', '/hotel/hotel_002', 'hotel'),
-    _Item('Riad Yasmine', 'Medina', 95, 4.6, 'assets/images/marrakech/hotels/riad_yasmine/1.png', '/hotel/hotel_003', 'hotel'),
-    _Item('La Sultana', 'Kasbah', 280, 4.8, 'assets/images/marrakech/hotels/la_sultana/1.png', '/hotel/hotel_005', 'hotel'),
-    _Item('Mandarin Oriental', 'Palmeraie', 420, 4.9, 'assets/images/marrakech/hotels/mandarin_oriental/1.png', '/hotel/hotel_006', 'hotel'),
-    _Item('Riad Kniza', 'Médina', 200, 4.7, 'assets/images/marrakech/hotels/riad_kniza/1.png', '/hotel/hotel_007', 'hotel'),
-    _Item('Royal Mansour', 'Médina', 550, 4.9, 'assets/images/marrakech/hotels/royal_mansour/1.png', '/hotel/hotel_008', 'hotel'),
+    _Item('La Mamounia', 'Hivernage', 3500, 4.9, 'assets/images/marrakech/hotels/la_mamounia/1.png', '/hotel/hotel_002', 'hotel'),
+    _Item('Riad Yasmine', 'Medina', 950, 4.6, 'assets/images/marrakech/hotels/riad_yasmine/1.png', '/hotel/hotel_003', 'hotel'),
+    _Item('La Sultana', 'Kasbah', 2800, 4.8, 'assets/images/marrakech/hotels/la_sultana/1.png', '/hotel/hotel_005', 'hotel'),
+    _Item('Mandarin Oriental', 'Palmeraie', 4200, 4.9, 'assets/images/marrakech/hotels/mandarin_oriental/1.png', '/hotel/hotel_006', 'hotel'),
+    _Item('Riad Kniza', 'Médina', 2000, 4.7, 'assets/images/marrakech/hotels/riad_kniza/1.png', '/hotel/hotel_007', 'hotel'),
+    _Item('Royal Mansour', 'Médina', 5500, 4.9, 'assets/images/marrakech/hotels/royal_mansour/1.png', '/hotel/hotel_008', 'hotel'),
   ];
   static const _vehicles = [
     _Item(
       'Dacia Duster 2024',
       'SUV · Diesel',
-      45,
+      450,
       4.6,
       'assets/images/vehicules/dacia_duster/1.png',
       '/vehicule/vehicule_001',
@@ -67,7 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'Renault Clio 5',
       'Citadine · Essence',
-      22,
+      220,
       4.4,
       'assets/images/vehicules/renault_clio/1.png',
       '/vehicule/vehicule_002',
@@ -76,7 +76,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'Mercedes Classe E',
       'Berline · Luxe',
-      150,
+      1500,
       4.9,
       'assets/images/vehicules/mercedes_classe_e/1.png',
       '/vehicule/vehicule_003',
@@ -85,7 +85,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'Peugeot 3008',
       'SUV · Familial',
-      65,
+      650,
       4.7,
       'assets/images/vehicules/peugeot_3008/1.png',
       '/vehicule/vehicule_005',
@@ -96,7 +96,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'Safari Désert d\'Agafay',
       'Aventure · 6h',
-      85,
+      850,
       4.8,
       'assets/images/marrakech/experiences/safari_agafay/1.png',
       '/experience/exp_001',
@@ -105,7 +105,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'Visite de la Médina',
       'Culture · 3h',
-      35,
+      350,
       4.7,
       'assets/images/marrakech/experiences/medina_visite/1.png',
       '/experience/exp_002',
@@ -114,7 +114,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'Randonnée Atlas',
       'Nature · 8h',
-      60,
+      600,
       4.9,
       'assets/images/marrakech/experiences/randonnee_atlas/1.png',
       '/experience/exp_003',
@@ -123,7 +123,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'Vol Montgolfière',
       'Aventure · 2h',
-      180,
+      1800,
       4.9,
       'assets/images/marrakech/experiences/vol_montgolfiere/1.png',
       '/experience/exp_005',
@@ -134,7 +134,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'Le Jardin',
       'Méditerranéen',
-      25,
+      250,
       4.7,
       'assets/images/marrakech/restaurants/le_jardin/1.png',
       '/restaurant/resto_001',
@@ -143,7 +143,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'Nomad',
       'Marocain Moderne',
-      30,
+      300,
       4.8,
       'assets/images/marrakech/restaurants/nomad/1.png',
       '/restaurant/resto_002',
@@ -152,7 +152,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'Al Fassia',
       'Cuisine Fassi',
-      35,
+      350,
       4.9,
       'assets/images/marrakech/restaurants/al_fassia/1.png',
       '/restaurant/resto_003',
@@ -161,7 +161,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     _Item(
       'La Table du Palais',
       'Français-Marocain',
-      120,
+      1200,
       4.9,
       'assets/images/marrakech/restaurants/la_table_du_palais/1.png',
       '/restaurant/resto_005',
@@ -234,11 +234,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   // ── Agadir Data ──
   static const _hotelsAgadir = [
-    _Item('Sofitel Royal Bay Resort', 'Baie d\'Agadir', 280, 4.8, 'assets/images/agadir/hotels/sofitel_royal_bay/1.jpg', '/hotel/hotel_aga_001', 'hotel'),
+    _Item('Sofitel Royal Bay Resort', 'Baie d\'Agadir', 2800, 4.8, 'assets/images/agadir/hotels/sofitel_royal_bay/1.jpg', '/hotel/hotel_aga_001', 'hotel'),
     _Item('Sofitel Thalassa Sea & Spa', 'Bord de Mer', 3200, 4.9, 'assets/images/agadir/hotels/sofitel_thalassa/1.jpg', '/hotel/hotel_aga_002', 'hotel'),
     _Item('Riu Palace Tikida', 'Secteur Balnéaire', 1800, 4.7, 'assets/images/agadir/hotels/riu_palace_tikida/1.jpg', '/hotel/hotel_aga_003', 'hotel'),
     _Item('The View Agadir', 'Colline Oufella', 1500, 4.6, 'assets/images/agadir/hotels/the_view/1.jpg', '/hotel/hotel_aga_004', 'hotel'),
-    _Item('Dunes d\'Or Ocean Club', 'Secteur Balnéaire', 120, 4.5, 'assets/images/agadir/hotels/dunes_dor/1.jpg', '/hotel/hotel_aga_005', 'hotel'),
+    _Item('Dunes d\'Or Ocean Club', 'Secteur Balnéaire', 1200, 4.5, 'assets/images/agadir/hotels/dunes_dor/1.jpg', '/hotel/hotel_aga_005', 'hotel'),
   ];
 
   static const _experiencesAgadir = [
@@ -252,7 +252,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   static const _restaurantsAgadir = [
     _Item('El Toro', 'Steakhouse · Grill', 450, 4.7, 'assets/images/agadir/restaurants/el_toro/1.jpg', '/restaurant/resto_aga_001', 'restaurant'),
     _Item('La Plage Restaurant', 'Fruits de Mer · Vue Mer', 550, 4.8, 'assets/images/agadir/restaurants/la_plage/1.jpg', '/restaurant/resto_aga_002', 'restaurant'),
-    _Item('Le 20\' Restaurant', 'Gastronomique · Fusion', 60, 4.9, 'assets/images/agadir/restaurants/le_20/1.jpg', '/restaurant/resto_aga_003', 'restaurant'),
+    _Item('Le 20\' Restaurant', 'Gastronomique · Fusion', 600, 4.9, 'assets/images/agadir/restaurants/le_20/1.jpg', '/restaurant/resto_aga_003', 'restaurant'),
     _Item('Little Italy', 'Italien · Pizza', 350, 4.6, 'assets/images/agadir/restaurants/little_italy/1.jpg', '/restaurant/resto_aga_004', 'restaurant'),
     _Item('Restaurant Rafiq', 'Marocain · Traditionnel', 300, 4.5, 'assets/images/agadir/restaurants/rafiq/1.jpg', '/restaurant/resto_aga_005', 'restaurant'),
   ];
@@ -273,7 +273,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   ];
   static const _restaurantsTangier = [
     _Item('El Morocco Club', 'Gastronomique · Médina', 550, 4.9, 'assets/images/tanger/restaurants/el_morocco_club/1.jpg', '/restaurant/resto_tan_001', 'restaurant'),
-    _Item('L\'Olivier Restaurant', 'Méditerranéen · Terrasse', 45, 4.7, 'assets/images/tanger/restaurants/lolivier/1.jpg', '/restaurant/resto_tan_002', 'restaurant'),
+    _Item('L\'Olivier Restaurant', 'Méditerranéen · Terrasse', 450, 4.7, 'assets/images/tanger/restaurants/lolivier/1.jpg', '/restaurant/resto_tan_002', 'restaurant'),
     _Item('Macondo', 'International · Branché', 400, 4.6, 'assets/images/tanger/restaurants/macondo/1.jpg', '/restaurant/resto_tan_003', 'restaurant'),
     _Item('Les Huîtres', 'Fruits de Mer · Corniche', 500, 4.8, 'assets/images/tanger/restaurants/les_huitres/1.jpg', '/restaurant/resto_tan_004', 'restaurant'),
     _Item('Palais Zahia', 'Marocain · Palais', 600, 4.8, 'assets/images/tanger/restaurants/palais_zahia/1.jpg', '/restaurant/resto_tan_005', 'restaurant'),

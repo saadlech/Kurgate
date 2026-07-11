@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/cart_provider.dart';
 import '../services/local_storage_service.dart';
+import '../services/supabase_service.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});
@@ -270,13 +271,42 @@ class _CartPaymentSheetState extends State<_CartPaymentSheet> with TickerProvide
     _successScale = CurvedAnimation(parent: _successCtrl, curve: Curves.elasticOut);
   }
 
-  void _loadSavedCard() {
-    _savedCardData = LocalStorageService.getSavedCard();
-    if (_savedCardData != null) {
-      _usingSavedCard = true;
-      _cardCtrl.text = _savedCardData!['number'] ?? '';
-      _expiryCtrl.text = _savedCardData!['expiry'] ?? '';
-      _nameCtrl.text = _savedCardData!['holder'] ?? '';
+  void _loadSavedCard() async {
+    // Try loading from DB first, fall back to local cache
+    try {
+      final dbCard = await SupabaseService.getSavedCard();
+      if (dbCard != null) {
+        if (!mounted) return;
+        setState(() {
+          _savedCardData = dbCard;
+          _usingSavedCard = true;
+          _cardCtrl.text = dbCard['number'] ?? '';
+          _expiryCtrl.text = dbCard['expiry'] ?? '';
+          _nameCtrl.text = dbCard['holder'] ?? '';
+        });
+        // Also update local cache
+        await LocalStorageService.saveCard(
+          cardNumber: dbCard['number'] ?? '',
+          expiry: dbCard['expiry'] ?? '',
+          holderName: dbCard['holder'] ?? '',
+          brand: dbCard['brand']?.isNotEmpty == true ? dbCard['brand'] : null,
+        );
+        return;
+      }
+    } catch (e) {
+      print('[CartScreen] DB card load failed, trying local: $e');
+    }
+
+    // Fall back to local storage
+    final localCard = LocalStorageService.getSavedCard();
+    if (localCard != null && mounted) {
+      setState(() {
+        _savedCardData = localCard;
+        _usingSavedCard = true;
+        _cardCtrl.text = localCard['number'] ?? '';
+        _expiryCtrl.text = localCard['expiry'] ?? '';
+        _nameCtrl.text = localCard['holder'] ?? '';
+      });
     }
   }
 
@@ -324,12 +354,27 @@ class _CartPaymentSheetState extends State<_CartPaymentSheet> with TickerProvide
       if (!mounted) return;
       // Save card if toggle checked
       if (_saveCardToggle && !_usingSavedCard) {
-        await LocalStorageService.saveCard(
-          cardNumber: _cardCtrl.text,
-          expiry: _expiryCtrl.text,
-          holderName: _nameCtrl.text.trim(),
-          brand: _detectBrand(_cardCtrl.text),
-        );
+        final brand = _detectBrand(_cardCtrl.text);
+        final digitsOnly = _cardCtrl.text.replaceAll(' ', '');
+        final last4 = digitsOnly.length >= 4
+            ? digitsOnly.substring(digitsOnly.length - 4)
+            : digitsOnly;
+        // Save to both DB and local storage
+        await Future.wait([
+          SupabaseService.saveCard(
+            cardNumber: digitsOnly,
+            cardLast4: last4,
+            cardExpiry: _expiryCtrl.text,
+            cardHolder: _nameCtrl.text.trim(),
+            cardBrand: brand,
+          ),
+          LocalStorageService.saveCard(
+            cardNumber: _cardCtrl.text,
+            expiry: _expiryCtrl.text,
+            holderName: _nameCtrl.text.trim(),
+            brand: brand,
+          ),
+        ]);
       }
       widget.onPaid(_addressCtrl.text.trim());
       setState(() { _processing = false; _success = true; });
